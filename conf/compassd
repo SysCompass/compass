@@ -42,7 +42,7 @@ start() {
     echo "Starting Compass: "
     if [ -f $SUSE ]; then
         echo -n "Start celeryd: "
-        startproc -f -p /var/run/celeryd.pid -l /tmp/celeryd.log "CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd"
+        startproc -f -p /var/run/celeryd.pid -l /tmp/celeryd.log "C_FORCE_ROOT=1 CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd"
         rc_status -v
         echo
         echo -n "Start service progress_update: "
@@ -53,7 +53,7 @@ start() {
         if [ -f /var/run/celeryd.pid ]; then
             echo "celeryd is already started"
             RETVAL=1
-        elif CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd &> /tmp/celeryd.log; then
+        elif C_FORCE_ROOT=1 CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd &> /tmp/celeryd.log; then
             echo "celeryd starts OK"
             RETVAL=0
         fi
@@ -66,7 +66,7 @@ start() {
         fi
     else
         echo -n "Start celeryd: "
-        daemon --pidfile /var/run/celeryd.pid "CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd &>/tmp/celeryd.log & echo \$! > /var/run/celeryd.pid"
+        daemon --pidfile /var/run/celeryd.pid "C_FORCE_ROOT=1 CELERY_CONFIG_MODULE=compass.utils.celeryconfig_wrapper celeryd &>/tmp/celeryd.log & echo \$! > /var/run/celeryd.pid"
         RETVAL=$?
         echo
         echo -n "Start service progress_update: "

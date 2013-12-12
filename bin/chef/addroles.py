@@ -4,7 +4,7 @@ import os
 import os.path
 
 rolelist = []
-role_dir = os.path.join(os.path.dirname(__file__), "roles")
+role_dir = '/var/chef/roles'
 for item in os.listdir(role_dir):
     f = os.path.join(role_dir, item)
     rolelist.append(f)

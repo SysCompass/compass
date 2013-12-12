@@ -4,7 +4,7 @@ import os
 import os.path
 
 databags = []
-databag_dir = os.path.join(os.path.dirname(__file__), "databags")
+databag_dir = '/var/chef/databags'
 for item in os.listdir(databag_dir):
     databags.append(item)
 

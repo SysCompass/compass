@@ -13,6 +13,12 @@ sudo sed -i '
 \$template Chef_log,"/var/log/cobbler/anamon/%hostname%/chef-client.log"\
 \$template Raw, "%rawmsg%"\
 ' /etc/rsyslog.conf
+sudo sed -i '
+/# ### begin forwarding rule ###/ i\
+local3.*        -?Chef_log\
+' /etc/rsyslog.conf
+sudo sed -i 's/^#$ModLoad[ \t]\+imtcp/$ModLoad imtcp/g' /etc/rsyslog.conf
+sudo sed -i '/$InputTCPServerRun/c\$InputTCPServerRun 514' /etc/rsyslog.conf
 sudo service rsyslog restart
 
 # configure chef-server

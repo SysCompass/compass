@@ -523,6 +523,29 @@ class Cluster(Resource):
             200, {"status": "OK"})
 
 
+@app.route("/clusters", methods=['GET'])
+def list_clusters():
+    """Lists the details of all clusters"""
+    endpoint = '/clusters'
+    results = []
+    with database.session() as session:
+        clusters = session.query(ModelCluster).all()
+
+        if clusters:
+            for cluster in clusters:
+                cluster_res = {}
+                cluster_res['clusterName'] = cluster.name
+                cluster_res['id'] = cluster.id
+                cluster_res['link'] = {
+                    "href": "/".join((endpoint, str(cluster.id))),
+                    "rel": "self"}
+                results.append(cluster_res)
+
+    return util.make_json_response(
+        200, {"status": "OK",
+              "clusters": results})
+
+
 @app.route("/clusters/<string:cluster_id>/action", methods=['POST'])
 def execute_cluster_action(cluster_id):
     """

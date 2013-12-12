@@ -121,7 +121,7 @@ def is_valid_networking_config(config):
         expected_keys = ['management', 'tenant', 'public', 'storage']
         required_fields = ['nic', 'promisc']
         normal_fields = ['ip_start', 'ip_end', 'netmask']
-        other_fields = ['gateway', 'vlan', 'proxy', 'ntp_sever']
+        other_fields = ['gateway', 'vlan']
 
         interfaces_keys = interfaces_config.keys()
         for key in expected_keys:
@@ -182,9 +182,10 @@ def is_valid_networking_config(config):
     def _is_valid_global_config(global_config):
         """Valid the format of 'global' section in config"""
 
-        keys = ['nameservers', 'search_path', 'gateway']
+        required_fields = ['nameservers', 'search_path', 'gateway']
+        other_fields = ['proxy', 'ntp_server']
         global_keys = global_config.keys()
-        for key in keys:
+        for key in required_fields:
             if key not in global_keys:
                 error_msg = ("Missing %s in global config of networking config"
                              % key)
@@ -208,6 +209,14 @@ def is_valid_networking_config(config):
 
             elif key == 'gateway' and not is_valid_gateway(value):
                 return False, "The gateway format is invalid! '%s'" % value
+
+        for key in other_fields:
+            if key not in global_keys:
+                continue
+
+            value = global_config[key]
+            if key == 'ntp_server' and not is_valid_ip(value):
+                return False, "The ntp server format is invalid!"
 
         return True, 'Valid!'
 

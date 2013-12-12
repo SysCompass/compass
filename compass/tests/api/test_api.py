@@ -346,6 +346,21 @@ class TestClusterAPI(ApiTestCase):
         data = json.loads(rv.get_data())
         self.assertEqual(data['cluster']['id'], 3)
 
+    def test_get_clusters(self):
+        #Insert more clusters in db
+        with database.session() as session:
+            clusters_list = [
+                Cluster(name="cluster_02"),
+                Cluster(name="cluster_03"),
+                Cluster(name="cluster_04")]
+            session.add_all(clusters_list)
+            session.flush()
+        
+        url = "/clusters"
+        rv = self.app.get(url)
+        data = json.loads(rv.get_data())
+        self.assertEqual(len(data['clusters']), 4)
+
     def test_put_cluster_security_resource(self):
         # Prepare testing data
         security = {'security': self.SECURITY_CONFIG}

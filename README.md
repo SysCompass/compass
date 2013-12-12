@@ -5,16 +5,17 @@ A Deoployment Automation System. See Wiki page at https://wiki.openstack.org/wik
 
 How to install Compass?
 -----------------------
- 1. Go to the Compass project directory.
- 2. Run `./install/install.sh` to setup compass environment.
- 3. Run `source /etc/profile` to setup compass profile.
- 4. Run `./bin/refresh.sh` to initialize database.
- 5. Run `service compassd start` to start compass daemon services.
+ 1. Run `git clone https://github.com/huawei-cloud/compass`
+ 2. Run `cd compass` to the Compass project directory.
+ 3. Run `./install/install.sh` to setup compass environment. Please note that before you execute `install.sh`, you may setup your environment variables in `install/install.conf`, explanations and examples of those variables can be found in `install.conf`.
+ 4. Run `source /etc/profile` to setup compass profile.
+ 5. Run `./bin/refresh.sh` to initialize database.
+ 6. Run `service compassd start` to start compass daemon services.
 
 FAQ
 ---
 
- * Why doesn't celery start?  What do I do if I get `celery died but pid file exists` message by running `service compassd status`?
+ * Why doesn't celery start?  What should I do if I get `celery died but pid file exists` message after running `service compassd status`?
 
   1. Simply remove celery pid file (`/var/run/celery.pid`).
   2. Try running `export C_FORCE_ROOT=1`
@@ -28,7 +29,7 @@ FAQ
   1. Run `service compassd status` to check compass services status.
   2. Run `service httpd status` to check web service status.
 
- * How to troubleshoot if `comapassd` can not start the services?
+ * How to troubleshoot if `compassd` can not start the services?
    1. Try to remove /var/run/celeryd.pid to release the celeryd lock
    2. Try to remove /var/run/progress_update.pid to release the progress_update lock.
 

@@ -113,17 +113,6 @@ else
   sudo service named start
 fi
 
-# import cobbler distro
-export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-sudo mkdir /var/lib/cobbler/iso
-sudo curl "$IMAGE_SOURCE" > /var/lib/cobbler/iso/CentOS6.4-minimal.iso
-sudo mkdir -p /mnt/CentOS6.4-minimal
-sudo mount -t auto -o loop /var/lib/cobbler/iso/CentOS6.4-minimal.iso /mnt/CentOS6.4-minimal
-sudo cobbler import --path=/mnt/CentOS6.4-minimal --name=CentOS6.4-minimal --arch=x86_64
-# manually run distro add and profile add if cobbler import fails
-sudo cobbler distro add --name=CentOS6.4-minimal --kernel=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/vmlinuz --initrd=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/initrd.img --arch=x86_64 --breed=redhat
-sudo cobbler profile add --name=CentOS6.4-minimal --repo=ppa_repo --distro=CentOS6.4-minimal --ksmeta= "tree=http://$ipaddr/cobbler/ks_mirror/CentOS6.4-minimal" --kickstart=/var/lib/cobbler/kickstarts/default.ks
-
 # create repo
 sudo mkdir -p /var/lib/cobbler/repo_mirror/ppa_repo
 sudo cobbler repo add --mirror=/var/lib/cobbler/repo_mirror/ppa_repo --name=ppa_repo --mirror-locally=Y
@@ -138,8 +127,22 @@ sudo curl ftp://rpmfind.net/linux/centos/6.4/os/x86_64/Packages/openssh-clients-
 sudo curl ftp://rpmfind.net/linux/centos/6.4/os/x86_64/Packages/iproute-2.6.32-23.el6.x86_64.rpm > iproute-2.6.32-23.el6.x86_64.rpm
 
 sudo curl ftp://rpmfind.net/linux/centos/6.4/os/x86_64/Packages/wget-1.12-1.8.el6.x86_64.rpm > wget-1.12-1.8.el6.x86_64.rpm
+
+sudo curl ftp://rpmfind.net/linux/centos/6.4/os/x86_64/Packages/ntpdate-4.2.4p8-3.el6.centos.x86_64.rpm > ntpdate-4.2.4p8-3.el6.centos.x86_64.rpm
+
 cd ..
 sudo createrepo ppa_repo
 sudo cobbler reposync
+
+# import cobbler distro
+export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+sudo mkdir -p /var/lib/cobbler/iso
+sudo curl "$IMAGE_SOURCE" > /var/lib/cobbler/iso/CentOS6.4-minimal.iso
+sudo mkdir -p /mnt/CentOS6.4-minimal
+sudo mount -t auto -o loop /var/lib/cobbler/iso/CentOS6.4-minimal.iso /mnt/CentOS6.4-minimal
+sudo cobbler import --path=/mnt/CentOS6.4-minimal --name=CentOS6.4-minimal --arch=x86_64
+# manually run distro add and profile add if cobbler import fails
+sudo cobbler distro add --name=CentOS6.4-minimal --kernel=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/vmlinuz --initrd=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/initrd.img --arch=x86_64 --breed=redhat
+sudo cobbler profile add --name=CentOS6.4-minimal --repo=ppa_repo --distro=CentOS6.4-minimal --ksmeta="tree=http://$ipaddr/cobbler/ks_mirror/CentOS6.4-minimal-x86_64" --kickstart=/var/lib/cobbler/kickstarts/default.ks
 
 echo "Cobbler configuration complete!"

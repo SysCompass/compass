@@ -22,6 +22,11 @@ def trigger_install(clusterid):
         logging.error('no cluster found for %s', clusterid)
         return
 
+    adapter = cluster.adapter
+    if not adapter:
+        logging.error('no proper adapter found for cluster %s', cluster.id)
+        return
+
     if not cluster.state:
         cluster.state = ClusterState()
 
@@ -31,19 +36,13 @@ def trigger_install(clusterid):
         return
 
     cluster.state.state = 'INSTALLING'
-    session.flush()
-    adapter = cluster.adapter
-    if not adapter:
-        logging.error('no proper adapter found for cluster %s', cluster.id)
-        return
-
     hostids = [host.id for host in cluster.hosts]
     update_hostids = []
     for host in cluster.hosts:
         if not host.state:
             host.state = HostState()
         elif host.state.state and host.state.state != 'UNINITIALIZED':
-            logging.info('ignore installing host %s sinc eth state is %s',
+            logging.info('ignore installing host %s sinc the state is %s',
                          host.id, host.state)
             continue
 
