@@ -47,7 +47,7 @@ TO_CLUSTER_TRANSLATORS = {
                 translated_keys=['/networking/public/interface']
             )],
             '/networking/interfaces/tenant/nic': [KeyTranslator(
-                translated_keys=['/networking/virtual/interface']
+                translated_keys=['/networking/tenant/interface']
             )],
         }
     ),
@@ -74,7 +74,6 @@ TO_HOST_TRANSLATORS = {
             '/networking/interfaces/management/ip': [KeyTranslator(
                 translated_keys=[
                     '/db/mysql/bind_address',
-                    '/mq/rabbitmg/bind_address',
                     '/mq/rabbitmq/bind_address',
                     '/endpoints/compute/metadata/host',
                     '/endpoints/compute/novnc/host',

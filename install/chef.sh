@@ -1,3 +1,6 @@
+#!bin/bash
+source install.con
+
 export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 echo "$ipaddr    $HOSTNAME" >> /etc/hosts
 sudo rpm -Uvh http://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-server-11.0.8-1.el6.x86_64.rpm
