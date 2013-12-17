@@ -1,0 +1,46 @@
+compass.log_analyzor package
+============================
+
+Submodules
+----------
+
+compass.log_analyzor.adapter_matcher module
+-------------------------------------------
+
+.. automodule:: compass.log_analyzor.adapter_matcher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.log_analyzor.file_matcher module
+----------------------------------------
+
+.. automodule:: compass.log_analyzor.file_matcher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.log_analyzor.line_matcher module
+----------------------------------------
+
+.. automodule:: compass.log_analyzor.line_matcher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.log_analyzor.progress_calculator module
+-----------------------------------------------
+
+.. automodule:: compass.log_analyzor.progress_calculator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.log_analyzor
+    :members:
+    :undoc-members:
+    :show-inheritance:

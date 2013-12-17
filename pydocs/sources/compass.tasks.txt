@@ -1,0 +1,30 @@
+compass.tasks package
+=====================
+
+Submodules
+----------
+
+compass.tasks.client module
+---------------------------
+
+.. automodule:: compass.tasks.client
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.tasks.tasks module
+--------------------------
+
+.. automodule:: compass.tasks.tasks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.tasks
+    :members:
+    :undoc-members:
+    :show-inheritance:

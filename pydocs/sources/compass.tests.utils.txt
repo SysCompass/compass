@@ -1,0 +1,22 @@
+compass.tests.utils package
+===========================
+
+Submodules
+----------
+
+compass.tests.utils.test_util module
+------------------------------------
+
+.. automodule:: compass.tests.utils.test_util
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.tests.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:

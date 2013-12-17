@@ -1,0 +1,38 @@
+compass.api package
+===================
+
+Submodules
+----------
+
+compass.api.api module
+----------------------
+
+.. automodule:: compass.api.api
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.api.errors module
+-------------------------
+
+.. automodule:: compass.api.errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.api.util module
+-----------------------
+
+.. automodule:: compass.api.util
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.api
+    :members:
+    :undoc-members:
+    :show-inheritance:

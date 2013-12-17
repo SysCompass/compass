@@ -1,0 +1,45 @@
+compass.config_management.installers package
+============================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.config_management.installers.plugins
+
+Submodules
+----------
+
+compass.config_management.installers.installer module
+-----------------------------------------------------
+
+.. automodule:: compass.config_management.installers.installer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.config_management.installers.os_installer module
+--------------------------------------------------------
+
+.. automodule:: compass.config_management.installers.os_installer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.config_management.installers.package_installer module
+-------------------------------------------------------------
+
+.. automodule:: compass.config_management.installers.package_installer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.config_management.installers
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,29 @@
+compass.hdsdiscovery.vendors.huawei package
+===========================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.hdsdiscovery.vendors.huawei.plugins
+
+Submodules
+----------
+
+compass.hdsdiscovery.vendors.huawei.huawei module
+-------------------------------------------------
+
+.. automodule:: compass.hdsdiscovery.vendors.huawei.huawei
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery.vendors.huawei
+    :members:
+    :undoc-members:
+    :show-inheritance:

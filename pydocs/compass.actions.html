@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.actions package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="compass.api package" href="compass.api.html" />
+    <link rel="prev" title="High level introduction" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.api.html" title="compass.api package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="High level introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-actions-package">
+<h1>compass.actions package<a class="headerlink" href="#compass-actions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.actions.poll_switch">
+<span id="compass-actions-poll-switch-module"></span><h2>compass.actions.poll_switch module<a class="headerlink" href="#module-compass.actions.poll_switch" title="Permalink to this headline">¶</a></h2>
+<p>Poll switch to update the information fo the machines &#8216;
+connected to the switch.</p>
+<dl class="function">
+<dt id="compass.actions.poll_switch.poll_switch">
+<tt class="descclassname">compass.actions.poll_switch.</tt><tt class="descname">poll_switch</tt><big>(</big><em>ip_addr</em>, <em>req_obj='mac'</em>, <em>oper='SCAN'</em><big>)</big><a class="headerlink" href="#compass.actions.poll_switch.poll_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query switch and return expected result
+:param str ip_addr: switch ip address
+:param str req_obj: the object requested to query from switch
+:param str oper : the operation to query the switch(SCAN, GET, SET)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.actions.progress_update">
+<span id="compass-actions-progress-update-module"></span><h2>compass.actions.progress_update module<a class="headerlink" href="#module-compass.actions.progress_update" title="Permalink to this headline">¶</a></h2>
+<p>module to update progress bar of the given cluster.</p>
+<dl class="function">
+<dt id="compass.actions.progress_update.updateProgress">
+<tt class="descclassname">compass.actions.progress_update.</tt><tt class="descname">updateProgress</tt><big>(</big><em>clusterid</em><big>)</big><a class="headerlink" href="#compass.actions.progress_update.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress bar for the given cluster.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>clusterid: int, the id of the cluster.</dd>
+<dt>Returns:</dt>
+<dd>None.</dd>
+</dl>
+<p>The function should be called out of the database session scope.
+In the function, it will update the database cluster_state and
+host_state table. The frontend will get the updated instaling state
+and progress from the two tables.
+The function will also query log_progressing_history table to get
+the lastest installing progress and the position of log it has processed
+in the last run. The function uses these information to avoid recalculate
+the progress from the beginning of the log file. After the progress got
+updated, it stores the information to the log_progressing_history for
+next time run.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.actions.trigger_install">
+<span id="compass-actions-trigger-install-module"></span><h2>compass.actions.trigger_install module<a class="headerlink" href="#module-compass.actions.trigger_install" title="Permalink to this headline">¶</a></h2>
+<p>module to trigger the install progress for a given cluster.</p>
+<dl class="function">
+<dt id="compass.actions.trigger_install.trigger_install">
+<tt class="descclassname">compass.actions.trigger_install.</tt><tt class="descname">trigger_install</tt><big>(</big><em>clusterid</em><big>)</big><a class="headerlink" href="#compass.actions.trigger_install.trigger_install" title="Permalink to this definition">¶</a></dt>
+<dd><p>trigger installer to start install for a given cluster.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>clusterid: int, the id of the cluster.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.actions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.actions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.actions package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.actions.poll_switch">compass.actions.poll_switch module</a></li>
+<li><a class="reference internal" href="#module-compass.actions.progress_update">compass.actions.progress_update module</a></li>
+<li><a class="reference internal" href="#module-compass.actions.trigger_install">compass.actions.trigger_install module</a></li>
+<li><a class="reference internal" href="#module-compass.actions">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">High level introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compass.api.html"
+                        title="next chapter">compass.api package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.actions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.api.html" title="compass.api package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="High level introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

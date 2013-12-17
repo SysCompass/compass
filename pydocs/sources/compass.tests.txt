@@ -1,0 +1,19 @@
+compass.tests package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.tests.api
+    compass.tests.hdsdiscovery
+    compass.tests.utils
+
+Module contents
+---------------
+
+.. automodule:: compass.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:

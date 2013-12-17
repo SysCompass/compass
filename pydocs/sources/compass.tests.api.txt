@@ -1,0 +1,22 @@
+compass.tests.api package
+=========================
+
+Submodules
+----------
+
+compass.tests.api.test_api module
+---------------------------------
+
+.. automodule:: compass.tests.api.test_api
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.tests.api
+    :members:
+    :undoc-members:
+    :show-inheritance:

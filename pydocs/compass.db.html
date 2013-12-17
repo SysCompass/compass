@@ -1,0 +1,809 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.db package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="compass.hdsdiscovery package" href="compass.hdsdiscovery.html" />
+    <link rel="prev" title="compass.api package" href="compass.api.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.hdsdiscovery.html" title="compass.hdsdiscovery package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compass.api.html" title="compass.api package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-db-package">
+<h1>compass.db package<a class="headerlink" href="#compass-db-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.db.database">
+<span id="compass-db-database-module"></span><h2>compass.db.database module<a class="headerlink" href="#module-compass.db.database" title="Permalink to this headline">¶</a></h2>
+<p>Provider interface to manipulate database.</p>
+<dl class="function">
+<dt id="compass.db.database.create_db">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">create_db</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.db.database.create_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create database</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.create_table">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">create_table</tt><big>(</big><em>table</em><big>)</big><a class="headerlink" href="#compass.db.database.create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> &#8211; Class of the Table defined in the model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.current_session">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">current_session</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.db.database.current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current session scope when it is called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">database session.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.drop_db">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">drop_db</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.db.database.drop_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.drop_table">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">drop_table</tt><big>(</big><em>table</em><big>)</big><a class="headerlink" href="#compass.db.database.drop_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table</strong> &#8211; Class of the Table defined in the model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.init">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">init</tt><big>(</big><em>database_url</em><big>)</big><a class="headerlink" href="#compass.db.database.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>database_url</strong> &#8211; string, database url.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.db.database.session">
+<tt class="descclassname">compass.db.database.</tt><tt class="descname">session</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#compass.db.database.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>database session scope. To operate database, it should be called in
+database session.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.db.model">
+<span id="compass-db-model-module"></span><h2>compass.db.model module<a class="headerlink" href="#module-compass.db.model" title="Permalink to this headline">¶</a></h2>
+<p>database model.</p>
+<dl class="class">
+<dt id="compass.db.model.Adapter">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">Adapter</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.Adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>Table stores ClusterHost installing Adapter information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>name</strong> &#8211; string, adapter name, unique.</li>
+<li><strong>os</strong> &#8211; string, os name for installing the host.</li>
+<li><strong>target_system</strong> &#8211; string, target system to be installed on the host.</li>
+<li><strong>clusters</strong> &#8211; refer to the list of Cluster.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.Adapter.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Adapter.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Adapter.name">
+<tt class="descname">name</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Adapter.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Adapter.os">
+<tt class="descname">os</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Adapter.os" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Adapter.target_system">
+<tt class="descname">target_system</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Adapter.target_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.Cluster">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">Cluster</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.Cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>Cluster configuration information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>name</strong> &#8211; str, cluster name.</li>
+<li><strong>mutable</strong> &#8211; bool, if the Cluster is mutable.</li>
+<li><strong>security_config</strong> &#8211; str stores json formatted security information.</li>
+<li><strong>networking_config</strong> &#8211; str stores json formatted networking information.</li>
+<li><strong>partition_config</strong> &#8211; string stores json formatted parition information.</li>
+<li><strong>adapter_id</strong> &#8211; the refer id in the Adapter table.</li>
+<li><strong>raw_config</strong> &#8211; str stores json formatted other cluster information.</li>
+<li><strong>adapter</strong> &#8211; refer to the Adapter.</li>
+<li><strong>state</strong> &#8211; refer to the ClusterState.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.adapter">
+<tt class="descname">adapter</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.adapter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.adapter_id">
+<tt class="descname">adapter_id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.adapter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.config">
+<tt class="descname">config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>get config from security, networking, partition</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.mutable">
+<tt class="descname">mutable</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.mutable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.name">
+<tt class="descname">name</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.networking">
+<tt class="descname">networking</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.networking" title="Permalink to this definition">¶</a></dt>
+<dd><p>networking getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.networking_config">
+<tt class="descname">networking_config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.networking_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.partition">
+<tt class="descname">partition</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>partition getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.partition_config">
+<tt class="descname">partition_config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.partition_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.raw_config">
+<tt class="descname">raw_config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.raw_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.security">
+<tt class="descname">security</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.security" title="Permalink to this definition">¶</a></dt>
+<dd><p>security getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Cluster.security_config">
+<tt class="descname">security_config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Cluster.security_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.ClusterHost">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">ClusterHost</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.ClusterHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>ClusterHost information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>machine_id</strong> &#8211; int, the id of the Machine.</li>
+<li><strong>cluster_id</strong> &#8211; int, the id of the Cluster.</li>
+<li><strong>mutable</strong> &#8211; if the ClusterHost information is mutable.</li>
+<li><strong>hostname</strong> &#8211; str, host name.</li>
+<li><strong>config_data</strong> &#8211; string, json formatted config data.</li>
+<li><strong>cluster</strong> &#8211; refer to Cluster the host in.</li>
+<li><strong>machine</strong> &#8211; refer to the Machine the host on.</li>
+<li><strong>state</strong> &#8211; refer to HostState indicates the host state.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.cluster">
+<tt class="descname">cluster</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.cluster_id">
+<tt class="descname">cluster_id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.cluster_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.config">
+<tt class="descname">config</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>config getter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.config_data">
+<tt class="descname">config_data</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.config_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.hostname">
+<tt class="descname">hostname</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.hostname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.machine">
+<tt class="descname">machine</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.machine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.machine_id">
+<tt class="descname">machine_id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.machine_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterHost.mutable">
+<tt class="descname">mutable</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterHost.mutable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.ClusterState">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">ClusterState</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.ClusterState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>The state of the Cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>state</strong> &#8211; Enum, &#8216;UNINITIALIZED&#8217;: the cluster is ready to setup.
+&#8216;INSTALLING&#8217;: the cluster is not installing.
+&#8216;READY&#8217;: the cluster is setup.
+&#8216;ERROR&#8217;: the cluster has error.</li>
+<li><strong>progress</strong> &#8211; float, the installing progress from 0 to 1.</li>
+<li><strong>message</strong> &#8211; the latest installing message.</li>
+<li><strong>severity</strong> &#8211; Enum, the installing message severity.
+(&#8216;INFO&#8217;, &#8216;WARNING&#8217;, &#8216;ERROR&#8217;).</li>
+<li><strong>update_timestamp</strong> &#8211; the lastest timestamp the entry got updated.</li>
+<li><strong>cluster</strong> &#8211; refer to Cluster.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.cluster">
+<tt class="descname">cluster</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.clustername">
+<tt class="descname">clustername</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.clustername" title="Permalink to this definition">¶</a></dt>
+<dd><p>clustername getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.message">
+<tt class="descname">message</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.progress">
+<tt class="descname">progress</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.severity">
+<tt class="descname">severity</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.severity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.state">
+<tt class="descname">state</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.ClusterState.update_timestamp">
+<tt class="descname">update_timestamp</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.ClusterState.update_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.HostState">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">HostState</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.HostState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>The state of the ClusterHost.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>state</strong> &#8211; Enum. &#8216;UNINITIALIZED&#8217;: the host is ready to setup.
+&#8216;INSTALLING&#8217;: the host is not installing.
+&#8216;READY&#8217;: the host is setup.
+&#8216;ERROR&#8217;: the host has error.</li>
+<li><strong>progress</strong> &#8211; float, the installing progress from 0 to 1.</li>
+<li><strong>message</strong> &#8211; the latest installing message.</li>
+<li><strong>severity</strong> &#8211; Enum, the installing message severity.
+(&#8216;INFO&#8217;, &#8216;WARNING&#8217;, &#8216;ERROR&#8217;)</li>
+<li><strong>update_timestamp</strong> &#8211; the lastest timestamp the entry got updated.</li>
+<li><strong>host</strong> &#8211; refer to ClusterHost.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.HostState.host">
+<tt class="descname">host</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.hostname">
+<tt class="descname">hostname</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.hostname" title="Permalink to this definition">¶</a></dt>
+<dd><p>hostname getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.message">
+<tt class="descname">message</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.progress">
+<tt class="descname">progress</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.severity">
+<tt class="descname">severity</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.severity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.state">
+<tt class="descname">state</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.HostState.update_timestamp">
+<tt class="descname">update_timestamp</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.HostState.update_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.LogProgressingHistory">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">LogProgressingHistory</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.LogProgressingHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>host installing log history for each file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>pathname</strong> &#8211; str, the full path of the installing log file. unique.</li>
+<li><strong>position</strong> &#8211; int, the position of the log file it has processed.</li>
+<li><strong>partial_line</strong> &#8211; str, partial line of the log.</li>
+<li><strong>progressing</strong> &#8211; float, indicate the installing progress between 0 to 1.</li>
+<li><strong>message</strong> &#8211; str, str, the installing message.</li>
+<li><strong>severity</strong> &#8211; Enum, the installing message severity.
+(&#8216;ERROR&#8217;, &#8216;WARNING&#8217;, &#8216;INFO&#8217;)</li>
+<li><strong>line_matcher_name</strong> &#8211; str, the line matcher name of the log processor.</li>
+<li><strong>update_timestamp</strong> &#8211; datetime, the latest timestamp the entry updated.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.line_matcher_name">
+<tt class="descname">line_matcher_name</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.line_matcher_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.message">
+<tt class="descname">message</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.partial_line">
+<tt class="descname">partial_line</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.partial_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.pathname">
+<tt class="descname">pathname</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.pathname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.position">
+<tt class="descname">position</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.progress">
+<tt class="descname">progress</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.progress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.severity">
+<tt class="descname">severity</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.severity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.LogProgressingHistory.update_timestamp">
+<tt class="descname">update_timestamp</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.LogProgressingHistory.update_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.Machine">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">Machine</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.Machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>Machine table.Note: currently, we are taking care of management plane.
+Therefore, we assume one machine is connected to one switch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key</li>
+<li><strong>mac</strong> &#8211; string, the MAC address of the machine.</li>
+<li><strong>switch_id</strong> &#8211; switch id that this machine connected on to.</li>
+<li><strong>port</strong> &#8211; nth port of the switch that this machine connected.</li>
+<li><strong>vlan</strong> &#8211; vlan id that this machine connected on to.</li>
+<li><strong>update_timestamp</strong> &#8211; last time this entry got updated.</li>
+<li><strong>switch</strong> &#8211; refer to the Switch the machine connects to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.Machine.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.mac">
+<tt class="descname">mac</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.mac" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.port">
+<tt class="descname">port</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.switch">
+<tt class="descname">switch</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.switch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.switch_id">
+<tt class="descname">switch_id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.switch_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.update_timestamp">
+<tt class="descname">update_timestamp</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.update_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Machine.vlan">
+<tt class="descname">vlan</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Machine.vlan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.Role">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">Role</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.Role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>The Role table stores avaiable roles of one target system
+where the host can be deployed to one or several roles in the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; int, identity as primary key.</li>
+<li><strong>name</strong> &#8211; role name.</li>
+<li><strong>target_system</strong> &#8211; str, the target_system.</li>
+<li><strong>description</strong> &#8211; str, the description of the role.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.Role.description">
+<tt class="descname">description</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Role.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Role.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Role.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Role.name">
+<tt class="descname">name</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Role.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Role.target_system">
+<tt class="descname">target_system</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Role.target_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.db.model.Switch">
+<em class="property">class </em><tt class="descclassname">compass.db.model.</tt><tt class="descname">Switch</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.db.model.Switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></tt></p>
+<p>Switch table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; the unique identifier of the switch. int as primary key.</li>
+<li><strong>ip</strong> &#8211; the IP address of the switch.</li>
+<li><strong>vendor_info</strong> &#8211; the name of the vendor</li>
+<li><strong>credential_data</strong> &#8211; used for accessing and retrieving information
+from the switch. Store json format as string.</li>
+<li><strong>state</strong> &#8211; Enum.&#8217;not_reached&#8217;: polling switch fails or not complete to
+learn all MAC addresses of devices connected to the switch;
+&#8216;under_monitoring&#8217;: successfully learn all MAC addresses.</li>
+<li><strong>machines</strong> &#8211; refer to list of Machine connected to the switch.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="compass.db.model.Switch.credential">
+<tt class="descname">credential</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.credential" title="Permalink to this definition">¶</a></dt>
+<dd><p>credential data getter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">python primitive dictionary object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.credential_data">
+<tt class="descname">credential_data</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.credential_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.id">
+<tt class="descname">id</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.ip">
+<tt class="descname">ip</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.state">
+<tt class="descname">state</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.vendor">
+<tt class="descname">vendor</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.vendor" title="Permalink to this definition">¶</a></dt>
+<dd><p>vendor property getter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="compass.db.model.Switch.vendor_info">
+<tt class="descname">vendor_info</tt><em class="property"> None</em><a class="headerlink" href="#compass.db.model.Switch.vendor_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.db">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.db" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.db package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.db.database">compass.db.database module</a></li>
+<li><a class="reference internal" href="#module-compass.db.model">compass.db.model module</a></li>
+<li><a class="reference internal" href="#module-compass.db">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compass.api.html"
+                        title="previous chapter">compass.api package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compass.hdsdiscovery.html"
+                        title="next chapter">compass.hdsdiscovery package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.db.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.hdsdiscovery.html" title="compass.hdsdiscovery package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="compass.api.html" title="compass.api package"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

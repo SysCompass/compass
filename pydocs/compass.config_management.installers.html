@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.config_management.installers package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="compass.config_management.installers.plugins package" href="compass.config_management.installers.plugins.html" />
+    <link rel="prev" title="compass.config_management.providers.plugins package" href="compass.config_management.providers.plugins.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.plugins.html" title="compass.config_management.installers.plugins package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.providers.plugins.html" title="compass.config_management.providers.plugins package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-config-management-installers-package">
+<h1>compass.config_management.installers package<a class="headerlink" href="#compass-config-management-installers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compass.config_management.installers.plugins.html">compass.config_management.installers.plugins package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compass.config_management.installers.plugins.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compass.config_management.installers.plugins.html#module-compass.config_management.installers.plugins.chefhandler">compass.config_management.installers.plugins.chefhandler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compass.config_management.installers.plugins.html#module-compass.config_management.installers.plugins.cobbler">compass.config_management.installers.plugins.cobbler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compass.config_management.installers.plugins.html#module-compass.config_management.installers.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.config_management.installers.installer">
+<span id="compass-config-management-installers-installer-module"></span><h2>compass.config_management.installers.installer module<a class="headerlink" href="#module-compass.config_management.installers.installer" title="Permalink to this headline">¶</a></h2>
+<p>Module to provider base installer class Installer.</p>
+<dl class="class">
+<dt id="compass.config_management.installers.installer.Installer">
+<em class="property">class </em><tt class="descclassname">compass.config_management.installers.installer.</tt><tt class="descname">Installer</tt><a class="headerlink" href="#compass.config_management.installers.installer.Installer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for installer.</p>
+<dl class="attribute">
+<dt id="compass.config_management.installers.installer.Installer.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'installer'</em><a class="headerlink" href="#compass.config_management.installers.installer.Installer.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.getClusterConfig">
+<tt class="descname">getClusterConfig</tt><big>(</big><em>clusterid</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.getClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.getGlobalConfig">
+<tt class="descname">getGlobalConfig</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.getGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.getHostConfig">
+<tt class="descname">getHostConfig</tt><big>(</big><em>hostid</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.getHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get host config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.getHostConfigs">
+<tt class="descname">getHostConfigs</tt><big>(</big><em>hostids</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.getHostConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>get host configs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to sync installer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.updateClusterConfig">
+<tt class="descname">updateClusterConfig</tt><big>(</big><em>clusterid</em>, <em>config</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.updateClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to update cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.updateGlobalConfig">
+<tt class="descname">updateGlobalConfig</tt><big>(</big><em>config</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.updateGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to update global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.updateHostConfig">
+<tt class="descname">updateHostConfig</tt><big>(</big><em>hostid</em>, <em>config</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.updateHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to update host config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.installer.Installer.updateHostConfigs">
+<tt class="descname">updateHostConfigs</tt><big>(</big><em>host_configs</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.installer.Installer.updateHostConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>updaet host configs.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.installers.os_installer">
+<span id="compass-config-management-installers-os-installer-module"></span><h2>compass.config_management.installers.os_installer module<a class="headerlink" href="#module-compass.config_management.installers.os_installer" title="Permalink to this headline">¶</a></h2>
+<p>provider Base class for os installer.</p>
+<dl class="class">
+<dt id="compass.config_management.installers.os_installer.Installer">
+<em class="property">class </em><tt class="descclassname">compass.config_management.installers.os_installer.</tt><tt class="descname">Installer</tt><a class="headerlink" href="#compass.config_management.installers.os_installer.Installer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.config_management.installers.installer.Installer" title="compass.config_management.installers.installer.Installer"><tt class="xref py py-class docutils literal"><span class="pre">compass.config_management.installers.installer.Installer</span></tt></a></p>
+<p>Base class for os installer.</p>
+<dl class="attribute">
+<dt id="compass.config_management.installers.os_installer.Installer.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'os_installer'</em><a class="headerlink" href="#compass.config_management.installers.os_installer.Installer.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.os_installer.Installer.getOSes">
+<tt class="descname">getOSes</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.installers.os_installer.Installer.getOSes" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get supported oses.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>list of str, each is the supported os name and version.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.os_installer.getInstaller">
+<tt class="descclassname">compass.config_management.installers.os_installer.</tt><tt class="descname">getInstaller</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.installers.os_installer.getInstaller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get default os installer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.os_installer.getInstallerByName">
+<tt class="descclassname">compass.config_management.installers.os_installer.</tt><tt class="descname">getInstallerByName</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.os_installer.getInstallerByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get os installer by name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.os_installer.register">
+<tt class="descclassname">compass.config_management.installers.os_installer.</tt><tt class="descname">register</tt><big>(</big><em>os_installer</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.os_installer.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register os installer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.installers.package_installer">
+<span id="compass-config-management-installers-package-installer-module"></span><h2>compass.config_management.installers.package_installer module<a class="headerlink" href="#module-compass.config_management.installers.package_installer" title="Permalink to this headline">¶</a></h2>
+<p>Provider Base class for package installer.</p>
+<dl class="class">
+<dt id="compass.config_management.installers.package_installer.Installer">
+<em class="property">class </em><tt class="descclassname">compass.config_management.installers.package_installer.</tt><tt class="descname">Installer</tt><a class="headerlink" href="#compass.config_management.installers.package_installer.Installer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.config_management.installers.installer.Installer" title="compass.config_management.installers.installer.Installer"><tt class="xref py py-class docutils literal"><span class="pre">compass.config_management.installers.installer.Installer</span></tt></a></p>
+<p>Base class for package installer.</p>
+<dl class="attribute">
+<dt id="compass.config_management.installers.package_installer.Installer.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'package_installer'</em><a class="headerlink" href="#compass.config_management.installers.package_installer.Installer.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.package_installer.Installer.getRoles">
+<tt class="descname">getRoles</tt><big>(</big><em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.Installer.getRoles" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get all roles of target system.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>target_system: str, target cloud system such as openstack.</dd>
+<dt>Returns:</dt>
+<dd>dict of {role: description}</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.package_installer.Installer.getTargetSystems">
+<tt class="descname">getTargetSystems</tt><big>(</big><em>oses</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.Installer.getTargetSystems" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get available target_systems for each os.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>oses: list of str, supported oses.</dd>
+<dt>Returns:</dt>
+<dd>dict of {os_version: list of supported target system}</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.installers.package_installer.Installer.os_installer_config">
+<tt class="descname">os_installer_config</tt><big>(</big><em>config</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.Installer.os_installer_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to get os installer related config.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.package_installer.getInstaller">
+<tt class="descclassname">compass.config_management.installers.package_installer.</tt><tt class="descname">getInstaller</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.getInstaller" title="Permalink to this definition">¶</a></dt>
+<dd><p>get default package installer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.package_installer.getInstallerByName">
+<tt class="descclassname">compass.config_management.installers.package_installer.</tt><tt class="descname">getInstallerByName</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.getInstallerByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>get package installer by name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.installers.package_installer.register">
+<tt class="descclassname">compass.config_management.installers.package_installer.</tt><tt class="descname">register</tt><big>(</big><em>package_installer</em><big>)</big><a class="headerlink" href="#compass.config_management.installers.package_installer.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register package installer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.installers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.config_management.installers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.config_management.installers package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.installers.installer">compass.config_management.installers.installer module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.installers.os_installer">compass.config_management.installers.os_installer module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.installers.package_installer">compass.config_management.installers.package_installer module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.installers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compass.config_management.providers.plugins.html"
+                        title="previous chapter">compass.config_management.providers.plugins package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compass.config_management.installers.plugins.html"
+                        title="next chapter">compass.config_management.installers.plugins package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.config_management.installers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.plugins.html" title="compass.config_management.installers.plugins package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.providers.plugins.html" title="compass.config_management.providers.plugins package"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+compass.hdsdiscovery.vendors.ovswitch package
+=============================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.hdsdiscovery.vendors.ovswitch.plugins
+
+Submodules
+----------
+
+compass.hdsdiscovery.vendors.ovswitch.ovswitch module
+-----------------------------------------------------
+
+.. automodule:: compass.hdsdiscovery.vendors.ovswitch.ovswitch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery.vendors.ovswitch
+    :members:
+    :undoc-members:
+    :show-inheritance:

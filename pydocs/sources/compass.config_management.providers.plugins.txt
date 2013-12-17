@@ -1,0 +1,38 @@
+compass.config_management.providers.plugins package
+===================================================
+
+Submodules
+----------
+
+compass.config_management.providers.plugins.db_config_provider module
+---------------------------------------------------------------------
+
+.. automodule:: compass.config_management.providers.plugins.db_config_provider
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.config_management.providers.plugins.file_config_provider module
+-----------------------------------------------------------------------
+
+.. automodule:: compass.config_management.providers.plugins.file_config_provider
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.config_management.providers.plugins.mix_config_provider module
+----------------------------------------------------------------------
+
+.. automodule:: compass.config_management.providers.plugins.mix_config_provider
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.config_management.providers.plugins
+    :members:
+    :undoc-members:
+    :show-inheritance:

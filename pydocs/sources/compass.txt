@@ -1,0 +1,25 @@
+compass package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.actions
+    compass.api
+    compass.config_management
+    compass.db
+    compass.hdsdiscovery
+    compass.log_analyzor
+    compass.tasks
+    compass.tests
+    compass.utils
+
+Module contents
+---------------
+
+.. automodule:: compass
+    :members:
+    :undoc-members:
+    :show-inheritance:

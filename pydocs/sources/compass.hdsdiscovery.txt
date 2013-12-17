@@ -1,0 +1,45 @@
+compass.hdsdiscovery package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.hdsdiscovery.vendors
+
+Submodules
+----------
+
+compass.hdsdiscovery.base module
+--------------------------------
+
+.. automodule:: compass.hdsdiscovery.base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.hdsdiscovery.hdmanager module
+-------------------------------------
+
+.. automodule:: compass.hdsdiscovery.hdmanager
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.hdsdiscovery.utils module
+---------------------------------
+
+.. automodule:: compass.hdsdiscovery.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery
+    :members:
+    :undoc-members:
+    :show-inheritance:

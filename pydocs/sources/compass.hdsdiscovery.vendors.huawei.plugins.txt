@@ -1,0 +1,22 @@
+compass.hdsdiscovery.vendors.huawei.plugins package
+===================================================
+
+Submodules
+----------
+
+compass.hdsdiscovery.vendors.huawei.plugins.mac module
+------------------------------------------------------
+
+.. automodule:: compass.hdsdiscovery.vendors.huawei.plugins.mac
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery.vendors.huawei.plugins
+    :members:
+    :undoc-members:
+    :show-inheritance:

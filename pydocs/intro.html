@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>High level introduction &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="compass.actions package" href="compass.actions.html" />
+    <link rel="prev" title="Welcome to Compass’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.actions.html" title="compass.actions package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Compass’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="high-level-introduction">
+<h1>High level introduction<a class="headerlink" href="#high-level-introduction" title="Permalink to this headline">¶</a></h1>
+<p>Compass is an open source project designed to provide &#8220;deployment as a service&#8221; to a set of bare metal machines.</p>
+<p>It can provide a Restful API service for operators to pragmatically deploy an OpenStack system on to the raw physical resources. From the 10,000 foot view, it can be considered as a Live CD to a set of physical machines to the end users (staff deploying OpenStack system).</p>
+<div class="section" id="design-considerations">
+<h2>Design Considerations<a class="headerlink" href="#design-considerations" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><em>Deployment System Extensibility</em>: Compass is not limited to OpenStack cluster, it provides a data-driven framework for deployment.</dt>
+<dd><ul class="first last simple">
+<li>Example: Providing capability to create a Ceph cluster by extending the data fields in Compass system</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Hardware Support Extensibility</em>: Like Cinder&#8217;s support for multiple storage vendors&#8217; system controlled by an OpenStack API through plug-in framework, Compass supports topology-aware resource discovery to multiple networking vendor&#8217;s equipment through its plug-in framework.</dt>
+<dd><ul class="first last simple">
+<li>Example: Compass originally supported Huawei switches for topology-aware resource discovery, and we added support to HP switches with less than a couple of hundred lines of plug-in code.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Host OS/Hypervisor Extensibility</em>:</dt>
+<dd><ul class="first last simple">
+<li>Example: we first streamlined the process for CentOS. Ubuntu support is being supported at this moment. We imagine we can repeat the similar easy effort to systems like ESXi.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first"><em>Configuration Management System Extensibility</em>: Compass provides the concept of adapter. Current we have implemented Chef based deployment, and we believe other CM tools can be easily included in this framework. We believe this helps enterprises that have purchased supported licenses from other CM tools vendors.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">High level introduction</a><ul>
+<li><a class="reference internal" href="#design-considerations">Design Considerations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Compass&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compass.actions.html"
+                        title="next chapter">compass.actions package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.actions.html" title="compass.actions package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Compass’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

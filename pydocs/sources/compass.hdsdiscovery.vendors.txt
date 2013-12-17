@@ -1,0 +1,19 @@
+compass.hdsdiscovery.vendors package
+====================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.hdsdiscovery.vendors.hp
+    compass.hdsdiscovery.vendors.huawei
+    compass.hdsdiscovery.vendors.ovswitch
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery.vendors
+    :members:
+    :undoc-members:
+    :show-inheritance:

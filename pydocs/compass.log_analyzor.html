@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.log_analyzor package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="compass.config_management.installers.plugins package" href="compass.config_management.installers.plugins.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.plugins.html" title="compass.config_management.installers.plugins package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-log-analyzor-package">
+<h1>compass.log_analyzor package<a class="headerlink" href="#compass-log-analyzor-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.log_analyzor.adapter_matcher">
+<span id="compass-log-analyzor-adapter-matcher-module"></span><h2>compass.log_analyzor.adapter_matcher module<a class="headerlink" href="#module-compass.log_analyzor.adapter_matcher" title="Permalink to this headline">¶</a></h2>
+<p>Module to provider installing progress update functions for the adapter.</p>
+<dl class="class">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterItemMatcher">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.adapter_matcher.</tt><tt class="descname">AdapterItemMatcher</tt><big>(</big><em>file_matchers</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterItemMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>progress matcher for the os installing or package installing.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterItemMatcher.updateProgress">
+<tt class="descname">updateProgress</tt><big>(</big><em>hostname</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterItemMatcher.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update progress.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>hostname: str, the hostname of the installing host.
+progress: Progress instance to update.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterItemMatcher.update_progress_range">
+<tt class="descname">update_progress_range</tt><big>(</big><em>min_progress</em>, <em>max_progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterItemMatcher.update_progress_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>update min_progress and max_progress.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.adapter_matcher.</tt><tt class="descname">AdapterMatcher</tt><big>(</big><em>name</em>, <em>os_pattern</em>, <em>os_matcher</em>, <em>min_os_progress</em>, <em>max_os_progress</em>, <em>package_installer_name</em>, <em>package_matcher</em>, <em>min_package_progress</em>, <em>max_package_progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Adapter matcher to update adapter installing progress.</p>
+<dl class="classmethod">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.getClusterProgress">
+<em class="property">classmethod </em><tt class="descname">getClusterProgress</tt><big>(</big><em>clusterid</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.getClusterProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get cluster progress from database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>clusterid: int, cluster id for the cluster.</dd>
+<dt>Returns:</dt>
+<dd>Progress instance from database.</dd>
+</dl>
+<p>Notes: the function should be called out of database session.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.getHostProgress">
+<em class="property">classmethod </em><tt class="descname">getHostProgress</tt><big>(</big><em>hostid</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.getHostProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Host Progress from database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>hostid: int, the id of host in database.</dd>
+<dt>Returns:</dt>
+<dd>Progress instance got from database or None if there is
+no such record.</dd>
+</dl>
+<p>Notes: The function should be called out of database session.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.match">
+<tt class="descname">match</tt><big>(</big><em>os_name</em>, <em>package_installer_name</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.match" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Check if the adapter matcher is acceptable for the given 
+os name and package installer.</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>os_name: str, the os name.
+package_installer_name: str, the package installer name.</dd>
+<dt>Returns:</dt>
+<dd>True if found the AdapterMatcher can process the log files
+generated for the os installation and package installation.</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.updateClusterProgress">
+<em class="property">classmethod </em><tt class="descname">updateClusterProgress</tt><big>(</big><em>clusterid</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.updateClusterProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update cluster installing progress to database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>clusterid: int, cluster id.
+progress: Progress instance to update to database.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+<p>the progress will be updated to database if the value is greater than
+the progress in the database or the value is the same but the message
+is different.</p>
+<p>Notes: the function should be called out of the database session.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.updateHostProgress">
+<em class="property">classmethod </em><tt class="descname">updateHostProgress</tt><big>(</big><em>hostid</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.updateHostProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update host progress to database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>hostid: int, the id of the ClusterHost in database.
+progress: Progress instance to update.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+<p>the progress will be updated to database if the value is greater than
+the progress in the database or the value is the same but the message
+is different.</p>
+<p>Notes: the function should be called out of the database session.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.adapter_matcher.AdapterMatcher.updateProgress">
+<tt class="descname">updateProgress</tt><big>(</big><em>clusterid</em>, <em>hostids</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.adapter_matcher.AdapterMatcher.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update cluster progress and hosts progresses.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>clusterid: int, the cluster id.
+hostids: list of int, the host ids.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.log_analyzor.file_matcher">
+<span id="compass-log-analyzor-file-matcher-module"></span><h2>compass.log_analyzor.file_matcher module<a class="headerlink" href="#module-compass.log_analyzor.file_matcher" title="Permalink to this headline">¶</a></h2>
+<p>Module to update intalling progress by processing log file.</p>
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.CompositeFileFilter">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">CompositeFileFilter</tt><big>(</big><em>filters</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.CompositeFileFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.log_analyzor.file_matcher.FileFilter" title="compass.log_analyzor.file_matcher.FileFilter"><tt class="xref py py-class docutils literal"><span class="pre">compass.log_analyzor.file_matcher.FileFilter</span></tt></a></p>
+<p>filter log file based on the list of filters</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.CompositeFileFilter.appendFilter">
+<tt class="descname">appendFilter</tt><big>(</big><em>file_filter</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.CompositeFileFilter.appendFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>append filter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.CompositeFileFilter.filter">
+<tt class="descname">filter</tt><big>(</big><em>pathname</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.CompositeFileFilter.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter log file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.FileFilter">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">FileFilter</tt><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>base class to filter log file.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileFilter.filter">
+<tt class="descname">filter</tt><big>(</big><em>pathname</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileFilter.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter log file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>pathname: str, the absolute path name to the log file.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.FileMatcher">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">FileMatcher</tt><big>(</big><em>line_matchers</em>, <em>min_progress</em>, <em>max_progress</em>, <em>filename</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>File matcher the get the lastest installing progress
+from the log file.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileMatcher.updateProgress">
+<tt class="descname">updateProgress</tt><big>(</big><em>hostname</em>, <em>total_progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileMatcher.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress from file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>hostname: str, the hostname of the installing host.
+total_progress: Progress instance to update.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+<p>the function update installing progress by reading the log file.
+It contains a list of line matcher, when one log line matches
+with current line matcher, the installing progress is updated.
+and the current line matcher got updated.
+Notes: some line may be processed multi times. The case is the
+last line of log file is processed in one run, while in the other
+run, it will be reprocessed at the beginning because there is
+no line end indicator for the last line of the file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileMatcher.updateTotalProgress">
+<tt class="descname">updateTotalProgress</tt><big>(</big><em>file_progress</em>, <em>total_progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileMatcher.updateTotalProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the total progress from file progress.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>file_progress: Progress instance. the installing progress from</dt>
+<dd>the logging file.
+It is between 0 to 1. 1 means the whole log
+installing progess for the related part is
+done. it does not mean the whole installing
+progress done.</dd>
+<dt>total_progrss: Progress instance. the total installing</dt>
+<dd>progress to update.
+It should be between absolute_min_progress
+and absolute max progress.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileMatcher.update_absolute_progress_range">
+<tt class="descname">update_absolute_progress_range</tt><big>(</big><em>min_progress</em>, <em>max_progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileMatcher.update_absolute_progress_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>update the min progress and max progress the log file indicates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.FileReader">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">FileReader</tt><big>(</big><em>pathname</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to read log file.</p>
+<p>The class provide support to read log file from the position
+it has read last time. and update the position when it finish
+reading the log.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileReader.getHistory">
+<tt class="descname">getHistory</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReader.getHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get log file read history from database.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None</dd>
+<dt>Returns:</dt>
+<dd>line_matcher_name: str, line matcher name.
+progress: Progress instance record the installing history.</dd>
+</dl>
+<p>The function should be called out of database session.
+It reads the log_progressing_history table to get the
+position in the log file it has read in last run,
+the partial line of the log, the line matcher name
+in the last run, the progress, the message and the
+severity it has got in the last run.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileReader.readline">
+<tt class="descname">readline</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReader.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>log line generator.</p>
+<blockquote>
+<div>For the last line of the file, it may regenerate in the next line
+because there is no</div></blockquote>
+<p>for the last line.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileReader.updateHistory">
+<tt class="descname">updateHistory</tt><big>(</big><em>line_matcher_name</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReader.updateHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update log_progressing_history table.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>line_matcher_name: str, the line matcher name.
+progress: Progress instance to record the installing progress.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+<p>The function should be called out of database session.
+It updates the log_processing_history table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.FileReaderFactory">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">FileReaderFactory</tt><big>(</big><em>logdir</em>, <em>filefilter</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReaderFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>factory class to create FileReader instance.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FileReaderFactory.getFileReader">
+<tt class="descname">getFileReader</tt><big>(</big><em>hostname</em>, <em>filename</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FileReaderFactory.getFileReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get FileReader instance.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>hostname: str, the hostname of installing host.
+filename: the filename of the log file.</dd>
+<dt>Returns:</dt>
+<dd>FileReader instance if it is not filtered.
+Otherwise None.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.file_matcher.FilterFileExist">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">FilterFileExist</tt><a class="headerlink" href="#compass.log_analyzor.file_matcher.FilterFileExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.log_analyzor.file_matcher.FileFilter" title="compass.log_analyzor.file_matcher.FileFilter"><tt class="xref py py-class docutils literal"><span class="pre">compass.log_analyzor.file_matcher.FileFilter</span></tt></a></p>
+<p>filter log file if not exists.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.file_matcher.FilterFileExist.filter">
+<tt class="descname">filter</tt><big>(</big><em>pathname</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.FilterFileExist.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter log file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.log_analyzor.file_matcher.getFileFilter">
+<tt class="descclassname">compass.log_analyzor.file_matcher.</tt><tt class="descname">getFileFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.log_analyzor.file_matcher.getFileFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>get file filter</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.log_analyzor.line_matcher">
+<span id="compass-log-analyzor-line-matcher-module"></span><h2>compass.log_analyzor.line_matcher module<a class="headerlink" href="#module-compass.log_analyzor.line_matcher" title="Permalink to this headline">¶</a></h2>
+<p>Module about line matcher to get the progress when found match 
+with a line of the log.</p>
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.IncrementalProgress">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">IncrementalProgress</tt><big>(</big><em>min_progress</em>, <em>max_progress</em>, <em>incremental_ratio</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.IncrementalProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.log_analyzor.line_matcher.ProgressCalculator" title="compass.log_analyzor.line_matcher.ProgressCalculator"><tt class="xref py py-class docutils literal"><span class="pre">compass.log_analyzor.line_matcher.ProgressCalculator</span></tt></a></p>
+<p>Class to increment the progress.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.line_matcher.IncrementalProgress.update">
+<tt class="descname">update</tt><big>(</big><em>message</em>, <em>severity</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.IncrementalProgress.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress from message and severity.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.LineMatcher">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">LineMatcher</tt><big>(</big><em>pattern</em>, <em>progress=None</em>, <em>message_template=''</em>, <em>severity=None</em>, <em>unmatch_sameline_next_matcher_name=''</em>, <em>unmatch_nextline_next_matcher_name=''</em>, <em>match_sameline_next_matcher_name=''</em>, <em>match_nextline_next_matcher_name=''</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.LineMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Progress matcher for each line.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.line_matcher.LineMatcher.updateProgress">
+<tt class="descname">updateProgress</tt><big>(</big><em>line</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.LineMatcher.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress by the line.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first docutils">
+<dt>line: str, one line in log file to indicate the</dt>
+<dd>installing progress. The line may be partial
+if the latest line of the log file is not the
+whole line. But the whole line may be resent
+in the next run.</dd>
+</dl>
+<p class="last">progress: the Progress instance to update.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.Progress">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">Progress</tt><big>(</big><em>progress</em>, <em>message</em>, <em>severity</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.Progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Progress object to store installing progress and message.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.ProgressCalculator">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">ProgressCalculator</tt><a class="headerlink" href="#compass.log_analyzor.line_matcher.ProgressCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>base class to generate progress.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.line_matcher.ProgressCalculator.update">
+<tt class="descname">update</tt><big>(</big><em>message</em>, <em>severity</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.ProgressCalculator.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>interface to update progress by message and severity.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>message: str, installing message.
+severity: str, installing severity.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="compass.log_analyzor.line_matcher.ProgressCalculator.updateProgress">
+<em class="property">classmethod </em><tt class="descname">updateProgress</tt><big>(</big><em>progress_data</em>, <em>message</em>, <em>severity</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.ProgressCalculator.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Update progress with the given progress_data,
+message and severity.</div></blockquote>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">progress_data: float between 0 to 1.
+message: str, installing progress message.
+severity: installing message severity.</p>
+<blockquote>
+<div>Should be in one of 
+[&#8216;ERROR&#8217;, &#8216;WARNING&#8217;, &#8216;INFO&#8217;].
+&#8216;ERROR&#8217; means there is some errors
+in installing.</div></blockquote>
+<p class="last">progress: Progress instance to update.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.RelativeProgress">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">RelativeProgress</tt><big>(</big><em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.RelativeProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.log_analyzor.line_matcher.ProgressCalculator" title="compass.log_analyzor.line_matcher.ProgressCalculator"><tt class="xref py py-class docutils literal"><span class="pre">compass.log_analyzor.line_matcher.ProgressCalculator</span></tt></a></p>
+<p>class to update progress to the given relative progress.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.line_matcher.RelativeProgress.update">
+<tt class="descname">update</tt><big>(</big><em>message</em>, <em>severity</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.RelativeProgress.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress from message and severity.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.log_analyzor.line_matcher.SameProgress">
+<em class="property">class </em><tt class="descclassname">compass.log_analyzor.line_matcher.</tt><tt class="descname">SameProgress</tt><a class="headerlink" href="#compass.log_analyzor.line_matcher.SameProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#compass.log_analyzor.line_matcher.ProgressCalculator" title="compass.log_analyzor.line_matcher.ProgressCalculator"><tt class="xref py py-class docutils literal"><span class="pre">compass.log_analyzor.line_matcher.ProgressCalculator</span></tt></a></p>
+<p>class to update message and severity for  progress.</p>
+<dl class="method">
+<dt id="compass.log_analyzor.line_matcher.SameProgress.update">
+<tt class="descname">update</tt><big>(</big><em>message</em>, <em>severity</em>, <em>progress</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.line_matcher.SameProgress.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update progress from the message and severity.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.log_analyzor.progress_calculator">
+<span id="compass-log-analyzor-progress-calculator-module"></span><h2>compass.log_analyzor.progress_calculator module<a class="headerlink" href="#module-compass.log_analyzor.progress_calculator" title="Permalink to this headline">¶</a></h2>
+<p>module to provide updating installing process function.</p>
+<dl class="function">
+<dt id="compass.log_analyzor.progress_calculator.getAdapterMatcher">
+<tt class="descclassname">compass.log_analyzor.progress_calculator.</tt><tt class="descname">getAdapterMatcher</tt><big>(</big><em>os_name</em>, <em>package_installer</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.progress_calculator.getAdapterMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>get adapter matcher by os name and package installer name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.log_analyzor.progress_calculator.updateProgress">
+<tt class="descclassname">compass.log_analyzor.progress_calculator.</tt><tt class="descname">updateProgress</tt><big>(</big><em>os_name</em>, <em>package_installer</em>, <em>clusterid</em>, <em>hostids</em><big>)</big><a class="headerlink" href="#compass.log_analyzor.progress_calculator.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update adapter installing progress.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>os_name: str, os name.
+package_installer: str, package installer name.
+clusterid: int, cluster id.
+hostids: list of int, hosts ids.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.log_analyzor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.log_analyzor" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.log_analyzor package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.log_analyzor.adapter_matcher">compass.log_analyzor.adapter_matcher module</a></li>
+<li><a class="reference internal" href="#module-compass.log_analyzor.file_matcher">compass.log_analyzor.file_matcher module</a></li>
+<li><a class="reference internal" href="#module-compass.log_analyzor.line_matcher">compass.log_analyzor.line_matcher module</a></li>
+<li><a class="reference internal" href="#module-compass.log_analyzor.progress_calculator">compass.log_analyzor.progress_calculator module</a></li>
+<li><a class="reference internal" href="#module-compass.log_analyzor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compass.config_management.installers.plugins.html"
+                        title="previous chapter">compass.config_management.installers.plugins package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.log_analyzor.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.plugins.html" title="compass.config_management.installers.plugins package"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

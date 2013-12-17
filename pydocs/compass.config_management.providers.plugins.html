@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.config_management.providers.plugins package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" />
+    <link rel="up" title="compass.config_management.providers package" href="compass.config_management.providers.html" />
+    <link rel="next" title="compass.config_management.installers package" href="compass.config_management.installers.html" />
+    <link rel="prev" title="compass.config_management.providers package" href="compass.config_management.providers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.html" title="compass.config_management.installers package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.providers.html" title="compass.config_management.providers package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="compass.config_management.providers.html" accesskey="U">compass.config_management.providers package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-config-management-providers-plugins-package">
+<h1>compass.config_management.providers.plugins package<a class="headerlink" href="#compass-config-management-providers-plugins-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.config_management.providers.plugins.db_config_provider">
+<span id="compass-config-management-providers-plugins-db-config-provider-module"></span><h2>compass.config_management.providers.plugins.db_config_provider module<a class="headerlink" href="#module-compass.config_management.providers.plugins.db_config_provider" title="Permalink to this headline">¶</a></h2>
+<p>config provider read config from db.</p>
+<dl class="class">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider">
+<em class="property">class </em><tt class="descclassname">compass.config_management.providers.plugins.db_config_provider.</tt><tt class="descname">DBProvider</tt><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="compass.config_management.providers.html#compass.config_management.providers.config_provider.ConfigProvider" title="compass.config_management.providers.config_provider.ConfigProvider"><tt class="xref py py-class docutils literal"><span class="pre">compass.config_management.providers.config_provider.ConfigProvider</span></tt></a></p>
+<p>config provider which reads config from db.</p>
+<dl class="attribute">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.CLUSTER_FILTER">
+<tt class="descname">CLUSTER_FILTER</tt><em class="property"> = &lt;compass.config_management.utils.config_filter.ConfigFilter object at 0x4127e10&gt;</em><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.CLUSTER_FILTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.HOST_FILTER">
+<tt class="descname">HOST_FILTER</tt><em class="property"> = &lt;compass.config_management.utils.config_filter.ConfigFilter object at 0x4127ed0&gt;</em><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.HOST_FILTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'db'</em><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.getClusterConfig">
+<tt class="descname">getClusterConfig</tt><big>(</big><em>clusterid</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.getClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get cluster config from db.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.getHostConfig">
+<tt class="descname">getHostConfig</tt><big>(</big><em>hostid</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.getHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get host config from db.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.db_config_provider.DBProvider.updateHostConfig">
+<tt class="descname">updateHostConfig</tt><big>(</big><em>hostid</em>, <em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.db_config_provider.DBProvider.updateHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update hsot config to db.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.providers.plugins.file_config_provider">
+<span id="compass-config-management-providers-plugins-file-config-provider-module"></span><h2>compass.config_management.providers.plugins.file_config_provider module<a class="headerlink" href="#module-compass.config_management.providers.plugins.file_config_provider" title="Permalink to this headline">¶</a></h2>
+<p>config provider read config from file.</p>
+<dl class="class">
+<dt id="compass.config_management.providers.plugins.file_config_provider.FileProvider">
+<em class="property">class </em><tt class="descclassname">compass.config_management.providers.plugins.file_config_provider.</tt><tt class="descname">FileProvider</tt><a class="headerlink" href="#compass.config_management.providers.plugins.file_config_provider.FileProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="compass.config_management.providers.html#compass.config_management.providers.config_provider.ConfigProvider" title="compass.config_management.providers.config_provider.ConfigProvider"><tt class="xref py py-class docutils literal"><span class="pre">compass.config_management.providers.config_provider.ConfigProvider</span></tt></a></p>
+<p>config provider which reads config from file.</p>
+<dl class="attribute">
+<dt id="compass.config_management.providers.plugins.file_config_provider.FileProvider.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'file'</em><a class="headerlink" href="#compass.config_management.providers.plugins.file_config_provider.FileProvider.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.file_config_provider.FileProvider.getGlobalConfig">
+<tt class="descname">getGlobalConfig</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.file_config_provider.FileProvider.getGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>read global config from file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.providers.plugins.mix_config_provider">
+<span id="compass-config-management-providers-plugins-mix-config-provider-module"></span><h2>compass.config_management.providers.plugins.mix_config_provider module<a class="headerlink" href="#module-compass.config_management.providers.plugins.mix_config_provider" title="Permalink to this headline">¶</a></h2>
+<p>mix provider which read config from different other providers.</p>
+<dl class="class">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider">
+<em class="property">class </em><tt class="descclassname">compass.config_management.providers.plugins.mix_config_provider.</tt><tt class="descname">MixProvider</tt><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="compass.config_management.providers.html#compass.config_management.providers.config_provider.ConfigProvider" title="compass.config_management.providers.config_provider.ConfigProvider"><tt class="xref py py-class docutils literal"><span class="pre">compass.config_management.providers.config_provider.ConfigProvider</span></tt></a></p>
+<p>mix provider which read config from different other providers.</p>
+<dl class="attribute">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'mix'</em><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.getClusterConfig">
+<tt class="descname">getClusterConfig</tt><big>(</big><em>clusterid</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.getClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.getGlobalConfig">
+<tt class="descname">getGlobalConfig</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.getGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.getHostConfig">
+<tt class="descname">getHostConfig</tt><big>(</big><em>hostid</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.getHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get host config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateClusterConfig">
+<tt class="descname">updateClusterConfig</tt><big>(</big><em>clusterid</em>, <em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateGlobalConfig">
+<tt class="descname">updateGlobalConfig</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateHostConfig">
+<tt class="descname">updateHostConfig</tt><big>(</big><em>hostid</em>, <em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.providers.plugins.mix_config_provider.MixProvider.updateHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update host config.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.providers.plugins">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.config_management.providers.plugins" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.config_management.providers.plugins package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.providers.plugins.db_config_provider">compass.config_management.providers.plugins.db_config_provider module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.providers.plugins.file_config_provider">compass.config_management.providers.plugins.file_config_provider module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.providers.plugins.mix_config_provider">compass.config_management.providers.plugins.mix_config_provider module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.providers.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compass.config_management.providers.html"
+                        title="previous chapter">compass.config_management.providers package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compass.config_management.installers.html"
+                        title="next chapter">compass.config_management.installers package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.config_management.providers.plugins.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.installers.html" title="compass.config_management.installers package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="compass.config_management.providers.html" title="compass.config_management.providers package"
+             >previous</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="compass.config_management.providers.html" >compass.config_management.providers package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

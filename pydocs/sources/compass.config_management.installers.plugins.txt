@@ -1,0 +1,30 @@
+compass.config_management.installers.plugins package
+====================================================
+
+Submodules
+----------
+
+compass.config_management.installers.plugins.chefhandler module
+---------------------------------------------------------------
+
+.. automodule:: compass.config_management.installers.plugins.chefhandler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.config_management.installers.plugins.cobbler module
+-----------------------------------------------------------
+
+.. automodule:: compass.config_management.installers.plugins.cobbler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.config_management.installers.plugins
+    :members:
+    :undoc-members:
+    :show-inheritance:

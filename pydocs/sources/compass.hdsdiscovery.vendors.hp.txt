@@ -1,0 +1,29 @@
+compass.hdsdiscovery.vendors.hp package
+=======================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.hdsdiscovery.vendors.hp.plugins
+
+Submodules
+----------
+
+compass.hdsdiscovery.vendors.hp.hp module
+-----------------------------------------
+
+.. automodule:: compass.hdsdiscovery.vendors.hp.hp
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.hdsdiscovery.vendors.hp
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,19 @@
+High level introduction
+=======================
+
+Compass is an open source project designed to provide "deployment as a service" to a set of bare metal machines.
+
+It can provide a Restful API service for operators to pragmatically deploy an OpenStack system on to the raw physical resources. From the 10,000 foot view, it can be considered as a Live CD to a set of physical machines to the end users (staff deploying OpenStack system).
+
+
+Design Considerations
+---------------------
+
+* *Deployment System Extensibility*: Compass is not limited to OpenStack cluster, it provides a data-driven framework for deployment.
+   * Example: Providing capability to create a Ceph cluster by extending the data fields in Compass system
+* *Hardware Support Extensibility*: Like Cinder's support for multiple storage vendors' system controlled by an OpenStack API through plug-in framework, Compass supports topology-aware resource discovery to multiple networking vendor's equipment through its plug-in framework.
+   * Example: Compass originally supported Huawei switches for topology-aware resource discovery, and we added support to HP switches with less than a couple of hundred lines of plug-in code.
+* *Host OS/Hypervisor Extensibility*:
+   * Example: we first streamlined the process for CentOS. Ubuntu support is being supported at this moment. We imagine we can repeat the similar easy effort to systems like ESXi.
+* *Configuration Management System Extensibility*: Compass provides the concept of adapter. Current we have implemented Chef based deployment, and we believe other CM tools can be easily included in this framework. We believe this helps enterprises that have purchased supported licenses from other CM tools vendors.
+

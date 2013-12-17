@@ -1,0 +1,1155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compass.config_management.utils package &mdash; compass 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="compass 0.1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="compass-config-management-utils-package">
+<h1>compass.config_management.utils package<a class="headerlink" href="#compass-config-management-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-compass.config_management.utils.config_filter">
+<span id="compass-config-management-utils-config-filter-module"></span><h2>compass.config_management.utils.config_filter module<a class="headerlink" href="#module-compass.config_management.utils.config_filter" title="Permalink to this headline">¶</a></h2>
+<p>Filter config based on allows and denies rules.</p>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><dl class="first docutils">
+<dt>config = {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;networking&#8217;: {</dt>
+<dd>&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;, &#8216;mac&#8217;: &#8216;00:00:00:00:00&#8217;},
+&#8216;public&#8217;: {&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;}</dd>
+</dl>
+<p class="last">},
+&#8216;security&#8217;: {&#8216;username&#8217;: &#8216;1234&#8217;, &#8216;password&#8217;: &#8216;1234&#8217;},</p>
+</dd>
+</dl>
+<p>}
+filter = ConfigFilter(allows=[&#8216;/networking/<a href="#id1"><span class="problematic" id="id2">*</span></a>&#8216;],</p>
+<blockquote>
+<div>denies=[&#8216;/networking/<a href="#id3"><span class="problematic" id="id4">*</span></a>/mac&#8217;])</div></blockquote>
+<p>filtered_config = filtere.filter(config)
+filtered_config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;networking&#8217;: {</dt>
+<dd>&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;},
+&#8216;public&#8217;: {&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;},</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="compass.config_management.utils.config_filter.ConfigFilter">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_filter.</tt><tt class="descname">ConfigFilter</tt><big>(</big><em>allows=['*'], denies=[]</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_filter.ConfigFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>config filter</p>
+<dl class="method">
+<dt id="compass.config_management.utils.config_filter.ConfigFilter.filter">
+<tt class="descname">filter</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_filter.ConfigFilter.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter config</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_filter.ConfigFilter.isValid">
+<tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_filter.ConfigFilter.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if config filter is valid.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_manager">
+<span id="compass-config-management-utils-config-manager-module"></span><h2>compass.config_management.utils.config_manager module<a class="headerlink" href="#module-compass.config_management.utils.config_manager" title="Permalink to this headline">¶</a></h2>
+<p>Config Manager to get configs from providers and isntallers
+and update them to providers and installers.</p>
+<dl class="docutils">
+<dt>The working flow is:</dt>
+<dd><p class="first">Get global config from provider (default from global config file).
+Get global config from os installer.
+Get global config from package installer.</p>
+<p>merge global config from global config got from provider,
+os installer, package installer.</p>
+<p>Update global config to provider (default no action).
+Update global config to os installer.
+Update global config to package installer.</p>
+<p>Get cluster config from provider (default from db).
+Get cluster config os installer.
+Get cluster config from package installer.</p>
+<p>merge cluster config from cluster config got from provider,
+os installer and package installer.</p>
+<p>merge global config into cluster config.</p>
+<p>Update cluster config to provider.
+Update cluster config to os installer.
+Update cluster config to package installer.</p>
+<p>Get hosts configs from provider (default from db)
+Get hosts configs from os installer.
+Get hosts configs from package installer.</p>
+<p>Call config_merger to update hosts configs from cluster config.</p>
+<p class="last">Update hosts configs to provider.
+Update hosts configs to os installer.
+Update host configs to package installer.</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="compass.config_management.utils.config_manager.ConfigManager">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_manager.</tt><tt class="descname">ConfigManager</tt><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Config manger is to read global/clsuter/host configs from provider,
+os installer, package installer, process them.
+update them to provider, os installer, package installer.</p>
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getAdapters">
+<tt class="descname">getAdapters</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getAdapters" title="Permalink to this definition">¶</a></dt>
+<dd><p>get adapter information from os installer and package installer.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><p class="first">list of adapter information.
+For each adapter, the information is as:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8216;name&#8217;: &#8216;CentOS/OpenStack&#8217;,
+&#8216;os&#8217;: &#8216;CentOS6.4&#8217;,
+&#8216;target_system&#8217;: &#8216;openstack&#8217;</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getClusterConfig">
+<tt class="descname">getClusterConfig</tt><big>(</big><em>clusterid</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getGlobalConfig">
+<tt class="descname">getGlobalConfig</tt><big>(</big><em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getHostConfig">
+<tt class="descname">getHostConfig</tt><big>(</big><em>hostid</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get host config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getHostConfigs">
+<tt class="descname">getHostConfigs</tt><big>(</big><em>hostids</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getHostConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>get host configs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.getRoles">
+<tt class="descname">getRoles</tt><big>(</big><em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.getRoles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all roles of the target system from package installer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>target_system: str, the target cloud system such as openstack.</dd>
+<dt>Returns:</dt>
+<dd><p class="first">list of role information.
+For each role, the information is as:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8216;name&#8217;: &#8216;os-single-controller&#8217;,
+&#8216;description&#8217;: &#8216;openstack controller node&#8217;,
+&#8216;target_system&#8217;: &#8216;openstack&#8217;</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sync os installer and package installer to 
+catch up the latest change.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.updateClusterAndHostConfigs">
+<tt class="descname">updateClusterAndHostConfigs</tt><big>(</big><em>clusterid</em>, <em>hostids</em>, <em>update_hostids</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.updateClusterAndHostConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>update cluster/host configs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.updateClusterConfig">
+<tt class="descname">updateClusterConfig</tt><big>(</big><em>clusterid</em>, <em>config</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.updateClusterConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update cluster config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.updateGlobalConfig">
+<tt class="descname">updateGlobalConfig</tt><big>(</big><em>config</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.updateGlobalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update global config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.updateHostConfig">
+<tt class="descname">updateHostConfig</tt><big>(</big><em>hostid</em>, <em>config</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.updateHostConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>update host config.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_manager.ConfigManager.updateHostConfigs">
+<tt class="descname">updateHostConfigs</tt><big>(</big><em>host_configs</em>, <em>os_version</em>, <em>target_system</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_manager.ConfigManager.updateHostConfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>update host configs.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_merger">
+<span id="compass-config-management-utils-config-merger-module"></span><h2>compass.config_management.utils.config_merger module<a class="headerlink" href="#module-compass.config_management.utils.config_merger" title="Permalink to this headline">¶</a></h2>
+<p>Module to set the hosts configs from cluster config.</p>
+<dl class="class">
+<dt id="compass.config_management.utils.config_merger.ConfigMapping">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_merger.</tt><tt class="descname">ConfigMapping</tt><big>(</big><em>path_list</em>, <em>from_upper_keys={}</em>, <em>from_lower_keys={}</em>, <em>to_key='.'</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<blockquote>
+<div>Class to merger config referred to path list in upper ref &#8216;
+to to_key in lower refs.</div></blockquote>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><dl class="first docutils">
+<dt>upper_config = {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip_start&#8217;: &#8216;10.145.88.100&#8217;,
+&#8216;ip_end&#8217;: &#8216;10.145.88.255&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip_start&#8217;: &#8216;192.168.100.100&#8217;,
+&#8216;ip_end&#8217;: &#8216;192.168.200.255&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>}
+lower_configs = {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>1: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;10.145.88.150&#8217;,</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},
+2: {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;10.145.88.151&#8217;,</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p>}</p>
+<p>upper_ref = ConfigReference(upper_config)
+lower_refs = {}
+for lower_key, lower_config in lower_configs.items():</p>
+<blockquote>
+<div>lower_refs[lower_key] = ConfigReference(lower_config)</div></blockquote>
+<dl class="docutils">
+<dt>mapper = ConfigMapper(</dt>
+<dd>path_list=[&#8216;/network/<a href="#id5"><span class="problematic" id="id6">*</span></a>&#8216;]
+from_upper_keys={&#8216;ip_start&#8217;: &#8216;ip_start&#8217;, &#8216;ip_end&#8217;: &#8216;ip_end&#8217;},
+to_key=&#8217;ip&#8217;,
+value=config_merger_callbacks.assignIPs</dd>
+</dl>
+<p>)
+mapper.merge(upper_ref, lower_refs)
+lower_refs[0].config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.150&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.100&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>}
+lower_refs[1].config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.151&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.101&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>}
+mapper = ConfigMapper(</p>
+<blockquote>
+<div>path_list=[&#8216;/network/<a href="#id7"><span class="problematic" id="id8">*</span></a>/netmask&#8217;]</div></blockquote>
+<p>)
+mapper.merge(upper_ref, lower_refs)
+lower_refs[0].config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.150&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.100&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>}
+lower_refs[1].config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.151&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.101&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="compass.config_management.utils.config_merger.ConfigMapping.isValid">
+<tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMapping.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check ConfigMapping instance is valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_merger.ConfigMapping.merge">
+<tt class="descname">merge</tt><big>(</big><em>upper_ref</em>, <em>lower_refs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMapping.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>merge upper config to lower configs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.config_management.utils.config_merger.ConfigMerger">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_merger.</tt><tt class="descname">ConfigMerger</tt><big>(</big><em>mappings</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMerger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Class to merge upper config to lower configs.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><dl class="first docutils">
+<dt>upper_config = {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip_start&#8217;: &#8216;10.145.88.100&#8217;,
+&#8216;ip_end&#8217;: &#8216;10.145.88.255&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip_start&#8217;: &#8216;192.168.100.100&#8217;,
+&#8216;ip_end&#8217;: &#8216;192.168.200.255&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>}
+lower_configs = {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>1: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;10.145.88.150&#8217;,</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},
+2: {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;10.145.88.151&#8217;,</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p>}</p>
+<dl class="docutils">
+<dt>merger = ConfigMerger(</dt>
+<dd><dl class="first docutils">
+<dt>mappings=[ConfigMapper(</dt>
+<dd>path_list=[&#8216;/network/<a href="#id9"><span class="problematic" id="id10">*</span></a>&#8216;]
+from_upper_keys={&#8216;ip_start&#8217;: &#8216;ip_start&#8217;, &#8216;ip_end&#8217;: &#8216;ip_end&#8217;},
+to_key=&#8217;ip&#8217;,
+value=config_merger_callbacks.assignIPs</dd>
+<dt>), ConfigMapper(</dt>
+<dd>path_list=[&#8216;/network/<a href="#id11"><span class="problematic" id="id12">*</span></a>/netmask&#8217;]</dd>
+</dl>
+<p class="last">)]</p>
+</dd>
+</dl>
+<p>merger.merge(upper_config, lower_configs)
+lower_configs == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>1: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.150&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.100&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},
+2: {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;network&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: 10.145.88.151&#8217;,
+&#8216;netmask&#8217;: &#8216;255.255.255.0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;192.168.100.101&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="compass.config_management.utils.config_merger.ConfigMerger.isValid">
+<tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMerger.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check ConfigMerger instance is valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_merger.ConfigMerger.merge">
+<tt class="descname">merge</tt><big>(</big><em>upper_config</em>, <em>lower_configs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger.ConfigMerger.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>merge upper config to lower configs.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>upper_config: any type.
+lower_configs: dict of {str: any type}</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_merger_callbacks">
+<span id="compass-config-management-utils-config-merger-callbacks-module"></span><h2>compass.config_management.utils.config_merger_callbacks module<a class="headerlink" href="#module-compass.config_management.utils.config_merger_callbacks" title="Permalink to this headline">¶</a></h2>
+<p>ConfigMerger Callbacks module.</p>
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.assignFromPattern">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">assignFromPattern</tt><big>(</big><em>_upper_ref</em>, <em>from_key</em>, <em>lower_refs</em>, <em>to_key</em>, <em>upper_keys=</em><span class="optional">[</span><span class="optional">]</span>, <em>lower_keys=</em><span class="optional">[</span><span class="optional">]</span>, <em>pattern=''</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.assignFromPattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>assign to_key by pattern.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.assignIPs">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">assignIPs</tt><big>(</big><em>_upper_ref</em>, <em>_from_key</em>, <em>lower_refs</em>, <em>to_key</em>, <em>ip_start='192.168.0.1'</em>, <em>ip_end='192.168.0.254'</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.assignIPs" title="Permalink to this definition">¶</a></dt>
+<dd><p>assign ips to hosts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.assignNoProxy">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">assignNoProxy</tt><big>(</big><em>_upper_ref</em>, <em>_from_key</em>, <em>lower_refs</em>, <em>to_key</em>, <em>default=</em><span class="optional">[</span><span class="optional">]</span>, <em>hostnames={}</em>, <em>ips={}</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.assignNoProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign no proxy to hosts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.assignRoles">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">assignRoles</tt><big>(</big><em>_upper_ref</em>, <em>_from_key</em>, <em>lower_refs</em>, <em>to_key</em>, <em>roles=</em><span class="optional">[</span><span class="optional">]</span>, <em>maxs={}</em>, <em>mins={}</em>, <em>default_max=-1</em>, <em>default_min=0</em>, <em>exclusives=</em><span class="optional">[</span><span class="optional">]</span>, <em>bundles=</em><span class="optional">[</span><span class="optional">]</span>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.assignRoles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign roles to lower configs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.assignRolesByHostNumbers">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">assignRolesByHostNumbers</tt><big>(</big><em>upper_ref</em>, <em>from_key</em>, <em>lower_refs</em>, <em>to_key</em>, <em>policy_by_host_numbers={}</em>, <em>default={}</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.assignRolesByHostNumbers" title="Permalink to this definition">¶</a></dt>
+<dd><p>assign roles by role assign policy.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_merger_callbacks.hasIntersection">
+<tt class="descclassname">compass.config_management.utils.config_merger_callbacks.</tt><tt class="descname">hasIntersection</tt><big>(</big><em>upper_ref</em>, <em>from_key</em>, <em>_lower_refs</em>, <em>to_key</em>, <em>lower_values={}</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_merger_callbacks.hasIntersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if upper config has intersection with lower values.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_reference">
+<span id="compass-config-management-utils-config-reference-module"></span><h2>compass.config_management.utils.config_reference module<a class="headerlink" href="#module-compass.config_management.utils.config_reference" title="Permalink to this headline">¶</a></h2>
+<p>Config Reference module.
+util to access the nested dict easily.
+Example: To access the element config[&#8216;network&#8217;][&#8216;management&#8217;][&#8216;ip&#8217;] in</p>
+<blockquote>
+<div>config = {&#8216;network&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;}}}
+ref = config_reference.ConfigReference(config)
+ref[&#8216;/network/management/ip&#8217;] to access the item directly.</div></blockquote>
+<dl class="class">
+<dt id="compass.config_management.utils.config_reference.ConfigReference">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_reference.</tt><tt class="descname">ConfigReference</tt><big>(</big><em>config</em>, <em>parent=None</em>, <em>parent_key=None</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Helper class to progress config which is deep nested dict.</p>
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.get">
+<tt class="descname">get</tt><big>(</big><em>path</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get config of the path. If config doest not exist in path,
+return default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.items">
+<tt class="descname">items</tt><big>(</big><em>prefix=''</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return key value pair of all items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.keys">
+<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return keys of all items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.ref">
+<tt class="descname">ref</tt><big>(</big><em>path</em>, <em>create_if_not_exist=False</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ref of the path.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">path: str. The path to the ref
+create_if_not_exists: bool, create ref if it</p>
+<blockquote class="last">
+<div>does not exist on the path.</div></blockquote>
+</dd>
+<dt>Returns:</dt>
+<dd>ConfigReference instance to the position of the path.</dd>
+<dt>Exceptions:</dt>
+<dd>KeyError: if the path does not exist.
+TypeError: if the path is glob pattern.</dd>
+<dt>Examples:</dt>
+<dd><p class="first">config = {&#8216;networking&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;}}}
+ref = ConfigReference(config)
+sub_ref = ref.ref(&#8216;/networking/management/ip&#8217;)
+sub_ref.config == &#8216;1.2.3.4&#8217;</p>
+<p>sub_ref = ref.ref(&#8216;/networking/public/ip&#8217;, True)
+ref.config = {&#8216;netwroking&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;},</p>
+<blockquote class="last">
+<div>&#8216;public&#8217;: {&#8216;ip&#8217;: None}}</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.refItems">
+<tt class="descname">refItems</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.refItems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the refs of the glob path.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>path: str, glob pattern. like &#8216;/networking/<a href="#id13"><span class="problematic" id="id14">*</span></a>/ip&#8217;,</dd>
+<dt>Returns:</dt>
+<dd>dict of {key: ConfigReference instance}.</dd>
+<dt>Example:</dt>
+<dd><dl class="first docutils">
+<dt>config = {&#8216;network&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;},</dt>
+<dd>&#8216;public&#8217;: {&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;}}}</dd>
+</dl>
+<p class="last">ref = ConfigReference(config)
+refs = ref.refItems(&#8216;/networking/<a href="#id15"><span class="problematic" id="id16">*</span></a>/ip&#8217;)
+refs[&#8216;/networking/management/ip&#8217;].config = &#8216;1.2.3.4&#8217;
+refs[&#8216;/networking/public/ip&#8217;].config = &#8216;2.3.4.5&#8217;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.refKeys">
+<tt class="descname">refKeys</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.refKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return keys of refitems.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.refValues">
+<tt class="descname">refValues</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.refValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return values of refItems.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.setdefault">
+<tt class="descname">setdefault</tt><big>(</big><em>path</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.setdefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>if path exists, return ref to the path, otherwise,
+set value to the path and return ref to the path.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.specialPath">
+<em class="property">classmethod </em><tt class="descname">specialPath</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.specialPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if path is special.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.update">
+<tt class="descname">update</tt><big>(</big><em>config</em>, <em>override=True</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update ConfigReference instance with config.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>config: any type
+override: bool, if the instance config should be overrided.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+<dt>Examples:</dt>
+<dd><p class="first">config = {&#8216;networking&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;}}}
+ref = ConfigReference(config)
+new_config = {&#8216;networking&#8217;: {</p>
+<blockquote>
+<div>&#8216;management&#8217;: {&#8216;mac&#8217;: &#8216;00:00:00:00:00:00&#8217;, &#8216;ip&#8217;: &#8216;2.3.4.5&#8217;}</div></blockquote>
+<p>}}
+ref.update(new_config)
+ref.config == {&#8216;networking&#8217;: {</p>
+<blockquote>
+<div>&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;, &#8216;mac&#8217;: &#8216;00:00:00:00:00:00&#8217;}</div></blockquote>
+<p>}}
+ref.update(new_config, True)
+ref.config == {&#8216;networking&#8217;: {</p>
+<blockquote>
+<div>&#8216;management&#8217;: {&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;, &#8216;mac&#8217;: &#8216;00:00:00:00:00:00&#8217;}</div></blockquote>
+<p class="last">}}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_reference.ConfigReference.values">
+<tt class="descname">values</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.ConfigReference.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return values of all items.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_reference.getCleanConfig">
+<tt class="descclassname">compass.config_management.utils.config_reference.</tt><tt class="descname">getCleanConfig</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_reference.getCleanConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get cleaned config from original config.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>config: any type.</dd>
+<dt>Returns:</dt>
+<dd>any type. If some field in config is None or all items in the dict 
+is None recursively, does not include it in the cleaned config.</dd>
+<dt>Example:</dt>
+<dd>config = {&#8216;network&#8217;: {&#8216;management&#8217;: {&#8216;ip&#8217;: None}}}
+getCleanConfig(config) == None</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_translator">
+<span id="compass-config-management-utils-config-translator-module"></span><h2>compass.config_management.utils.config_translator module<a class="headerlink" href="#module-compass.config_management.utils.config_translator" title="Permalink to this headline">¶</a></h2>
+<p>Config Translator module to translate orign config to dest config.</p>
+<dl class="class">
+<dt id="compass.config_management.utils.config_translator.ConfigTranslator">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_translator.</tt><tt class="descname">ConfigTranslator</tt><big>(</big><em>mapping</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.ConfigTranslator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<blockquote>
+<div>Class to translate origin config to expected dest config.</div></blockquote>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><dl class="first docutils">
+<dt>config = {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;networking&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;,
+&#8216;nic&#8217;: &#8216;eth0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;,
+&#8216;nic&#8217;: &#8216;eth0&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},
+&#8216;security&#8217;: {</p>
+<blockquote>
+<div>&#8216;user&#8217;: &#8216;root&#8217;,
+&#8216;password&#8217;: &#8216;root&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>}
+translator = ConfigTranslator(</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;/networking/<a href="#id17"><span class="problematic" id="id18">*</span></a>/ip&#8217;: [KeyTranslator(</dt>
+<dd><dl class="first docutils">
+<dt>translated_keys=[</dt>
+<dd><dl class="first docutils">
+<dt>functools.partial(</dt>
+<dd>config_translator_callbacks.getKeyFromPattern,
+to_pattern=&#8217;/modify_interface/ipaddress-%(nic)s&#8217;),</dd>
+</dl>
+<p class="last">),</p>
+</dd>
+</dl>
+<p>],
+from_keys={&#8216;nic&#8217;: &#8216;../nic&#8217;},
+override=functools.partial(</p>
+<blockquote class="last">
+<div>config_translator_callbacks.overridePathHas,
+should_exist=&#8217;management&#8217;)</div></blockquote>
+</dd>
+</dl>
+<p>)],
+&#8216;/networking/<a href="#id19"><span class="problematic" id="id20">*</span></a>/nic&#8217;: [KeyTranslator(</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>translated_keys=[functools.partial(</dt>
+<dd>config_translator_callbacks.getKeyFromPattern,
+to_pattern=&#8217;/modify_interface/static-%(nic)s&#8217;)],</dd>
+</dl>
+<p>from_keys={&#8216;nic&#8217;: &#8216;../nic&#8217;},
+translated_value=True,
+override=functools.partial(</p>
+<blockquote>
+<div>config_translator_callbacks.overridePathHas,
+should_exist=&#8217;management&#8217;),</div></blockquote>
+</div></blockquote>
+<p>)],
+&#8216;/security/user&#8217;: [KeyTranslator(</p>
+<blockquote>
+<div>translated_keys=[&#8216;/ksmeta/username&#8217;]</div></blockquote>
+<p>)],</p>
+</div></blockquote>
+<p>translated_config = translator.translate(config)
+translated_config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;modify_interface&#8217;: {</dt>
+<dd>&#8216;ipaddress-eth0&#8217;: &#8216;1.2.3.4&#8217;,
+&#8216;static-eth0&#8217;: True</dd>
+</dl>
+<p>},
+&#8216;ksmeta&#8217;: {</p>
+<blockquote>
+<div>&#8216;username&#8217;: &#8216;root&#8217;,</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.ConfigTranslator.isValid">
+<tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.ConfigTranslator.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if COnfigTranslator is valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.ConfigTranslator.translate">
+<tt class="descname">translate</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.ConfigTranslator.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate config.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>config: any type of data.</dd>
+<dt>Returns:</dt>
+<dd>the translated config.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator">
+<em class="property">class </em><tt class="descclassname">compass.config_management.utils.config_translator.</tt><tt class="descname">KeyTranslator</tt><big>(</big><em>translated_keys=</em><span class="optional">[</span><span class="optional">]</span>, <em>from_keys={}</em>, <em>translated_value=None</em>, <em>from_values={}</em>, <em>override=False</em>, <em>override_conditions={}</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<blockquote>
+<div>Translate refs to the path in origin config to
+expected position in dest config.</div></blockquote>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><dl class="first docutils">
+<dt>config = {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;networking&#8217;: {</dt>
+<dd><dl class="first docutils">
+<dt>&#8216;management&#8217;: {</dt>
+<dd>&#8216;ip&#8217;: &#8216;1.2.3.4&#8217;,
+&#8216;nic&#8217;: &#8216;eth0&#8217;,</dd>
+</dl>
+<p>},
+&#8216;public&#8217;: {</p>
+<blockquote>
+<div>&#8216;ip&#8217;: &#8216;2.3.4.5&#8217;,
+&#8216;nic&#8217;: &#8216;eth0&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>},
+&#8216;security&#8217;: {</p>
+<blockquote>
+<div>&#8216;user&#8217;: &#8216;root&#8217;,
+&#8216;password&#8217;: &#8216;root&#8217;,</div></blockquote>
+<p class="last">},</p>
+</dd>
+</dl>
+<p>}
+ref = ConfigReference(config)
+translated_ref = ConfigReference({})
+translator = KeyTranslator(</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>translated_keys=[</dt>
+<dd><dl class="first docutils">
+<dt>functools.partial(</dt>
+<dd>config_translator_callbacks.getKeyFromPattern,
+to_pattern=&#8217;/modify_interface/ipaddress-%(nic)s&#8217;),</dd>
+</dl>
+<p class="last">),</p>
+</dd>
+</dl>
+<p>],
+from_keys={&#8216;nic&#8217;: &#8216;../nic&#8217;},
+override=functools.partial(</p>
+<blockquote>
+<div>config_translator_callbacks.overridePathHas,
+should_exist=&#8217;management&#8217;)</div></blockquote>
+</div></blockquote>
+<p>)
+translator.translte(ref, &#8216;/networking/<a href="#id21"><span class="problematic" id="id22">*</span></a>/ip&#8217;, translated_ref)
+translated_ref.config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;modify_interface&#8217;: {</dt>
+<dd>&#8216;ipaddress-eth0&#8217;: &#8216;1.2.3.4&#8217;,</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>}
+translator = KeyTranslator(</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>translated_keys=[functools.partial(</dt>
+<dd>config_translator_callbacks.getKeyFromPattern,
+to_pattern=&#8217;/modify_interface/static-%(nic)s&#8217;)],</dd>
+</dl>
+<p>from_keys={&#8216;nic&#8217;: &#8216;../nic&#8217;},
+translated_value=True,
+override=functools.partial(</p>
+<blockquote>
+<div>config_translator_callbacks.overridePathHas,
+should_exist=&#8217;management&#8217;),</div></blockquote>
+</div></blockquote>
+<p>)
+translator.translate(ref, &#8216;/networking/<a href="#id23"><span class="problematic" id="id24">*</span></a>/nic&#8217;, translated_ref)
+translated_ref.config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;modify_interface&#8217;: {</dt>
+<dd>&#8216;ipaddress-eth0&#8217;: &#8216;1.2.3.4&#8217;,
+&#8216;static-eth0&#8217;: True</dd>
+</dl>
+<p>},</p>
+</div></blockquote>
+<p>}
+translator = KeyTranslator(</p>
+<blockquote>
+<div>translated_keys=[&#8216;/ksmeta/username&#8217;]</div></blockquote>
+<p>)
+translator.translate(ref, &#8216;/security/user&#8217;, translated_ref)
+translated_ref.config == {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&#8216;modify_interface&#8217;: {</dt>
+<dd>&#8216;ipaddress-eth0&#8217;: &#8216;1.2.3.4&#8217;,
+&#8216;static-eth0&#8217;: True</dd>
+</dl>
+<p>},
+&#8216;ksmeta&#8217;: {</p>
+<blockquote>
+<div>&#8216;username&#8217;: &#8216;root&#8217;,</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator.getOverride">
+<tt class="descname">getOverride</tt><big>(</big><em>ref_key</em>, <em>sub_ref</em>, <em>translated_key</em>, <em>translated_sub_ref</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator.getOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get override from ref_key, ref from ref_key,
+translated_key, translated_ref from translated_key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator.getTranslatedKeys">
+<tt class="descname">getTranslatedKeys</tt><big>(</big><em>ref_key</em>, <em>sub_ref</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator.getTranslatedKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get translated keys from ref_key and ref to ref_key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator.getTranslatedValue">
+<tt class="descname">getTranslatedValue</tt><big>(</big><em>ref_key</em>, <em>sub_ref</em>, <em>translated_key</em>, <em>translated_sub_ref</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator.getTranslatedValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get translated value from ref_key, ref from ref_key,
+translated_key, translated_ref from translated_key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator.isValid">
+<tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check key translator is valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compass.config_management.utils.config_translator.KeyTranslator.translate">
+<tt class="descname">translate</tt><big>(</big><em>ref</em>, <em>key</em>, <em>translated_ref</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator.KeyTranslator.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate content in ref[key] to translated_ref.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils.config_translator_callbacks">
+<span id="compass-config-management-utils-config-translator-callbacks-module"></span><h2>compass.config_management.utils.config_translator_callbacks module<a class="headerlink" href="#module-compass.config_management.utils.config_translator_callbacks" title="Permalink to this headline">¶</a></h2>
+<p>callback lib for config translator callbacks.</p>
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.addValue">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">addValue</tt><big>(</big><em>ref</em>, <em>path</em>, <em>translated_ref</em>, <em>translated_path</em>, <em>condition=''</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.addValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append value into translated config if condition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.getEncryptedValue">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">getEncryptedValue</tt><big>(</big><em>ref</em>, <em>_path</em>, <em>_translated_ref</em>, <em>_translated_path</em>, <em>crypt_method=None</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.getEncryptedValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get encrypted value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.getKeyFromPattern">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">getKeyFromPattern</tt><big>(</big><em>_ref</em>, <em>path</em>, <em>from_pattern='.*'</em>, <em>to_pattern=''</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.getKeyFromPattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get translated key from pattern</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.getValueIf">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">getValueIf</tt><big>(</big><em>ref</em>, <em>_path</em>, <em>_translated_ref</em>, <em>_translated_path</em>, <em>condition=False</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.getValueIf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value if condition is true.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.overrideIfAll">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">overrideIfAll</tt><big>(</big><em>_ref</em>, <em>_path</em>, <em>_translated_ref</em>, <em>_translated_path</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.overrideIfAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>override if all kwargs are True</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.overrideIfAny">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">overrideIfAny</tt><big>(</big><em>_ref</em>, <em>_path</em>, <em>_translated_ref</em>, <em>_translated_path</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.overrideIfAny" title="Permalink to this definition">¶</a></dt>
+<dd><p>override if any kwargs is True</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compass.config_management.utils.config_translator_callbacks.overridePathHas">
+<tt class="descclassname">compass.config_management.utils.config_translator_callbacks.</tt><tt class="descname">overridePathHas</tt><big>(</big><em>_ref</em>, <em>path</em>, <em>_translated_ref</em>, <em>_translated_path</em>, <em>should_exist=''</em>, <em>**_kwargs</em><big>)</big><a class="headerlink" href="#compass.config_management.utils.config_translator_callbacks.overridePathHas" title="Permalink to this definition">¶</a></dt>
+<dd><p>override if expect part exists in path.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compass.config_management.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-compass.config_management.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">compass.config_management.utils package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_filter">compass.config_management.utils.config_filter module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_manager">compass.config_management.utils.config_manager module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_merger">compass.config_management.utils.config_merger module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_merger_callbacks">compass.config_management.utils.config_merger_callbacks module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_reference">compass.config_management.utils.config_reference module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_translator">compass.config_management.utils.config_translator module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils.config_translator_callbacks">compass.config_management.utils.config_translator_callbacks module</a></li>
+<li><a class="reference internal" href="#module-compass.config_management.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/compass.config_management.utils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">compass 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Compass Dev Team, Huawei Cloud.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+    </div>
+  </body>
+</html>

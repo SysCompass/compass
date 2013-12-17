@@ -1,0 +1,38 @@
+compass.actions package
+=======================
+
+Submodules
+----------
+
+compass.actions.poll_switch module
+----------------------------------
+
+.. automodule:: compass.actions.poll_switch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.actions.progress_update module
+--------------------------------------
+
+.. automodule:: compass.actions.progress_update
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+compass.actions.trigger_install module
+--------------------------------------
+
+.. automodule:: compass.actions.trigger_install
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.actions
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,22 @@
+compass.tests.hdsdiscovery package
+==================================
+
+Submodules
+----------
+
+compass.tests.hdsdiscovery.test_hdsdiscovery module
+---------------------------------------------------
+
+.. automodule:: compass.tests.hdsdiscovery.test_hdsdiscovery
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.tests.hdsdiscovery
+    :members:
+    :undoc-members:
+    :show-inheritance:

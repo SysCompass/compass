@@ -1,0 +1,30 @@
+.. Compass documentation master file, created by
+   sphinx-quickstart on Tue Nov 26 22:52:49 2013.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Compass's documentation!
+===================================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   intro
+   compass.actions
+   compass.api
+   compass.apiclient
+   compass.db
+   compass.hdsdiscovery
+   compass.config_management.providers
+   compass.config_management.installers
+   compass.log_analyzor
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

@@ -1,0 +1,29 @@
+compass.config_management.providers package
+===========================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    compass.config_management.providers.plugins
+
+Submodules
+----------
+
+compass.config_management.providers.config_provider module
+----------------------------------------------------------
+
+.. automodule:: compass.config_management.providers.config_provider
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: compass.config_management.providers
+    :members:
+    :undoc-members:
+    :show-inheritance:
