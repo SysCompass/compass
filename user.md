@@ -5,5 +5,4 @@ layout: page
 Become A User
 =============
 
-
-Please contact us for questions. 
+We are preparing a golden image, details coming soon ...
