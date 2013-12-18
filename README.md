@@ -1,40 +1,58 @@
-# Jekyll-Bootstrap
+Compass
+=======
 
-The quickest way to start and publish your Jekyll powered blog. 100% compatible with GitHub pages
+A Deoployment Automation System. See Wiki page at https://wiki.openstack.org/wiki/Compass.
 
-## Usage
+How to install Compass?
+-----------------------
+ 1. Go to the Compass project directory.
+ 2. Run `./install/install.sh` to setup compass environment.
+ 3. Run `source /etc/profile` to setup compass profile.
+ 4. Run `./bin/refresh.sh` to initialize database.
+ 5. Run `service compassd start` to start compass daemon services.
 
-For all usage and documentation please see: <http://jekyllbootstrap.com>
+FAQ
+---
 
-## Version
+ * Why doesn't celery start?  What do I do if I get `celery died but pid file exists` message by running `service compassd status`?
 
-0.3.0 - stable and versioned using [semantic versioning](http://semver.org/).
+  1. Simply remove celery pid file (`/var/run/celery.pid`).
+  2. Try running `export C_FORCE_ROOT=1`
+  3. Restart Compass daemon.
 
-**NOTE:** 0.3.0 introduces a new theme which is not backwards compatible in the sense it won't _look_ like the old version.
-However, the actual API has not changed at all.
-You might want to run 0.3.0 in a branch to make sure you are ok with the theme design changes.
+ * How to restart compass service?
+  1. Run `service compassd restart`
+  2. Run `service httpd restart` to restart web service.
 
-## Contributing
+ * How to check if the compass services run properly?
+  1. Run `service compassd status` to check compass services status.
+  2. Run `service httpd status` to check web service status.
 
+ * How to troubleshoot if `comapassd` can not start the services?
+   1. Try to remove /var/run/celeryd.pid to release the celeryd lock
+   2. Try to remove /var/run/progress_update.pid to release the progress_update lock.
 
-To contribute to the framework please make sure to checkout your branch based on `jb-development`!!
-This is very important as it allows me to accept your pull request without having to publish a public version release.
+ * How to use compass to install distributed systems?
 
-Small, atomic Features, bugs, etc.
-Use the `jb-development` branch but note it will likely change fast as pull requests are accepted.
-Please rebase as often as possible when working.
-Work on small, atomic features/bugs to avoid upstream commits affecting/breaking your development work.
+  Access http://<server_ip>/ods/ods.html. In the current version, we only support OpenStack deployment with a simplified configuration. Follow the simple wizard from the Web UI.
 
-For Big Features or major API extensions/edits:
-This is the one case where I'll accept pull-requests based off the master branch.
-This allows you to work in isolation but it means I'll have to manually merge your work into the next public release.
-Translation : it might take a bit longer so please be patient! (but sincerely thank you).
+ * How to run unittest?
+    `COMPASS_SETTING=<your own compass setting> python -m discover -s compass/tests`
 
-**Jekyll-Bootstrap Documentation Website.**
+ * Where to find the log file?
+   1. `/var/log/compass/compass.log` is the compass web log.
+   2. `/var/log/compass/celery.log` is the celery log
+   3. The redirected celeryd stdout/stderr is at `/tmp/celeryd.log`.
+   4. The redirected progress_update.py stdout/stderr is at `/tmp/progress_update.log`
+   5. The web server (httpd) log files are under `/var/log/httpd/`.
 
-The documentation website at <http://jekyllbootstrap.com> is maintained at https://github.com/plusjade/jekyllbootstrap.com
+ * Where to find the compass config file?
+   1. the compass setting file is at /etc/compass/setting.
+   2. the default global config file for installing distributed system is at /etc/compass/setting
+   3. the default celery config file is at /etc/compass/celeryconfig
 
+ * Where is the default database file?
+  It is at `/opt/compass/db/app.db`
 
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
+ * Where is the utility scripts for compass?
+  It is at `/opt/compass/bin/`
