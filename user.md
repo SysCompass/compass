@@ -2,8 +2,6 @@
 layout: default
 ---
 
-User
-====
 
 <div class="container bs-docs-container">
  <div class="row">
