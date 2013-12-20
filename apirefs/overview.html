@@ -9,7 +9,7 @@ apis:
 
 {% include JB/setup %}
 
- <a href="machines.html">Machine</a> | <a href="clusters.html">Cluster</a> |  <a href="cluster_hots.html">Cluster Host</a>
+{% include apirefs/links.md %}
 
 
 <h3>Switch Methods</h3>
@@ -25,27 +25,43 @@ apis:
 <td><span class="label label-success">POST</span></td>
 <td>/switches</td>
 <td>Create/Add a new switch</td>
-<td><button type="button" class="btn btn-small btn-primary" data-target="#switch_api" data-toggle="collapse">Detail</button></td>
+<td><button type="button" class="btn btn-small btn-primary" data-target="#post_api" data-toggle="collapse">Detail</button></td>
 </tr>
 <tr>
 <td colspan="4" class="hiddenRow">
-<div class="accordian-body collapse" id="switch_api">
- {% capture myinclude %}{% include switchpost.md %}{% endcapture %}
+<div class="accordian-body collapse" id="post_api">
+ {% capture myinclude %}{% include apirefs/switches/post.md %}{% endcapture %}
 {{ myinclude | markdownify }}
 </div>
 </td>
 </tr>
 
 <tr>
+  <td><span class="label label-success">PUT</span></td>
+  <td>/switches/{id}</td>
+  <td>Updates a specified switch</td>
+  <td><button type="button" class="btn btn-small btn-primary" data-target="#put_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+  <td colspan="4" class="hiddenRow">
+    <div class="accordian-body collapse" id="put_api">
+      {% capture myinclude %}{% include apirefs/switches/put.md %}{% endcapture %}
+      {{ myinclude | markdownify }}
+    </div>
+  </td>
+</tr>
+
+
+<tr>
 <td><span class="label label-success">GET</span></td>
-<td>/switches?name=value</td>
+<td>/switches?switchIp={switch_ip_address}&amp;switchIpNetwork={switch_ip_network}&amp;limit={number}</td>
 <td>Lists details for all switches, or optionally return numbers of results containing specified switches</td>
-<td><button type="button" class="btn btn-small btn-primary" data-target="#switchget_api" data-toggle="collapse">Detail</button></td>
+<td><button type="button" class="btn btn-small btn-primary" data-target="#query_api" data-toggle="collapse">Detail</button></td>
 </tr>
 <tr>
 <td colspan="4" class="hiddenRow">
-<div class="accordian-body collapse" id="switchget_api">
- {% capture myinclude %}{%  include switchget.md %}{% endcapture %}
+<div class="accordian-body collapse" id="query_api">
+ {% capture myinclude %}{%  include apirefs/switches/getswitches.md %}{% endcapture %}
 {{ myinclude | markdownify }}
 </div>
 </td>
@@ -62,12 +78,9 @@ apis:
 <tr>
 <td colspan="4" class="hiddenRow">
 <div class="accordian-body collapse" id="switchget2_api">
- {% capture myinclude %}{%  include switchget2.md %}{% endcapture %}
+ {% capture myinclude %}{%  include apirefs/switches/getsingleswitch.md %}{% endcapture %}
 {{ myinclude | markdownify }}
 </div>
 </td>
 </tr>
-
-
-
 </table>

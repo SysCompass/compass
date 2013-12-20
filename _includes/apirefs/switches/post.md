@@ -1,20 +1,21 @@
-POST /switches
---------------
+<h4>POST /switches</h4>
+
 
 Create a switch by providing a switch IP address and associated credentials.
 The POST action shall trigger switch polling. During the polling process,
 MAC address of the devices connected to the switch will be learned by SNMP or SSH.
 
-*Normal Response Code:* 202
+***Normal Response Code:*** 202
 
-*Error Response Codes:*
+***Error Response Codes:***
   * 409 Duplicate key error
   * 400 Invalid request data
 
-*Request parameters*
+***Request parameters***
 
 <table class="table table-bordered table-striped">
-<thead><th>Name</th>
+<thead><th>Parameters</th>
+<th>Style</th>
 <th>Type</th>
 <th>Description</th>
 
@@ -24,13 +25,15 @@ MAC address of the devices connected to the switch will be learned by SNMP or SS
 
 <tr>
 <td>ip</td>
-<td>string </td>
+<td>plain</td>
+<td>string</td>
 <td>The switch IP address</td>
 </tr>
 
 
 <tr>
 <td>version</td>
+<td>plain</td>
 <td>string </td>
 <td>SNMP version when accessing the specified switch by SNMP </td>
 </tr>
@@ -38,6 +41,7 @@ MAC address of the devices connected to the switch will be learned by SNMP or SS
 
 <tr>
 <td>community</td>
+<td>plain</td>
 <td>string </td>
 <td>SNMP community strinng when accessing the specified switch by SNMP </td>
 </tr>
@@ -45,6 +49,7 @@ MAC address of the devices connected to the switch will be learned by SNMP or SS
 
 <tr>
 <td>username</td>
+<td>plain</td>
 <td>string </td>
 <td>SSH username when accessing the specified switch via SSH </td>
 </tr>
@@ -52,6 +57,7 @@ MAC address of the devices connected to the switch will be learned by SNMP or SS
 
 <tr>
 <td>password</td>
+<td>plain</td>
 <td>string </td>
 <td>SSH password when accessing the specified switch via SSH </td>
 </tr>
@@ -62,10 +68,10 @@ MAC address of the devices connected to the switch will be learned by SNMP or SS
 
 
 
-*Response parameters*
+***Response parameters***
 
 <table class="table table-bordered table-striped">
-<thead><th>Name</th>
+<thead><th>Parameters</th>
 <th>Type</th>
 <th>Description</th>
 
@@ -109,33 +115,56 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
 
 
 
-*Sample JSON Request*
+***Sample JSON Request***
 
 {% highlight javascript %}
 {
-  "switch"": {
-    "ip" : "192.168.10.2",
-    "credential" : {
-	"version": "v2c",
-	"community": "public"
-  }
- }
+    "switch": {
+        "ip": "192.168.10.2",
+        "credential": {
+	        "version": "v2c",
+	        "community": "public"
+        }
+    }
 }
 {% endhighlight  %}
 
-*Sample JSON Response*
-
+***Sample JSON Request***
 
 {% highlight javascript %}
 {
-  "status": "accepted",
-  "switch": {
-  "state": "not_reached",
-  "link": {
- 	"href": "/switches/1",
-        "rel": "self"
-        },
-  "id": 1
-  }
+    "switch": {
+        "ip": "192.168.10.2",
+        "credential": { 
+            "username": "admin",
+            "password": "admin" 
+        } 
+    } 
+} 
+{% endhighlight  %}
+
+***Sample JSON Response***
+
+{% highlight javascript %}
+{
+    "status": "accepted",
+    "id": 1,
+    "switch": {
+        "state": "not_reached",
+        "link": {
+            "href": "/switches/1",
+            "rel": "self"
+        }
+    }
+}
+{% endhighlight  %}
+
+***Sample JSON Error Response***
+
+{% highlight javascript %}
+{
+    "status": "Conflict Error",
+    "message": "IP address sample_ip already exists",
+    "failedSwitch": 1
 }
 {% endhighlight  %}

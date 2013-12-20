@@ -1,0 +1,117 @@
+---
+layout: page
+title: "Overview"
+description: ""
+apis:
+  - switch.md
+  - machine.md
+---
+
+{% include JB/setup %}
+
+{% include apirefs/links.md %}
+
+<h3>Cluster Methods</h3>
+<table class="table table-stripped">
+<thead>
+<th>Method</th>
+<th>URI</th>
+<th>Description</th>
+<th></th>
+</thead>
+
+<tr>
+<td><span class="label label-success">POST</span></td>
+<td>/clusters</td>
+<td>Create/Add a new cluster</td>
+<td><button type="button" class="btn btn-small btn-primary" data-target="#cluster_post_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+<td colspan="4" class="hiddenRow">
+<div class="accordian-body collapse" id="cluster_post_api">
+ {% capture myinclude %}{% include apirefs/clusters/post.md %}{% endcapture %}
+{{ myinclude | markdownify }}
+</div>
+</td>
+</tr>
+
+<tr>
+  <td><span class="label label-success">POST</span></td>
+  <td>/clusters/{id}/action</td>
+  <td>Takes action (addHosts, removeHosts, replaceAllHosts or deploy) for a specified cluster</td>
+  <td><button type="button" class="btn btn-small btn-primary" data-target="#cluster_action_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+  <td colspan="4" class="hiddenRow">
+    <div class="accordian-body collapse" id="cluster_action_api">
+      {% capture myinclude %}{% include apirefs/clusters/postaction.md %}{% endcapture %}
+      {{ myinclude | markdownify }}
+    </div>
+  </td>
+</tr>
+
+
+<tr>
+<td><span class="label label-success">PUT</span></td>
+<td>/clusters/{id}/{resource}</td>
+<td>Updates resource (security, networking or partition config) for a specified cluster</td>
+<td><button type="button" class="btn btn-small btn-primary" data-target="#cluster_put_resource_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+<td colspan="4" class="hiddenRow">
+<div class="accordian-body collapse" id="cluster_put_resource_api">
+ {% capture myinclude %}{%  include apirefs/clusters/updateresource.md %}{% endcapture %}
+{{ myinclude | markdownify }}
+</div>
+</td>
+</tr>
+
+
+
+<tr>
+<td><span class="label label-success">GET</span></td>
+<td>/clusters/{id}/{resouce}</td>
+<td>Lists resource (security, networking or partition config) for a specified cluster</td>
+<td><button type="button" class="btn btn-small btn-primary" data-target="#getresource_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+<td colspan="4" class="hiddenRow">
+<div class="accordian-body collapse" id="getresource_api">
+ {% capture myinclude %}{%  include apirefs/clusters/getresource.md %}{% endcapture %}
+{{ myinclude | markdownify }}
+</div>
+</td>
+</tr>
+
+<tr>
+  <td><span class="label label-success">GET</span></td>
+  <td>/clusters/{id}</td>
+  <td>Lists details for a specified cluster</td>
+  <td><button type="button" class="btn btn-small btn-primary" data-target="#getsinglecluster_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+  <td colspan="4" class="hiddenRow">
+    <div class="accordian-body collapse" id="getsinglecluster_api">
+      {% capture myinclude %}{%  include apirefs/clusters/getsinglecluster.md %}{% endcapture %}
+      {{ myinclude | markdownify }}
+    </div>
+  </td>
+</tr>
+
+<tr>
+  <td><span class="label label-success">GET</span></td>
+  <td>/clusters</td>
+  <td>Lists details for all clusters</td>
+  <td><button type="button" class="btn btn-small btn-primary" data-target="#getclusters_api" data-toggle="collapse">Detail</button></td>
+</tr>
+<tr>
+  <td colspan="4" class="hiddenRow">
+    <div class="accordian-body collapse" id="getclusters_api">
+      {% capture myinclude %}{%  include apirefs/clusters/getclusters.md %}{% endcapture %}
+      {{ myinclude | markdownify }}
+    </div>
+  </td>
+</tr>
+
+
+</table>
