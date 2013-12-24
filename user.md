@@ -1,45 +1,23 @@
 ---
-layout: default
+layout: page
 ---
 
+{% include JB/setup %}
 
-<div class="container bs-docs-container">
- <div class="row">
-   <div class="col-md-9" role="main">
-     <div><h1 id="installation"> More Details Comming Soon ... </h1> </div>
+Getting Started
+---------------
 
-     <div class="bs-docs-section">
-       <div class="page-header">
-          <h1 id="installation"> Install VirtualBox </h1>
-       </div>
-       <h3 id="downloadvb"> VirtualBox </h3>
-       <p> Download VirtualBox from </p>
-       <h3 id="downloadext"> Extension </h3>
-       <p> Download VirtualBox extention from </p>
-     </div>
-     
-     <div class="bs-docs-section">
-       <div class="page-header">
-          <h1 id="goldenimage"> Download Golden Image </h1>
-       </div>
-       <h3 id="save"> Save </h3>
-       <p> Save zip file on the disk</p>
-       <h3 id="unzip"> Unzip </h3>
-       <p> Unzip the file and run the .bat file to start golden image </p>
-     </div>
+We provide an pre-configured Compass VM image for you to get a detailed look at what Compass can do. It is packaged as VirtualBox VDI. Currently, it only supports Windows.
 
-     <div class="bs-docs-section">
-       <div class="page-header">
-          <h1 id="baremetal"> Baremetal Machines Deoloyment </h1>
-       </div>
-       <h3 id="browser"> Open Browser</h3>
-       <p> Open a browser to connect to IP </p>
-       <h3 id="steps"> Follow Steps </h3>
-       <p> Follow the wizard </p>
-     </div>
+Systme requirements are:
 
-   </div>
+  * Windows 7 (64-bit OS)
+  * VirtualBox on Windows. VirtualBox is a general-purpose full virtualizer for x86 hardware provided by Oracle. VirtualBox can be downloaded from its official web site at https://www.virtualbox.org/wiki/Downloads.
 
- </div>
-</div>
+<h3>Download </h3>
+  The ZIP file is available at [this link](http://www.syscompass.org/)
+  Extract the files on your Windows system and open the folder in Explorer. Run the `runme` script.
+
+ Follow the steps from [this link](/userguides/steps.html)
+
 
