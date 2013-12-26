@@ -68,7 +68,13 @@ def main(argv):
             if flags.OPTIONS.async:
                 celery.send_task('compass.tasks.progress_update', (clusterid,))
             else:
-                progress_update.updateProgress(clusterid)
+                try:
+                    progress_update.update_progress(clusterid)
+                except Exception as error:
+                    logging.error('failed to update progress for cluster %s',
+                                  clusterid)
+                    logging.exception(error)
+                    pass
 
         BUSY = False
         if KILLED:

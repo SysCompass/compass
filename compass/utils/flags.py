@@ -1,4 +1,7 @@
-"""Module to load flags."""
+"""Module to load flags.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import sys
 
 from optparse import OptionParser
@@ -9,26 +12,31 @@ OPTIONS = None
 
 
 def init():
-    """init flag parsing.
-    Args:
-      argv: list of string, which should be the same as sys.argv.
-
-    Return:
-      no return
+    """Init flag parsing.
     """
+    global OPTIONS
     (options, argv) = PARSER.parse_args()
     sys.argv = [sys.argv[0]] + argv
-    global OPTIONS
     OPTIONS = options
 
 
 def add(flagname, **kwargs):
-    """add a flag name and its setting."""
+    """Add a flag name and its setting.
+
+    :param flagname: flag name declared in cmd as --<flagname>=...
+    :type flagname: str
+    """
     PARSER.add_option('--%s' % flagname, dest=flagname, **kwargs)
 
 
 def add_bool(flagname, default=True, **kwargs):
-    """add a bool flag name and its setting."""
+    """Add a bool flag name and its setting.
+
+    :param flagname: flag name declared in cmd as --[no]<flagname>.
+    :type flagname: str
+    :param default: default value
+    :type default: bool
+    """
     PARSER.add_option('--%s' % flagname,
                       dest=flagname, default=default,
                       action="store_true", **kwargs)

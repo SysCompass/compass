@@ -11,7 +11,7 @@ sudo mkdir /root/backup # create backup folder
 sudo cp /etc/ntp.conf /root/backup/
 # update ntp.conf
 sudo sed -i 's/^#server[ \t]\+127.127.1.0/server 127.127.1.0/g' /etc/ntp.conf
-sudo sed -i 's/^#fudge[ \t]\+127.127.1.0/fudge 127.127.1.0/g' /etc/ntp.conf
+sudo sed -i 's/^#fudge[ \t]\+127.127.1.0[ \t]\+stratum.*$/fudge 127.127.1.0 stratum 8/g' /etc/ntp.conf
 sudo service ntpd restart
 
 # configure xinetd
@@ -81,6 +81,12 @@ sudo sed -i 's/disable\([ \t]\+\)=\([ \t]\+\)yes/disable\1=\2no/g' /etc/xinetd.d
 sudo sed -i 's/^@dists=/# @dists=/g' /etc/debmirror.conf
 sudo sed -i 's/^@arches=/# @arches=/g' /etc/debmirror.conf
 
+echo "disable iptables"
+sudo service iptables stop
+
+echo "disable selinux temporarily"
+echo 0 > /selinux/enforce
+
 echo "Checking if httpd is running"
 sudo ps cax | grep httpd > /dev/null
 if [ $? -eq 0 ]; then
@@ -139,7 +145,7 @@ export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $
 sudo mkdir -p /var/lib/cobbler/iso
 sudo curl "$IMAGE_SOURCE" > /var/lib/cobbler/iso/CentOS6.4-minimal.iso
 sudo mkdir -p /mnt/CentOS6.4-minimal
-sudo mount -t auto -o loop /var/lib/cobbler/iso/CentOS6.4-minimal.iso /mnt/CentOS6.4-minimal
+sudo mount -o loop /var/lib/cobbler/iso/CentOS6.4-minimal.iso /mnt/CentOS6.4-minimal
 sudo cobbler import --path=/mnt/CentOS6.4-minimal --name=CentOS6.4-minimal --arch=x86_64
 # manually run distro add and profile add if cobbler import fails
 sudo cobbler distro add --name=CentOS6.4-minimal --kernel=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/vmlinuz --initrd=/var/www/cobbler/ks_mirror/CentOS6.4-minimal-x86_64/isolinux/initrd.img --arch=x86_64 --breed=redhat

@@ -1,4 +1,7 @@
-'''Module to define celery tasks.'''
+"""Module to define celery tasks.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 from celery.signals import setup_logging
 
 from compass.actions import poll_switch
@@ -11,8 +14,8 @@ from compass.utils import logsetting
 from compass.utils import setting_wrapper as setting
 
 
-def tasks_setup_logging(**_kw):
-    '''setup logging options'''
+def tasks_setup_logging(**_):
+    """Setup logging options from compass setting."""
     flags.init()
     flags.OPTIONS.logfile = setting.CELERY_LOGFILE
     logsetting.init()
@@ -23,40 +26,35 @@ setup_logging.connect(tasks_setup_logging)
 
 @celery.task(name="compass.tasks.pollswitch")
 def pollswitch(ip_addr, req_obj='mac', oper="SCAN"):
-    """ Query switch and return expected result.
+    """Query switch and return expected result.
 
-        :param str ip_addr     : switch ip address
-        :param str reqObj      : the object requested to query from switch
-        :param str oper        : the operation to query the switch
-                                 (SCAN, GET, SET)
+    :param ip_addr: switch ip address.
+    :type ip_addr: str
+    :param reqObj: the object requested to query from switch.
+    :type reqObj: str
+    :param oper: the operation to query the switch (SCAN, GET, SET).
+    :type oper: str
     """
     with database.session():
         poll_switch.poll_switch(ip_addr, req_obj='mac', oper="SCAN")
 
 
 @celery.task(name="compass.tasks.trigger_install")
-def triggerInstall(clusterid):
-    """Trigger install progress for the given cluster.
+def triggerinstall(clusterid):
+    """Deploy the given cluster.
 
-    Args:
-        clusterid: int. Used to query a host table to get host
-                    configurations.
-
-    Returns:
-        None
+    :param clusterid: the id of the cluster to deploy.
+    :type clusterid: int
     """
     with database.session():
         trigger_install.trigger_install(clusterid)
 
 
 @celery.task(name="compass.tasks.progress_update")
-def progressUpdate(clusterid):
-    """Calculate the installing progress of given cluster.
+def progressupdate(clusterid):
+    """Calculate the installing progress of the given cluster.
 
-    Args:
-        clusterid: int, to updte installing progress of the cluster.
-
-    Returns:
-        None
+    :param clusterid: the id of the cluster to get the intstalling progress.
+    :type clusterid: int
     """
-    progress_update.updateProgress(clusterid)
+    progress_update.update_progress(clusterid)

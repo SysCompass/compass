@@ -106,7 +106,7 @@ class TestConfigTranslatorFunctions(unittest2.TestCase):
                     config_translator.KeyTranslator(
                         translated_keys=['/ksmeta/password'],
                         translated_value=(
-                            config_translator_callbacks.getEncryptedValue)
+                            config_translator_callbacks.get_encrypted_value)
                     )
                 ],
                 '/partition': [
@@ -117,72 +117,72 @@ class TestConfigTranslatorFunctions(unittest2.TestCase):
                 '/networking/interfaces/*/mac': [
                     config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/macaddress-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management')
                     )
                 ],
                 '/networking/interfaces/*/ip': [
                     config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/ipaddress-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management')
                     )
                 ],
                 '/networking/interfaces/*/netmask': [
                     config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/netmask-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management')
                     )
                 ],
                 '/networking/interfaces/*/dns_alias': [
                     config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/dnsname-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management')
                     )
                 ],
                 '/networking/interfaces/*/nic': [
                     config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/static-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         translated_value=True,
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management'),
                     ), config_translator.KeyTranslator(
                         translated_keys=[functools.partial(
-                            config_translator_callbacks.getKeyFromPattern,
+                            config_translator_callbacks.get_key_from_pattern,
                             to_pattern='/modify_interface/management-%(nic)s')],
                         from_keys={'nic': '../nic'},
                         translated_value=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management'),
                         override=functools.partial(
-                            config_translator_callbacks.overridePathHas,
+                            config_translator_callbacks.override_path_has,
                             should_exist='management')
                     ), config_translator.KeyTranslator(
                         translated_keys=['/ksmeta/promisc_nics'],
                         from_values={'condition': '../promisc'},
-                        translated_value=config_translator_callbacks.addValue,
+                        translated_value=config_translator_callbacks.add_value,
                         override=True,
                     )
                 ],
@@ -215,9 +215,9 @@ class TestConfigTranslatorFunctions(unittest2.TestCase):
                             '/endpoints/network/service/host',
                             '/endpoints/volume/service/host',
                         ],
-                        translated_value=config_translator_callbacks.getValueIf,
+                        translated_value=config_translator_callbacks.get_value_if,
                         from_values={'condition': '/has_dashboard_roles'},
-                        override=config_translator_callbacks.overrideIfAny,
+                        override=config_translator_callbacks.override_if_any,
                         override_conditions={
                             'has_dashboard_roles': '/has_dashboard_roles'}
                     )

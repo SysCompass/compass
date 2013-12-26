@@ -1,4 +1,6 @@
 """Utils for API usage"""
+import logging
+
 from flask import make_response
 from flask.ext.restful import Api
 
@@ -89,11 +91,13 @@ def is_valid_security_config(config):
     security_keys = ['server_credentials', 'service_credentials',
                      'console_credentials']
     fields = ['username', 'password']
+    logging.debug('config: %s', config)
     for key in security_keys:
         try:
             content = config[key]
         except KeyError:
             error_msg = "Missing '%s' in security config!" % key
+            logging.error(error_msg)
             raise KeyError(error_msg)
 
         for k in fields:
@@ -105,6 +109,7 @@ def is_valid_security_config(config):
             except KeyError:
                 error_msg = ("Missing '%s' in '%s' section of security config"
                              % (k, key))
+                logging.error(error_msg)
                 raise KeyError(error_msg)
 
     return True, 'valid!'
@@ -263,7 +268,7 @@ def valid_host_config(config):
                     "/networking/global/gateway": "is_valid_gateway",
                     "/networking/global/nameserver": "",
                     "/networking/global/search_path": "",
-                    "/role": ""}
+                    "/roles": ""}
     flat_config = {}
     flatten_dict(config, flat_config)
 

@@ -1,8 +1,11 @@
-'''Module to provider base installer class Installer.'''
+"""Module to provider installer interface.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 
 
 class Installer(object):
-    '''Base class for installer.'''
+    """Interface for installer."""
     NAME = 'installer'
 
     def __init__(self):
@@ -13,41 +16,78 @@ class Installer(object):
         return '%s[%s]' % (self.__class__.__name__, self.NAME)
 
     def sync(self):
-        '''interface to sync installer.'''
+        """virtual method to sync installer."""
         pass
 
-    def getGlobalConfig(self, **kwargs):
-        '''interface to get global config.'''
+    def get_global_config(self, **kwargs):
+        """virtual method to get global config."""
         return {}
 
-    def getClusterConfig(self, clusterid, **kwargs):
-        '''interface to get cluster config.'''
+    def get_cluster_config(self, clusterid, **kwargs):
+        """virtual method to get cluster config.
+
+        :param clusterid: the id of the cluster to get configuration.
+        :type clusterid: int
+
+        :returns: cluster configuration as dict.
+        """
         return {}
 
-    def getHostConfig(self, hostid, **kwargs):
-        '''interface to get host config.'''
+    def get_host_config(self, hostid, **kwargs):
+        """virtual method to get host config.
+
+        :param hostid: the id of host to get configuration.
+        :type hostid: int
+
+        :returns: host configuration as dict.
+        """
         return {}
 
-    def getHostConfigs(self, hostids, **kwargs):
-        '''get host configs.'''
+    def get_host_configs(self, hostids, **kwargs):
+        """Wrapper method get hosts' configs.
+
+        :param hostids: ids of the hosts' configuration.
+        :type hostids: list of int
+
+        :returns: dict of host id to host configuration as dict.
+        """
         host_configs = {}
         for hostid in hostids:
-            host_configs[hostid] = self.getHostConfig(hostid, **kwargs)
+            host_configs[hostid] = self.get_host_config(hostid, **kwargs)
         return host_configs
 
-    def updateGlobalConfig(self, config, **kwargs):
-        '''interface to update global config.'''
+    def update_global_config(self, config, **kwargs):
+        """virtual method to update global config.
+
+        :param config: global configuration.
+        :type config: dict
+        """
         pass
 
-    def updateClusterConfig(self, clusterid, config, **kwargs):
-        '''interface to update cluster config.'''
+    def update_cluster_config(self, clusterid, config, **kwargs):
+        """virtual method to update cluster config.
+
+        :param clusterid: the id of the cluster to update the configuration.
+        :type clusterid: int
+        :param config: cluster configuration to update.
+        :type config: dict
+        """
         pass
 
-    def updateHostConfig(self, hostid, config, **kwargs):
-        '''interface to update host config.'''
+    def update_host_config(self, hostid, config, **kwargs):
+        """virtual method to update host config.
+
+        :param hostid: the id of host to update host configuration.
+        :type hostid: int
+        :param config: host configuration to update.
+        :type config: dict
+        """
         pass
 
-    def updateHostConfigs(self, host_configs, **kwargs):
-        '''updaet host configs.'''
+    def update_host_configs(self, host_configs, **kwargs):
+        """Wrapper method to updaet hosts' configs.
+
+        :param host_configs: dict of host id to host configuration as dict
+        """
         for hostid, config in host_configs.items():
-            self.updateHostConfig(hostid, config, **kwargs)
+            self.update_host_config(hostid, config, **kwargs)

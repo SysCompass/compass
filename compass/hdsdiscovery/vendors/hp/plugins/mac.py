@@ -13,16 +13,17 @@ class Mac(base.BasePlugin):
         self.credential = credential
 
     def process_data(self, oper='SCAN'):
-        """ Dynamically call the function according 'oper'
-            param str oper : operation of data processing
+        """Dynamically call the function according 'oper'
+
+        :param oper: operation of data processing
         """
         func_name = oper.lower()
         return getattr(self, func_name)()
 
     def scan(self):
-        """Implemnets the scan method in BasePlugin class
-           In this mac module, mac addesses were retrieved by
-           snmpwalk python lib.
+        """
+        Implemnets the scan method in BasePlugin class. In this mac module,
+        mac addesses were retrieved by snmpwalk python lib.
         """
         walk_result = utils.snmp_walk(self.host, self.credential,
                                       "BRIDGE-MIB::dot1dTpFdbPort")

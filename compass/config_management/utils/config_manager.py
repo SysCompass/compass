@@ -1,42 +1,9 @@
-'''
-   Config Manager to get configs from providers and isntallers
-   and update them to providers and installers.
+"""
+Module to get configs from provider and isntallers and update
+them to provider and installers.
 
-   The working flow is:
-       Get global config from provider (default from global config file).
-       Get global config from os installer.
-       Get global config from package installer.
-
-       merge global config from global config got from provider,
-       os installer, package installer.
-
-       Update global config to provider (default no action).
-       Update global config to os installer.
-       Update global config to package installer.
-
-       Get cluster config from provider (default from db).
-       Get cluster config os installer.
-       Get cluster config from package installer.
-
-       merge cluster config from cluster config got from provider,
-       os installer and package installer.
-
-       merge global config into cluster config.
-
-       Update cluster config to provider.
-       Update cluster config to os installer.
-       Update cluster config to package installer.
-
-       Get hosts configs from provider (default from db)
-       Get hosts configs from os installer.
-       Get hosts configs from package installer.
-
-       Call config_merger to update hosts configs from cluster config.
-
-       Update hosts configs to provider.
-       Update hosts configs to os installer.
-       Update host configs to package installer.
-'''
+   .. moduleauthor:: Xiaodong wang ,xiaodongwang@huawei.com>
+"""
 import functools
 import logging
 
@@ -55,7 +22,7 @@ CLUSTER_HOST_MERGER = ConfigMerger(
             path_list=['/networking/interfaces/*'],
             from_upper_keys={'ip_start': 'ip_start', 'ip_end': 'ip_end'},
             to_key='ip',
-            value=config_merger_callbacks.assignIPs
+            value=config_merger_callbacks.assign_ips
         ),
         ConfigMapping(
             path_list=['/role_assign_policy'],
@@ -63,13 +30,14 @@ CLUSTER_HOST_MERGER = ConfigMerger(
                 'policy_by_host_numbers': 'policy_by_host_numbers',
                 'default': 'default'},
             to_key='/roles',
-            value=config_merger_callbacks.assignRolesByHostNumbers
+            value=config_merger_callbacks.assign_roles_by_host_numbers,
+            override=config_merger_callbacks.override_if_empty
         ),
         ConfigMapping(
             path_list=['/dashboard_roles'],
             from_lower_keys={'lower_values': '/roles'},
             to_key='/has_dashboard_roles',
-            value=config_merger_callbacks.hasIntersection
+            value=config_merger_callbacks.has_intersection
         ),
         ConfigMapping(
             path_list=[
@@ -88,7 +56,7 @@ CLUSTER_HOST_MERGER = ConfigMerger(
                              'search_path': '/networking/global/search_path'},
             from_lower_keys={'hostname': '/hostname'},
             to_key='dns_alias',
-            value=functools.partial(config_merger_callbacks.assignFromPattern,
+            value=functools.partial(config_merger_callbacks.assign_from_pattern,
                                     upper_keys=['search_path', 'clustername'],
                                     lower_keys=['hostname'])
         ),
@@ -98,39 +66,38 @@ CLUSTER_HOST_MERGER = ConfigMerger(
             from_lower_keys={'hostnames': '/hostname',
                              'ips': '/networking/interfaces/management/ip'},
             to_key='ignore_proxy',
-            value=config_merger_callbacks.assignNoProxy
+            value=config_merger_callbacks.assign_noproxy
         )])
 
 
 class ConfigManager(object):
-    '''
-       Config manger is to read global/clsuter/host configs from provider,
-       os installer, package installer, process them.
-       update them to provider, os installer, package installer.
-    '''
+    """
+    Class is to get global/clsuter/host configs from provider,
+    os installer, package installer, process them, and
+    update them to provider, os installer, package installer.
+    """
 
     def __init__(self):
-        self.config_provider = config_provider.getProvider()
-        logging.debug('got config provider: %s', self.config_provider)
-        self.os_installer = os_installer.getInstaller()
-        logging.debug('got os installer: %s', self.os_installer)
-        self.package_installer = package_installer.getInstaller()
-        logging.debug('got package installer: %s', self.package_installer)
+        self.config_provider_ = config_provider.get_provider()
+        logging.debug('got config provider: %s', self.config_provider_)
+        self.package_installer_ = package_installer.get_installer()
+        logging.debug('got package installer: %s', self.package_installer_)
+        self.os_installer_ = os_installer.get_installer(
+            self.package_installer_)
+        logging.debug('got os installer: %s', self.os_installer_)
 
-    def getAdapters(self):
-        '''get adapter information from os installer and package installer.
+    def get_adapters(self):
+        """Get adapter information from os installer and package installer.
 
-        Returns:
-            list of adapter information.
-            For each adapter, the information is as:
-                {
-                    'name': 'CentOS/OpenStack',
-                    'os': 'CentOS6.4',
-                    'target_system': 'openstack'
-                }
-        '''
-        oses = self.os_installer.getOSes()
-        target_systems_per_os = self.package_installer.getTargetSystems(oses)
+        :returns: list of adapter information.
+
+        .. note::
+           For each adapter, the information is as
+           {'name': '...', 'os': '...', 'target_system': '...'}
+        """
+        oses = self.os_installer_.get_oses()
+        target_systems_per_os = self.package_installer_.get_target_systems(
+            oses)
         adapters = []
         for os_version, target_systems in target_systems_per_os.items():
             for target_system in target_systems:
@@ -142,22 +109,19 @@ class ConfigManager(object):
         logging.debug('got adapters: %s', adapters)
         return adapters
 
-    def getRoles(self, target_system):
-        '''Get all roles of the target system from package installer.
+    def get_roles(self, target_system):
+        """Get all roles of the target system from package installer.
 
-        Args:
-            target_system: str, the target cloud system such as openstack.
+        :param target_system: the target distributed system to deploy.
+        :type target_system: str
 
-        Returns:
-            list of role information.
-            For each role, the information is as:
-                {
-                    'name': 'os-single-controller',
-                    'description': 'openstack controller node',
-                    'target_system': 'openstack'
-                }
-        '''
-        roles = self.package_installer.getRoles(target_system)
+        :returns: list of role information.
+
+        .. note::
+           For each role, the information is as:
+           {'name': '...', 'description': '...', 'target_system': '...'}
+        """
+        roles = self.package_installer_.get_roles(target_system)
         return [
             {
                 'name': role,
@@ -166,167 +130,138 @@ class ConfigManager(object):
             } for role, description in roles.items()
         ]
 
-    def getGlobalConfig(self, os_version, target_system):
-        '''Get global config.'''
-        config = self.config_provider.getGlobalConfig()
+    def get_global_config(self, os_version, target_system):
+        """Get global config."""
+        config = self.config_provider_.get_global_config()
         logging.debug('got global provider config from %s: %s',
-                      self.config_provider, config)
+                      self.config_provider_, config)
 
-        os_config = self.os_installer.getGlobalConfig(
+        os_config = self.os_installer_.get_global_config(
             os_version=os_version, target_system=target_system)
         logging.debug('got global os config from %s: %s',
-                      self.os_installer, os_config)
-        package_config = self.package_installer.getGlobalConfig(
+                      self.os_installer_, os_config)
+        package_config = self.package_installer_.get_global_config(
             os_version=os_version,
             target_system=target_system)
         logging.debug('got global package config from %s: %s',
-                      self.package_installer, package_config)
+                      self.package_installer_, package_config)
 
-        util.mergeDict(config, os_config)
-        util.mergeDict(config, package_config)
-        logging.debug('got global config: %s', config)
+        util.merge_dict(config, os_config)
+        util.merge_dict(config, package_config)
         return config
 
-    def updateGlobalConfig(self, config, os_version, target_system):
-        '''update global config.'''
+    def update_global_config(self, config, os_version, target_system):
+        """update global config."""
         logging.debug('update global config: %s', config)
-        
-        logging.debug('update global config to %s',
-                      self.config_provider)
-        self.config_provider.updateGlobalConfig(config)
-        
-        logging.debug('update global config to %s',
-                      self.os_installer)
-        self.os_installer.updateGlobalConfig(
+        self.config_provider_.update_global_config(config)
+        self.os_installer_.update_global_config(
             config, os_version=os_version, target_system=target_system)
-        
-        logging.debug('update global config to %s',
-                      self.package_installer)
-        self.package_installer.updateGlobalConfig(
+        self.package_installer_.update_global_config(
             config, os_version=os_version, target_system=target_system)
 
-    def getClusterConfig(self, clusterid, os_version, target_system):
-        '''get cluster config.'''
-        config = self.config_provider.getClusterConfig(clusterid)
+    def get_cluster_config(self, clusterid, os_version, target_system):
+        """get cluster config."""
+        config = self.config_provider_.get_cluster_config(clusterid)
         logging.debug('got cluster %s config from %s: %s',
-                      clusterid, self.config_provider, config)
+                      clusterid, self.config_provider_, config)
 
-        os_config = self.os_installer.getClusterConfig(
+        os_config = self.os_installer_.get_cluster_config(
             clusterid, os_version=os_version,
             target_system=target_system)
         logging.debug('got cluster %s config from %s: %s',
-                      clusterid, self.os_installer, os_config)
+                      clusterid, self.os_installer_, os_config)
 
-        package_config = self.package_installer.getClusterConfig(
+        package_config = self.package_installer_.get_cluster_config(
             clusterid, os_version=os_version,
             target_system=target_system)
         logging.debug('got cluster %s config from %s: %s',
-                      clusterid, self.package_installer, package_config)
-        
-        util.mergeDict(config, os_config)
-        util.mergeDict(config, package_config)
-        logging.debug('got cluster %s config: %s', clusterid, config)
+                      clusterid, self.package_installer_, package_config)
+
+        util.merge_dict(config, os_config)
+        util.merge_dict(config, package_config)
         return config
 
-    def updateClusterConfig(self, clusterid, config, os_version, target_system):
-        '''update cluster config.'''
+    def update_cluster_config(self, clusterid, config,
+                              os_version, target_system):
+        """update cluster config."""
         logging.debug('update cluster %s config: %s', clusterid, config)
-
-        logging.debug('update cluster %s config to %s',
-                      clusterid, self.config_provider)
-        self.config_provider.updateClusterConfig(clusterid, config)
-
-        logging.debug('update cluster %s config to %s',
-                      clusterid, self.os_installer)
-        self.os_installer.updateClusterConfig(
+        self.config_provider_.update_cluster_config(clusterid, config)
+        self.os_installer_.update_cluster_config(
+            clusterid, config, os_version=os_version,
+            target_system=target_system)
+        self.package_installer_.update_cluster_config(
             clusterid, config, os_version=os_version,
             target_system=target_system)
 
-        logging.debug('update cluster %s config to %s',
-                      clusterid, self.package_installer)
-        self.package_installer.updateClusterConfig(
-            clusterid, config, os_version=os_version,
-            target_system=target_system)
-
-    def getHostConfig(self, hostid, os_version, target_system):
-        '''get host config.'''
-        config = self.config_provider.getHostConfig(hostid)
+    def get_host_config(self, hostid, os_version, target_system):
+        """get host config."""
+        config = self.config_provider_.get_host_config(hostid)
         logging.debug('got host %s config from %s: %s',
-                      hostid, self.config_provider, config)
+                      hostid, self.config_provider_, config)
 
-        os_config = self.os_installer.getHostConfig(
+        os_config = self.os_installer_.get_host_config(
             hostid, os_version=os_version,
             target_system=target_system)
         logging.debug('got host %s config from %s: %s',
-                      hostid, self.os_installer, os_config)
+                      hostid, self.os_installer_, os_config)
 
-        package_config = self.package_installer.getHostConfig(
+        package_config = self.package_installer_.get_host_config(
             hostid, os_version=os_version,
             target_system=target_system)
         logging.debug('got host %s config from %s: %s',
-                      hostid, self.package_installer, package_config)
+                      hostid, self.package_installer_, package_config)
 
-        util.mergeDict(config, os_config)
-        util.mergeDict(config, package_config)
-        logging.debug('got host %s config: %s', hostid, config)
+        util.merge_dict(config, os_config)
+        util.merge_dict(config, package_config)
         return config
 
-    def getHostConfigs(self, hostids, os_version, target_system):
-        '''get host configs.'''
+    def get_host_configs(self, hostids, os_version, target_system):
+        """get host configs."""
         host_configs = {}
         for hostid in hostids:
-            host_configs[hostid] = self.getHostConfig(
+            host_configs[hostid] = self.get_host_config(
                 hostid, os_version, target_system)
         return host_configs
 
-    def updateHostConfig(self, hostid, config, os_version, target_system):
-        'update host config.'''
+    def update_host_config(self, hostid, config, os_version, target_system):
+        """update host config."""
         logging.debug('update host %s config: %s', hostid, config)
-
-        logging.debug('update host %s config to %s',
-                      hostid, self.config_provider)
-        self.config_provider.updateHostConfig(hostid, config)
-
-        logging.debug('update host %s config to %s',
-                      hostid, self.os_installer)
-        self.os_installer.updateHostConfig(
+        self.config_provider_.update_host_config(hostid, config)
+        self.os_installer_.update_host_config(
+            hostid, config, os_version=os_version,
+            target_system=target_system)
+        self.package_installer_.update_host_config(
             hostid, config, os_version=os_version,
             target_system=target_system)
 
-        logging.debug('update host %s config to %s',
-                      hostid, self.package_installer)
-        self.package_installer.updateHostConfig(
-            hostid, config, os_version=os_version,
-            target_system=target_system)
-
-    def updateHostConfigs(self, host_configs, os_version, target_system):
-        'update host configs.'''
+    def update_host_configs(self, host_configs, os_version, target_system):
+        """update host configs."""
         for hostid, host_config in host_configs.items():
-            self.updateHostConfig(
+            self.update_host_config(
                 hostid, host_config, os_version, target_system)
 
-    def updateClusterAndHostConfigs(self,
-                                    clusterid,
-                                    hostids,
-                                    update_hostids,
-                                    os_version,
-                                    target_system):
-        '''update cluster/host configs.'''
+    def update_cluster_and_host_configs(self,
+                                        clusterid,
+                                        hostids,
+                                        update_hostids,
+                                        os_version,
+                                        target_system):
+        """update cluster/host configs."""
         logging.debug('update cluster %s with all hosts %s and update: %s',
                       clusterid, hostids, update_hostids)
 
-        global_config = self.getGlobalConfig(os_version, target_system)
-        self.updateGlobalConfig(global_config, os_version=os_version,
-                                target_system=target_system)
+        global_config = self.get_global_config(os_version, target_system)
+        self.update_global_config(global_config, os_version=os_version,
+                                  target_system=target_system)
 
-        cluster_config = self.getClusterConfig(
+        cluster_config = self.get_cluster_config(
             clusterid, os_version=os_version, target_system=target_system)
-        util.mergeDict(cluster_config, global_config, False)
-        self.updateClusterConfig(
+        util.merge_dict(cluster_config, global_config, False)
+        self.update_cluster_config(
             clusterid, cluster_config, os_version=os_version,
             target_system=target_system)
 
-        host_configs = self.getHostConfigs(
+        host_configs = self.get_host_configs(
             hostids, os_version=os_version,
             target_system=target_system)
         CLUSTER_HOST_MERGER.merge(cluster_config, host_configs)
@@ -334,14 +269,11 @@ class ConfigManager(object):
             [(hostid, host_config)
              for hostid, host_config in host_configs.items()
              if hostid in update_hostids])
-        self.updateHostConfigs(
+        self.update_host_configs(
             update_host_configs, os_version=os_version,
             target_system=target_system)
 
     def sync(self):
-        '''
-           Sync os installer and package installer to 
-           catch up the latest change.
-        '''
-        self.os_installer.sync()
-        self.package_installer.sync()
+        """sync os installer and package installer."""
+        self.os_installer_.sync()
+        self.package_installer_.sync()

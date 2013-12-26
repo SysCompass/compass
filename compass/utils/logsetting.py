@@ -1,4 +1,7 @@
-"""Module to setup logging configuration."""
+"""Module to setup logging configuration.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 
 import logging
 import logging.handlers
@@ -24,6 +27,7 @@ flags.add('log_format',
           help='log format', default=setting.DEFAULT_LOGFORMAT)
 
 
+# mapping str setting in flag --loglevel to logging level.
 LOGLEVEL_MAPPING = {
     'finest': logging.DEBUG - 2,  # more detailed log.
     'fine': logging.DEBUG - 1,    # detailed log.
@@ -36,15 +40,19 @@ LOGLEVEL_MAPPING = {
 
 
 def init():
-    """Init loggsetting. It should be called after flags.init(sys.argv)."""
-
+    """Init loggsetting. It should be called after flags.init."""
     loglevel = flags.OPTIONS.loglevel.lower()
     logdir = flags.OPTIONS.logdir
     logfile = flags.OPTIONS.logfile
     logger = logging.getLogger()
+    if logger.handlers:
+        for handler in logger.handlers:
+            logger.removeHandler(handler)
+
     if logdir:
         if not logfile:
             logfile = os.path.basename(sys.argv[0])
+
         handler = logging.handlers.TimedRotatingFileHandler(
             os.path.join(logdir, logfile),
             when=flags.OPTIONS.log_interval_unit,
@@ -61,5 +69,6 @@ def init():
 
     formatter = logging.Formatter(
         flags.OPTIONS.log_format)
+
     handler.setFormatter(formatter)
     logger.addHandler(handler)

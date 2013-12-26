@@ -1,11 +1,15 @@
+"""celeryconfig wrapper."""
 import logging
 import os.path
 
 from compass.utils import setting_wrapper as setting
 
-celeryconfig_file = os.path.join(setting.CELERYCONFIG_DIR,
-                                 setting.CELERYCONFIG_FILE)
+
+CELERY_CONFIG = os.path.join(setting.CELERYCONFIG_DIR,
+                            setting.CELERYCONFIG_FILE)
+
 try:
-    execfile(celeryconfig_file, globals(), locals())
-except Exception as e:
-    logging.exception(e)
+    execfile(CELERY_CONFIG, globals(), locals())
+except Exception as error:
+    logging.exception(error)
+    raise error

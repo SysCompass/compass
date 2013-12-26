@@ -1,4 +1,4 @@
-'''database model.'''
+"""database model."""
 from datetime import datetime
 import simplejson as json
 import logging
@@ -15,18 +15,18 @@ BASE = declarative_base()
 
 
 class Switch(BASE):
-    '''Switch table.
-    
-    id: identity: int as primary key.
-    ip: string as xxx.xxx.xxx.xxx format. unique.
-    vendor_info: string. vendor information.
-                 It should not be used directly.
-    credential_data: string. stores the credential data in json format.
-                     It should not be used directly.
-    state: Enum. 'not_reached': snmp fails to get switch info.,
-           'under_monitoring': the switch info is already got.
-    machines: refer to list of Machine connected to the switch.
-    '''
+    """Switch table.
+
+    :param id: the unique identifier of the switch. int as primary key.
+    :param ip: the IP address of the switch.
+    :param vendor_info: the name of the vendor
+    :param credential_data: used for accessing and retrieving information
+                            from the switch. Store json format as string.
+    :param state: Enum.'not_reached': polling switch fails or not complete to
+                  learn all MAC addresses of devices connected to the switch;
+                  'under_monitoring': successfully learn all MAC addresses.
+    :param machines: refer to list of Machine connected to the switch.
+    """
     __tablename__ = 'switch'
 
     id = Column(Integer, primary_key=True)
@@ -46,21 +46,20 @@ class Switch(BASE):
 
     @property
     def vendor(self):
-        '''vendor property getter'''
+        """vendor property getter"""
         return self.vendor_info
 
     @vendor.setter
     def vendor(self, value):
-        '''vendor property setter'''
+        """vendor property setter"""
         self.vendor_info = value
 
     @property
     def credential(self):
-        '''credential data getter.
+        """credential data getter.
 
-        Returns:
-            python primitive object.
-        '''
+        :returns: python primitive dictionary object.
+        """
         if self.credential_data:
             try:
                 credential = json.loads(self.credential_data)
@@ -77,14 +76,10 @@ class Switch(BASE):
 
     @credential.setter
     def credential(self, value):
-        '''credential property setter
-        
-        Args:
-            python primitive object.
-    
-        Returns:
-            None
-        '''
+        """credential property setter
+
+        :param value: dict of configuration data needed to update.
+        """
         if value:
             try:
                 credential = {}
@@ -105,16 +100,16 @@ class Switch(BASE):
 
 class Machine(BASE):
     """
-      Note: currently, we are taking care of management plane.
-            Therefore, we assume one machine is connected to one switch.
-      id: int, identity as primary key
-      mac: string, mac address of this machine in xx:xx:xx:xx:xx:xx format,
-           unique.
-      switch_id: switch id that this machine connected on to.
-      port: nth port of the switch that this machine connected.
-      vlan: vlan id that this machine connected on to.
-      update_timestamp: last time this entry got updated.
-      switch: refer to the Switch the machine connects to.
+    Machine table.Note: currently, we are taking care of management plane.
+    Therefore, we assume one machine is connected to one switch.
+
+    :param id: int, identity as primary key
+    :param mac: string, the MAC address of the machine.
+    :param switch_id: switch id that this machine connected on to.
+    :param port: nth port of the switch that this machine connected.
+    :param vlan: vlan id that this machine connected on to.
+    :param update_timestamp: last time this entry got updated.
+    :param switch: refer to the Switch the machine connects to.
     """
     __tablename__ = 'machine'
 
@@ -139,20 +134,20 @@ class Machine(BASE):
 
 
 class HostState(BASE):
-    '''the state of the ClusterHost.
- 
-    id: int, identity as primary key.
-    state: Enum. 'UNINITIALIZED': the host is ready to setup.
+    """The state of the ClusterHost.
+
+    :param id: int, identity as primary key.
+    :param state: Enum. 'UNINITIALIZED': the host is ready to setup.
                  'INSTALLING': the host is not installing.
                  'READY': the host is setup.
                  'ERROR': the host has error.
-    progress: float, the installing progress from 0 to 1.
-    message: the latest installing message.
-    severity: Enum, the installing message severity.
-              Should be in one of ['INFO', 'WARNING', 'ERROR'].
-    update_timestamp: the lastest timestamp the entry got updated.
-    host: refer to ClusterHost.
-    '''
+    :param progress: float, the installing progress from 0 to 1.
+    :param message: the latest installing message.
+    :param severity: Enum, the installing message severity.
+                     ('INFO', 'WARNING', 'ERROR')
+    :param update_timestamp: the lastest timestamp the entry got updated.
+    :param host: refer to ClusterHost.
+    """
     __tablename__ = "host_state"
 
     id = Column(Integer, ForeignKey('cluster_host.id',
@@ -174,31 +169,31 @@ class HostState(BASE):
 
     @property
     def hostname(self):
-        '''hostname getter'''
+        """hostname getter"""
         return self.host.hostname
 
     def __repr__(self):
         return ('<HostState %r: state=%r, progress=%s, '
-                   'message=%s, severity=%s>') % (
+                'message=%s, severity=%s>') % (
             self.hostname, self.state, self.progress,
             self.message, self.severity)
 
 
 class ClusterState(BASE):
-    '''The state of the Cluster.
+    """The state of the Cluster.
 
-    id: int, identity as primary key.
-    state: Enum, 'UNINITIALIZED': the cluster is ready to setup.
+    :param id: int, identity as primary key.
+    :param state: Enum, 'UNINITIALIZED': the cluster is ready to setup.
                  'INSTALLING': the cluster is not installing.
                  'READY': the cluster is setup.
                  'ERROR': the cluster has error.
-    progress: float, the installing progress from 0 to 1.
-    message: the latest installing message.
-    severity: Enum, the installing message severity.
-              Should be in one of ['INFO', 'WARNING', 'ERROR'].
-    update_timestamp: the lastest timestamp the entry got updated.
-    cluster: refer to Cluster.
-    '''
+    :param progress: float, the installing progress from 0 to 1.
+    :param message: the latest installing message.
+    :param severity: Enum, the installing message severity.
+                     ('INFO', 'WARNING', 'ERROR').
+    :param update_timestamp: the lastest timestamp the entry got updated.
+    :param cluster: refer to Cluster.
+    """
     __tablename__ = 'cluster_state'
     id = Column(Integer, ForeignKey('cluster.id',
                                     onupdate='CASCADE',
@@ -224,25 +219,25 @@ class ClusterState(BASE):
 
     def __repr__(self):
         return ('<ClusterState %r: state=%r, progress=%s, '
-                   'message=%s, severity=%s>') % (
+                'message=%s, severity=%s>') % (
             self.clustername, self.state, self.progress,
             self.message, self.severity)
 
 
 class Cluster(BASE):
-    '''Cluster configuration information.
-    
-    id: int, identity as primary key.
-    name: string, cluster name.
-    mutable: bool, if the Cluster is mutable.
-    security_config: string stores json formatted security information.
-    networking_config: string stores json formatted networking information.
-    partition_config: string stores json formatted parition information.
-    adapter_id: the refer id in the Adapter table.
-    raw_config: string stores json formatted other cluster information.
-    adapter: refer to the Adapter.
-    state: refer to the ClusterState.
-    '''
+    """Cluster configuration information.
+
+    :param id: int, identity as primary key.
+    :param name: str, cluster name.
+    :param mutable: bool, if the Cluster is mutable.
+    :param security_config: str stores json formatted security information.
+    :param networking_config: str stores json formatted networking information.
+    :param partition_config: string stores json formatted parition information.
+    :param adapter_id: the refer id in the Adapter table.
+    :param raw_config: str stores json formatted other cluster information.
+    :param adapter: refer to the Adapter.
+    :param state: refer to the ClusterState.
+    """
     __tablename__ = 'cluster'
 
     id = Column(Integer, primary_key=True)
@@ -268,7 +263,7 @@ class Cluster(BASE):
 
     @property
     def partition(self):
-        '''partition getter'''
+        """partition getter"""
         if self.partition_config:
             try:
                 return json.loads(self.partition_config)
@@ -282,7 +277,7 @@ class Cluster(BASE):
 
     @partition.setter
     def partition(self, value):
-        '''partition setter'''
+        """partition setter"""
         logging.debug('cluster %s set partition %s', self.id, value)
         if value:
             try:
@@ -296,7 +291,7 @@ class Cluster(BASE):
 
     @property
     def security(self):
-        '''security getter'''
+        """security getter"""
         if self.security_config:
             try:
                 return json.loads(self.security_config)
@@ -310,7 +305,7 @@ class Cluster(BASE):
 
     @security.setter
     def security(self, value):
-        '''security setter'''
+        """security setter"""
         logging.debug('cluster %s set security %s', self.id, value)
         if value:
             try:
@@ -324,7 +319,7 @@ class Cluster(BASE):
 
     @property
     def networking(self):
-        'networking getter'''
+        """networking getter"""
         if self.networking_config:
             try:
                 return json.loads(self.networking_config)
@@ -338,7 +333,7 @@ class Cluster(BASE):
 
     @networking.setter
     def networking(self, value):
-        '''networking setter'''
+        """networking setter"""
         logging.debug('cluster %s set networking %s', self.id, value)
         if value:
             try:
@@ -352,7 +347,7 @@ class Cluster(BASE):
 
     @property
     def config(self):
-        '''get config from security, networking, partition'''
+        """get config from security, networking, partition"""
         config = {}
         if self.raw_config:
             try:
@@ -361,16 +356,16 @@ class Cluster(BASE):
                 logging.error('failed to load raw config %s: %s',
                               self.id, self.raw_config)
                 logging.exception(error)
-        util.mergeDict(config, {'security': self.security})
-        util.mergeDict(config, {'networking': self.networking})
-        util.mergeDict(config, {'partition': self.partition})
-        util.mergeDict(config, {'clusterid': self.id,
+        util.merge_dict(config, {'security': self.security})
+        util.merge_dict(config, {'networking': self.networking})
+        util.merge_dict(config, {'partition': self.partition})
+        util.merge_dict(config, {'clusterid': self.id,
                                 'clustername': self.name})
         return config
 
     @config.setter
     def config(self, value):
-        '''set config to security, networking, partition.'''
+        """set config to security, networking, partition."""
         logging.debug('cluster %s set config %s', self.id, value)
         if not value:
             self.security = None
@@ -390,18 +385,18 @@ class Cluster(BASE):
 
 
 class ClusterHost(BASE):
-    '''ClusterHost information.
+    """ClusterHost information.
 
-    id: int, identity as primary key.
-    machine_id: int, the id of the Machine.
-    cluster_id: int, the id of the Cluster.
-    mutable: if the ClusterHost information is mutable.
-    hostname: str, host name.
-    config_data: string, json formatted config data.
-    cluster: refer to Cluster the host in.
-    machine: refer to the Machine the host on.
-    state: refer to HostState indicates the host state.
-    '''
+    :param id: int, identity as primary key.
+    :param machine_id: int, the id of the Machine.
+    :param cluster_id: int, the id of the Cluster.
+    :param mutable: if the ClusterHost information is mutable.
+    :param hostname: str, host name.
+    :param config_data: string, json formatted config data.
+    :param cluster: refer to Cluster the host in.
+    :param machine: refer to the Machine the host on.
+    :param state: refer to HostState indicates the host state.
+    """
     __tablename__ = 'cluster_host'
 
     id = Column(Integer, primary_key=True)
@@ -436,7 +431,7 @@ class ClusterHost(BASE):
 
     @property
     def config(self):
-        '''config getter.'''
+        """config getter."""
         config = {}
         if self.config_data:
             try:
@@ -446,7 +441,7 @@ class ClusterHost(BASE):
                     config.update({'clusterid': self.cluster.id,
                                    'clustername': self.cluster.name})
                 if self.machine:
-                    util.mergeDict(
+                    util.merge_dict(
                         config, {
                             'networking': {
                                 'interfaces': {
@@ -464,7 +459,7 @@ class ClusterHost(BASE):
 
     @config.setter
     def config(self, value):
-        'config setter'''
+        """config setter"""
         if not self.config_data:
             config = {
             }
@@ -473,7 +468,7 @@ class ClusterHost(BASE):
         if value:
             try:
                 config = json.loads(self.config_data)
-                util.mergeDict(config, value)
+                util.merge_dict(config, value)
 
                 self.config_data = json.dumps(config)
             except Exception as error:
@@ -483,19 +478,19 @@ class ClusterHost(BASE):
 
 
 class LogProgressingHistory(BASE):
-    '''host installing log history for each file.
-   
-    id: int, identity as primary key.
-    pathname: str, the full path of the installing log file. unique.
-    position: int, the position of the log file it has processed.
-    partial_line: str, partial line of the log.
-    progressing: float, indicate the installing progress between 0 to 1.
-    message: string, str, the installing message.
-    severity: Enum, the installing message severity.
-              Should be in ['ERROR', 'WARNING', 'INFO']
-    line_matcher_name: string, the line matcher name of the log processor.
-    update_timestamp: datetime, the latest timestamp the entry got updated.
-    '''
+    """host installing log history for each file.
+
+    :param id: int, identity as primary key.
+    :param pathname: str, the full path of the installing log file. unique.
+    :param position: int, the position of the log file it has processed.
+    :param partial_line: str, partial line of the log.
+    :param progressing: float, indicate the installing progress between 0 to 1.
+    :param message: str, str, the installing message.
+    :param severity: Enum, the installing message severity.
+                     ('ERROR', 'WARNING', 'INFO')
+    :param line_matcher_name: str, the line matcher name of the log processor.
+    :param update_timestamp: datetime, the latest timestamp the entry updated.
+    """
     __tablename__ = 'log_progressing_history'
     id = Column(Integer, primary_key=True)
     pathname = Column(String, unique=True)
@@ -523,15 +518,14 @@ class LogProgressingHistory(BASE):
 
 
 class Adapter(BASE):
-    '''Table stores ClusterHost installing Adapter information.
+    """Table stores ClusterHost installing Adapter information.
 
-    id: int, identity as primary key.
-    name: string, adapter name, unique.
-    os: string, os name for installing the host.
-    target_system: string, target system to be installed on the host.
-                   Such as openstack.
-    clusters: refer to the list of Cluster.
-    '''
+    :param id: int, identity as primary key.
+    :param name: string, adapter name, unique.
+    :param os: string, os name for installing the host.
+    :param target_system: string, target system to be installed on the host.
+    :param clusters: refer to the list of Cluster.
+    """
     __tablename__ = 'adapter'
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
@@ -547,15 +541,15 @@ class Adapter(BASE):
 
 
 class Role(BASE):
-    '''
+    """
     The Role table stores avaiable roles of one target system
     where the host can be deployed to one or several roles in the cluster.
 
-    id: int, identity as primary key.
-    name: role name.
-    target_system: str, the target_system.
-    description: str, the description of the role.
-    '''
+    :param id: int, identity as primary key.
+    :param name: role name.
+    :param target_system: str, the target_system.
+    :param description: str, the description of the role.
+    """
     __tablename__ = 'role'
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)

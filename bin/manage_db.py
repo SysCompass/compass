@@ -82,13 +82,14 @@ def droptable():
 @manager.command
 def sync_from_installers():
     manager = config_manager.ConfigManager()
-    adapters = manager.getAdapters()
+    adapters = manager.get_adapters()
     target_systems = set()
     roles_per_target_system = {}
     for adapter in adapters:
         target_systems.add(adapter['target_system'])
     for target_system in target_systems:
-        roles_per_target_system[target_system] = manager.getRoles(target_system)
+        roles_per_target_system[target_system] = manager.get_roles(
+            target_system)
     with database.session() as session:
         session.query(Adapter).delete()
         session.query(Role).delete()

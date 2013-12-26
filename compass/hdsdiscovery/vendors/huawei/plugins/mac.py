@@ -15,16 +15,18 @@ class Mac(base.BasePlugin):
         self.credential = credential
 
     def process_data(self, oper="SCAN"):
-        """ Dynamically call the function according 'oper'
-            param str oper : operation of data processing
+        """
+        Dynamically call the function according 'oper'
+
+        :param oper: operation of data processing
         """
         func_name = oper.lower()
         return getattr(self, func_name)()
 
     def scan(self):
-        """Implemnets the scan method in BasePlugin class
-           In this mac module, mac addesses were retrieved by
-           snmpwalk commandline.
+        """
+        Implemnets the scan method in BasePlugin class. In this mac module,
+        mac addesses were retrieved by snmpwalk commandline.
         """
 
         version = self.credential['Version']
@@ -77,7 +79,8 @@ class Mac(base.BasePlugin):
 
     def _get_port(self, if_index):
         """Get port number by using snmpget and OID 'IfName'
-           :param int if_index:the index of 'IfName'
+
+        :param int if_index:the index of 'IfName'
         """
 
         if_name = '.'.join(('ifName', if_index))

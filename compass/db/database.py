@@ -1,4 +1,4 @@
-'''Provider interface to manipulate database.'''
+"""Provider interface to manipulate database."""
 import logging
 from threading import local
 
@@ -18,13 +18,10 @@ SESSION_HOLDER = local()
 
 
 def init(database_url):
-    '''initialize database.
-    Args:
-        database_url: string, database url.
+    """Initialize database.
 
-    Returns:
-        None
-    '''
+    :param database_url: string, database url.
+    """
     global ENGINE
     global SCOPED_SESSION
     ENGINE = create_engine(database_url, convert_unicode=True)
@@ -34,13 +31,10 @@ def init(database_url):
 
 @contextmanager
 def session():
-    '''database session scope.
-
-    To operate database, it should be called in database session.
-    Example:
-        with database.session() as session:
-            using the session to operate the database.
-    '''
+    """
+    database session scope. To operate database, it should be called in
+    database session.
+    """
     if hasattr(SESSION_HOLDER, 'session'):
         logging.error('we are already in session')
         new_session = SESSION_HOLDER.session
@@ -62,14 +56,10 @@ def session():
 
 
 def current_session():
-    '''Get the current session scope when it is called.
+    """Get the current session scope when it is called.
 
-    Return:
-        database session.
-
-    Exceptions:
-        Exception indicates the function is called out of session scope.
-    '''
+    :return: database session.
+    """
     try:
         return SESSION_HOLDER.session
     except Exception as error:
@@ -79,34 +69,26 @@ def current_session():
 
 
 def create_db():
-    '''Create database'''
+    """Create database"""
     model.BASE.metadata.create_all(bind=ENGINE)
 
 
 def drop_db():
-    '''Drop database.'''
+    """Drop database."""
     model.BASE.metadata.drop_all(bind=ENGINE)
 
 
 def create_table(table):
-    '''Create table.
-    
-    Args:
-        table: Class of the Table defined in the model.
-    
-    Returns:
-        None
-    '''
+    """Create table.
+
+    :param table: Class of the Table defined in the model.
+    """
     table.__table__.create(bind=ENGINE, checkfirst=True)
 
 
 def drop_table(table):
-    '''Drop table.
+    """Drop table.
 
-    Args:
-        table: Class of the Table defined in the model.
-
-    Returns:
-        None
-    '''
-    table.__table__.drop(bind=ENGINE, checkfirst=True)    
+    :param table: Class of the Table defined in the model.
+    """
+    table.__table__.drop(bind=ENGINE, checkfirst=True)

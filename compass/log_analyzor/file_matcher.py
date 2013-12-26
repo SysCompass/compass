@@ -1,4 +1,7 @@
-'''Module to update intalling progress by processing log file.'''
+"""Module to update intalling progress by processing log file.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 import os.path
 
@@ -10,36 +13,32 @@ from compass.utils import setting_wrapper as setting
 
 class FileFilter(object):
     """base class to filter log file."""
-    def __str__(self):
+    def __repr__(self):
         return self.__class__.__name__
 
     def filter(self, pathname):
-        '''filter log file.
+        """Filter log file.
 
-        Args:
-            pathname: str, the absolute path name to the log file.
-
-        Returns:
-            None
-        '''
+        :param pathname: the absolute path name to the log file.
+        """
         raise NotImplementedError(str(self))
 
 
 class CompositeFileFilter(FileFilter):
     """filter log file based on the list of filters"""
     def __init__(self, filters):
-        self.filters = filters
+        self.filters_ = filters
 
     def __str__(self):
-        return 'CompositeFileFilter[%s]' % self.filters
+        return 'CompositeFileFilter[%s]' % self.filters_
 
-    def appendFilter(self, file_filter):
-        '''append filter.'''
-        self.filters.append(file_filter)
+    def append_filter(self, file_filter):
+        """append filter."""
+        self.filters_.append(file_filter)
 
     def filter(self, pathname):
-        '''filter log file.'''
-        for file_filter in self.filters:
+        """filter log file."""
+        for file_filter in self.filters_:
             if not file_filter.filter(pathname):
                 return False
 
@@ -49,7 +48,7 @@ class CompositeFileFilter(FileFilter):
 class FilterFileExist(FileFilter):
     """filter log file if not exists."""
     def filter(self, pathname):
-        '''filter log file.'''
+        """filter log file."""
         file_exist = os.path.isfile(pathname)
         if not file_exist:
             logging.error("%s is not exist", pathname)
@@ -57,59 +56,52 @@ class FilterFileExist(FileFilter):
         return file_exist
 
 
-def getFileFilter():
-    '''get file filter'''
+def get_file_filter():
+    """get file filter"""
     composite_filter = CompositeFileFilter([FilterFileExist()])
     return composite_filter
 
 
 class FileReader(object):
-    '''Class to read log file.
+    """Class to read log file.
 
     The class provide support to read log file from the position
     it has read last time. and update the position when it finish
     reading the log.
-    '''
+    """
     def __init__(self, pathname):
-        self.pathname = pathname
-        self.position = 0
-        self.partial_line = ''
+        self.pathname_ = pathname
+        self.position_ = 0
+        self.partial_line_ = ''
 
-    def __str__(self):
+    def __repr__(self):
         return (
             '%s[pathname:%s, position:%s, partial_line:%s]' % (
-                self.__class__.__name__, self.pathname, self.position,
-                self.partial_line
+                self.__class__.__name__, self.pathname_, self.position_,
+                self.partial_line_
             )
         )
 
-    def getHistory(self):
-        '''Get log file read history from database.
+    def get_history(self):
+        """Get log file read history from database.
 
-        Args:
-            None
+        :returns: (line_matcher_name progress)
 
-        Returns:
-            line_matcher_name: str, line matcher name.
-            progress: Progress instance record the installing history.
-
-        The function should be called out of database session.
-        It reads the log_progressing_history table to get the
-        position in the log file it has read in last run,
-        the partial line of the log, the line matcher name
-        in the last run, the progress, the message and the
-        severity it has got in the last run.
-        '''
+        .. note::
+           The function should be called out of database session.
+           It reads the log_progressing_history table to get the
+           position in the log file it has read in last run,
+           the partial line of the log, the line matcher name
+           in the last run, the progress, the message and the
+           severity it has got in the last run.
+        """
         with database.session() as session:
             history = session.query(
                 LogProgressingHistory).filter_by(
-                pathname=self.pathname).first()
+                pathname=self.pathname_).first()
             if history:
-                logging.log(logging.DEBUG - 1,
-                            'get file %s history %s',
-                            self.pathname, history)
-                self.position = history.position
-                self.partial_line = history.partial_line
+                self.position_ = history.position
+                self.partial_line_ = history.partial_line
                 line_matcher_name = history.line_matcher_name
                 progress = Progress(history.progress,
                                     history.message,
@@ -120,117 +112,103 @@ class FileReader(object):
 
             return line_matcher_name, progress
 
-    def updateHistory(self, line_matcher_name, progress):
-        '''Update log_progressing_history table.
+    def update_history(self, line_matcher_name, progress):
+        """Update log_progressing_history table.
 
-        Args:
-            line_matcher_name: str, the line matcher name.
-            progress: Progress instance to record the installing progress.
+        :param line_matcher_name: the line matcher name.
+        :param progress: Progress instance to record the installing progress.
 
-        Returns:
-            None
-
-        The function should be called out of database session.
-        It updates the log_processing_history table.
-        '''
+        .. note::
+           The function should be called out of database session.
+           It updates the log_processing_history table.
+        """
         with database.session() as session:
             history = session.query(LogProgressingHistory).filter_by(
-                pathname=self.pathname).first()
+                pathname=self.pathname_).first()
 
             if history:
-                if history.position >= self.position:
+                if history.position >= self.position_:
                     logging.error(
                         '%s history position %s is ahead of currrent '
                         'position %s',
-                        self.pathname,
+                        self.pathname_,
                         history.position,
-                        self.position)
+                        self.position_)
                     return
 
-                history.position = self.position
-                history.partial_line = self.partial_line
+                history.position = self.position_
+                history.partial_line = self.partial_line_
                 history.line_matcher_name = line_matcher_name
                 history.progress = progress.progress
                 history.message = progress.message
                 history.severity = progress.severity
             else:
                 history = LogProgressingHistory(
-                    pathname=self.pathname, position=self.position,
-                    partial_line=self.partial_line,
+                    pathname=self.pathname_, position=self.position_,
+                    partial_line=self.partial_line_,
                     line_matcher_name=line_matcher_name,
                     progress=progress.progress,
                     message=progress.message,
                     severity=progress.severity)
                 session.merge(history)
             logging.debug('update file %s to history %s',
-                          self.pathname, history)
+                          self.pathname_, history)
 
     def readline(self):
-        '''log line generator.
-
-        For the last line of the file, it may regenerate in the next line
-        because there is no \n for the last line.
-        '''
+        """Generate each line of the log file."""
+        old_position = self.position_
         try:
-            with open(self.pathname) as logfile:
-                old_position = self.position
-                logfile.seek(self.position)
+            with open(self.pathname_) as logfile:
+                logfile.seek(self.position_)
                 while True:
                     line = logfile.readline()
-                    self.partial_line += line
+                    self.partial_line_ += line
                     position = logfile.tell()
-                    if position > self.position:
-                        self.position = position
+                    if position > self.position_:
+                        self.position_ = position
 
-                    if self.partial_line.endswith('\n'):
-                        yield_line = self.partial_line
-                        self.partial_line = ''
+                    if self.partial_line_.endswith('\n'):
+                        yield_line = self.partial_line_
+                        self.partial_line_ = ''
                         yield yield_line
                     else:
-                        logging.debug(
-                            'did not read the whole line:\n%r\n'
-                            'It means the end of the file reached.',
-                            self.partial_line)
                         break
 
-                if self.partial_line:
-                    yield self.partial_line
-
-                logging.debug('processing file %s log %s bytes',
-                              self.pathname, self.position - old_position)
+                if self.partial_line_:
+                    yield self.partial_line_
 
         except Exception as error:
-            logging.error('failed to processing file %s', self.pathname)
-            logging.exception(error)
+            logging.error('failed to processing file %s', self.pathname_)
+            raise error
 
-        logging.debug('%s is read to %s', self.pathname, self.position)
+        logging.debug(
+            'processing file %s log %s bytes to position %s',
+            self.pathname_, self.position_ - old_position,
+            self.position_)
 
 
 class FileReaderFactory(object):
-    '''factory class to create FileReader instance.'''
+    """factory class to create FileReader instance."""
 
     def __init__(self, logdir, filefilter):
-        self.logdir = logdir
-        self.filefilter = filefilter
+        self.logdir_ = logdir
+        self.filefilter_ = filefilter
 
     def __str__(self):
         return '%s[logdir: %s filefilter: %s]' % (
-            self.__class__.__name__, self.logdir, self.filefilter)
+            self.__class__.__name__, self.logdir_, self.filefilter_)
 
-    def getFileReader(self, hostname, filename):
-        '''Get FileReader instance.
+    def get_file_reader(self, hostname, filename):
+        """Get FileReader instance.
 
-        Args:
-            hostname: str, the hostname of installing host.
-            filename: the filename of the log file.
+        :param hostname: hostname of installing host.
+        :param filename: the filename of the log file.
 
-        Returns:
-            FileReader instance if it is not filtered.
-            Otherwise None.
-        '''
-        pathname = os.path.join(self.logdir, hostname, filename)
-        logging.debug('Read %s', pathname)
-        if not self.filefilter.filter(pathname):
+        :returns: :class:`FileReader` instance if it is not filtered.
+        """
+        pathname = os.path.join(self.logdir_, hostname, filename)
+        logging.debug('get FileReader from %s', pathname)
+        if not self.filefilter_.filter(pathname):
             logging.error('%s is filtered', pathname)
             return None
 
@@ -238,14 +216,14 @@ class FileReaderFactory(object):
 
 
 FILE_READER_FACTORY = FileReaderFactory(
-    setting.INSTALLATION_LOGDIR, getFileFilter())
+    setting.INSTALLATION_LOGDIR, get_file_filter())
 
 
 class FileMatcher(object):
-    '''
+    """
        File matcher the get the lastest installing progress
        from the log file.
-    '''
+    """
     def __init__(self, line_matchers, min_progress, max_progress, filename):
         if not 0.0 <= min_progress <= max_progress <= 1.0:
             raise IndexError(
@@ -255,61 +233,46 @@ class FileMatcher(object):
                     min_progress,
                     max_progress))
 
-        self.line_matchers = line_matchers
-        self.min_progress = min_progress
-        self.max_progress = max_progress
-        self.absolute_min_progress = 0.0
-        self.absolute_max_progress = 1.0
-        self.absolute_progress_diff = 1.0
-        self.filename = filename
+        self.line_matchers_ = line_matchers
+        self.min_progress_ = min_progress
+        self.max_progress_ = max_progress
+        self.absolute_min_progress_ = 0.0
+        self.absolute_max_progress_ = 1.0
+        self.absolute_progress_diff_ = 1.0
+        self.filename_ = filename
 
     def update_absolute_progress_range(self, min_progress, max_progress):
-        '''update the min progress and max progress the log file indicates.'''
+        """update the min progress and max progress the log file indicates."""
         progress_diff = max_progress - min_progress
-        self.absolute_min_progress = (
-            min_progress + self.min_progress * progress_diff)
-        self.absolute_max_progress = (
-            min_progress + self.max_progress * progress_diff)
-        self.absolute_progress_diff = progress_diff
+        self.absolute_min_progress_ = (
+            min_progress + self.min_progress_ * progress_diff)
+        self.absolute_max_progress_ = (
+            min_progress + self.max_progress_ * progress_diff)
+        self.absolute_progress_diff_ = (
+            self.absolute_max_progress_ - self.absolute_min_progress_)
 
     def __str__(self):
         return (
             '%s[ filename: %s, progress range: [%s:%s], '
             'line_matchers: %s]' % (
-                self.__class__.__name__, self.filename,
-                self.absolute_min_progress,
-                self.absolute_max_progress, self.line_matchers)
+                self.__class__.__name__, self.filename_,
+                self.absolute_min_progress_,
+                self.absolute_max_progress_, self.line_matchers_)
         )
 
-    def updateTotalProgress(self, file_progress, total_progress):
-        '''Get the total progress from file progress.
-
-        Args:
-            file_progress: Progress instance. the installing progress from
-                           the logging file.
-                           It is between 0 to 1. 1 means the whole log
-                           installing progess for the related part is
-                           done. it does not mean the whole installing
-                           progress done.
-            total_progrss: Progress instance. the total installing
-                           progress to update.
-                           It should be between absolute_min_progress
-                           and absolute max progress.
-
-        Returns:
-            None
-        '''
+    def update_total_progress(self, file_progress, total_progress):
+        """Get the total progress from file progress."""
         if not file_progress.message:
             logging.info(
                 'ignore update file %s progress %s to total progress',
-                self.filename, file_progress)
+                self.filename_, file_progress)
             return
 
         total_progress_data = min(
-            self.absolute_min_progress
+            self.absolute_min_progress_
                 +
-            file_progress.progress * self.absolute_progress_diff,
-            self.absolute_max_progress)
+            file_progress.progress * self.absolute_progress_diff_,
+            self.absolute_max_progress_)
 
         # total progress should only be updated when the new calculated
         # progress is greater than the recored total progress or the
@@ -321,21 +284,18 @@ class FileMatcher(object):
             total_progress.message = file_progress.message
             total_progress.severity = file_progress.severity
             logging.debug('update file %s total progress %s',
-                          self.filename, total_progress)
+                          self.filename_, total_progress)
         else:
             logging.info(
                 'ignore update file %s progress %s to total progress %s',
-                self.filename, file_progress, total_progress)  
+                self.filename_, file_progress, total_progress)
 
-    def updateProgress(self, hostname, total_progress):
-        '''update progress from file.
+    def update_progress(self, hostname, total_progress):
+        """update progress from file.
 
-        Args:
-            hostname: str, the hostname of the installing host.
-            total_progress: Progress instance to update.
-
-        Returns:
-            None
+        :param hostname: the hostname of the installing host.
+        :type hostname: str
+        :param total_progress: Progress instance to update.
 
         the function update installing progress by reading the log file.
         It contains a list of line matcher, when one log line matches
@@ -345,24 +305,24 @@ class FileMatcher(object):
         last line of log file is processed in one run, while in the other
         run, it will be reprocessed at the beginning because there is
         no line end indicator for the last line of the file.
-        '''
-        file_reader = FILE_READER_FACTORY.getFileReader(hostname,
-                                                        self.filename)
+        """
+        file_reader = FILE_READER_FACTORY.get_file_reader(
+            hostname, self.filename_)
         if not file_reader:
             return
 
-        line_matcher_name, file_progress = file_reader.getHistory()
+        line_matcher_name, file_progress = file_reader.get_history()
         for line in file_reader.readline():
-            if line_matcher_name not in self.line_matchers:
-                logging.debug('early exit because %s is not in %s',
-                              line_matcher_name, self.line_matchers)
+            if line_matcher_name not in self.line_matchers_:
+                logging.debug('early exit at\n%s\nbecause %s is not in %s',
+                              line, line_matcher_name, self.line_matchers_)
                 break
 
             index = line_matcher_name
-            while index in self.line_matchers:
-                line_matcher = self.line_matchers[index]
-                index, line_matcher_name = line_matcher.updateProgress(
+            while index in self.line_matchers_:
+                line_matcher = self.line_matchers_[index]
+                index, line_matcher_name = line_matcher.update_progress(
                     line, file_progress)
 
-        file_reader.updateHistory(line_matcher_name, file_progress)
-        self.updateTotalProgress(file_progress, total_progress)
+        file_reader.update_history(line_matcher_name, file_progress)
+        self.update_total_progress(file_progress, total_progress)

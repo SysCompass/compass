@@ -1,57 +1,61 @@
-'''util module'''
+"""Module to provider util functions in all compass code
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 from copy import deepcopy
 
 
-def mergeDict(lhs, rhs, override=True):
-    '''merge right dict into left dict.
-    Args:
-        lhs: dict
-        rhs: dict
-        override: bool. the value in the right overides '
-                  the value in left dict if True.
+def merge_dict(lhs, rhs, override=True):
+    """Merge nested right dict into left nested dict recursively.
 
-    Returns:
-        None. lhs is updated by rhs.
+    :param lhs: dict to be merged into.
+    :type lhs: dict
+    :param rhs: dict to merge from.
+    :type rhs: dict
+    :param override: the value in rhs overide the value in left if True.
+    :type override: str
 
-    Exceptions:
-        TypeError if lhs or rhs is not dict.
-    '''
+    :raises: TypeError if lhs or rhs is not a dict.
+    """
     if not rhs:
         return
+
     if not isinstance(lhs, dict):
         raise TypeError('lhs type is %s while expected is dict' % type(lhs),
                         lhs)
+
     if not isinstance(rhs, dict):
         raise TypeError('rhs type is %s while expected is dict' % type(rhs),
                         rhs)
+
     for key, value in rhs.items():
-        if isinstance(value, dict) and\
-           key in lhs and\
-           isinstance(lhs[key], dict):
-            mergeDict(lhs[key], value, override)
+        if (isinstance(value, dict) and key in lhs and
+            isinstance(lhs[key], dict)):
+            merge_dict(lhs[key], value, override)
         else:
             if override or key not in lhs:
                 lhs[key] = deepcopy(value)
 
 
-def orderKeys(keys, orders):
-    '''Get ordered keys.
+def order_keys(keys, orders):
+    """Get ordered keys.
 
-    Args:
-        keys: list
-        orders: list, may contains '.' which means all other keys not
-    appeared in orders.
+    :param keys: keys to be sorted.
+    :type keys: list of str
+    :param orders: the order of the keys. '.' is all other keys not in order.
+    :type orders: list of str.
 
-    Returns:
-        list sorted by orders
+    :returns: keys as list sorted by orders.
 
-    Exceptions:
-        TypeError if keys or orders is not list.
-    '''
+    :raises: TypeError if keys or orders is not list.
+    """
+
     if not isinstance(keys, list):
         raise TypeError('keys %s type should be list' % keys)
+
     if not isinstance(orders, list):
         raise TypeError('orders ^s type should be list' % orders)
+
     found_dot = False
     pres = []
     posts = []
@@ -63,42 +67,41 @@ def orderKeys(keys, orders):
                 posts.append(order)
             else:
                 pres.append(order)
-    return [pre for pre in pres if pre in keys] +\
-        [key for key in keys if key not in orders] +\
-        [post for post in posts if post in keys]
+
+    return ([pre for pre in pres if pre in keys] +
+            [key for key in keys if key not in orders] +
+            [post for post in posts if post in keys])
 
 
-def isInstanceOf(instance, expected_types):
-    '''Check instance type is in one of expected types.
+def is_instance(instance, expected_types):
+    """Check instance type is in one of expected types.
 
-    Args:
-        instance: object.
-        expected_types: list of type. 
+    :param instance: instance to check the type.
+    :param expected_types: types to check if instance type is in them.
+    :type expected_types: list of type
 
-    Returns:
-        True if instance type is of one of expect_types.
-        Otherwise False.
-    '''
+    :returns: True if instance type is in expect_types.
+    """
     for expected_type in expected_types:
         if isinstance(instance, expected_type):
             return True
+
     return False
 
 
-def getListWithPossibility(lists):
-    '''Return list of item from list of list of identity item.
+def flat_lists_with_possibility(lists):
+    """Return list of item from list of list of identity item.
 
-    Args:
-        lists: list of list of identity item.
+    :param lists: list of list of identity item.
 
-    Returns:
-        list where for each first k elements, it should be the k most
-        possible items. 
+    :returns: list.
 
-    Example:
-        lists: ['a', 'a', 'a', 'a'], ['b', 'b'], ['c'],
-        the expected output is ['a', 'b', 'c', 'a', 'a', 'b', 'a']
-    '''
+    .. note::
+       For each first k elements in the returned list, it should be the k
+       most possible items. e.g. the input lists is
+       ['a', 'a', 'a', 'a'], ['b', 'b'], ['c'],
+       the expected output is ['a', 'b', 'c', 'a', 'a', 'b', 'a'].
+    """
     lists = deepcopy(lists)
     lists = sorted(lists, key=len, reverse=True)
     list_possibility = []
@@ -113,6 +116,7 @@ def getListWithPossibility(lists):
             possibilities.append(1.0/length)
         else:
             possibilities.append(0.0)
+
     output = []
     while total_elements > 0:
         if not lists[max_index]:
@@ -123,4 +127,5 @@ def getListWithPossibility(lists):
             output.append(element)
             total_elements -= 1
         max_index = list_possibility.index(max(list_possibility))
+
     return output

@@ -1,4 +1,7 @@
-'''plugin module for chef as package instaler.'''
+"""package instaler chef plugin.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@gmail.com>
+"""
 import fnmatch
 import logging
 
@@ -89,7 +92,7 @@ TO_HOST_TRANSLATORS = {
                     '/endpoints/network/service/host',
                     '/endpoints/volume/service/host',
                 ],
-                translated_value=config_translator_callbacks.getValueIf,
+                translated_value=config_translator_callbacks.get_value_if,
                 from_values={'condition': '/has_dashboard_roles'}
             )],
         }
@@ -98,56 +101,51 @@ TO_HOST_TRANSLATORS = {
 
 
 class Installer(package_installer.Installer):
-    '''chef package installer.'''
+    """chef package installer."""
     NAME = 'chef'
 
-    @classmethod
-    def installer_url(cls):
-        '''get chef server url.'''
-        return setting.CHEF_INSTALLER_URL
+    def __init__(self):
+        import chef
+        self.installer_url_ = setting.CHEF_INSTALLER_URL
+        self.global_databag_name_ = setting.CHEF_GLOBAL_DATABAG_NAME
+        self.api_ = chef.autoconfigure()
+        logging.debug('%s instance created', self)
+
+    def __repr__(self):
+        return '%s[name=%s,installer_url=%s,global_databag_name=%s]' % (
+            self.__class__.__name__, self.installer_url_,
+            self.NAME, self.global_databag_name_)
 
     @classmethod
-    def global_databag_name(cls):
-        '''get global databag name'''
-        return setting.CHEF_GLOBAL_DATABAG_NAME
-
-    @classmethod
-    def cluster_databag_name(cls, clusterid, target_system):
-        '''get cluster databag name'''
+    def _cluster_databag_name(cls, clusterid, target_system):
+        """get cluster databag name"""
         return '%s_%s' % (target_system, str(clusterid))
 
-    def os_installer_config(self, config, **kwargs):
-        '''get os installer config.'''
-        target_system = kwargs['target_system']
-        clusterid = config.get('clusterid', 0)
-        roles = config.get('roles', [])
+    def os_installer_config(self, config, target_system, **kwargs):
+        """get os installer config."""
+        clusterid = config['clusterid']
+        roles = config['roles']
         return {
-            '%s_url' % self.NAME: self.installer_url(),
+            '%s_url' % self.NAME: self.installer_url_,
             'run_list': ','.join(
                 ['"role[%s]"' % role for role in roles if role]),
-            'cluster_databag': self.cluster_databag_name(
+            'cluster_databag': self._cluster_databag_name(
                 clusterid, target_system),
         }
 
-    def getTargetSystems(self, oses):
-        '''get target systems.'''
+    def get_target_systems(self, oses):
+        """get target systems."""
         from chef import DataBag
-        try:
-            databags = DataBag.list(api=self.api)
-        except Exception as error:
-            logging.error('%s failed to get the databags', self.NAME)
-            logging.exception(error)
-            raise error
-
+        databags = DataBag.list(api=self.api_)
         target_systems = {}
         for os_version in oses:
             target_systems[os_version] = []
 
         for databag in databags:
             target_system = databag
-            global_databag_item = self.getGlobalDataBagItem(
-                self.getDataBag(target_system))
-            support_oses = global_databag_item.get('support_oses', [])
+            global_databag_item = self._get_global_databag_item(
+                self._get_databag(target_system))
+            support_oses = global_databag_item['support_oses']
             for os_version in oses:
                 for support_os in support_oses:
                     if fnmatch.fnmatch(os_version, support_os):
@@ -156,105 +154,70 @@ class Installer(package_installer.Installer):
 
         return target_systems
 
-    def getRoles(self, target_system):
-        '''get supported roles.'''
-        global_databag_item = self.getGlobalDataBagItem(
-            self.getDataBag(target_system))
-        return global_databag_item.get('all_roles', {})
+    def get_roles(self, target_system):
+        """get supported roles."""
+        global_databag_item = self._get_global_databag_item(
+            self._get_databag(target_system))
+        return global_databag_item['all_roles']
 
-    def __init__(self):
-        import chef
-        try:
-            self.api = chef.autoconfigure()
-        except Exception as error:
-            logging.error('%s failed to autoconfigure', self.NAME)
-            logging.exception(error)
-            raise error
-        logging.debug('%s instance created %s', self.NAME, self.api)
-
-    def getDataBag(self, target_system):
-        '''get databag.'''
+    def _get_databag(self, target_system):
+        """get databag."""
         from chef import DataBag
-        try:
-            return DataBag(target_system, api=self.api)
-        except Exception as error:
-            logging.error('%s failed to get databag of %s',
-                          self.NAME, target_system)
-            logging.exception(error)
-            raise error
+        return DataBag(target_system, api=self.api_)
 
-    def getDataBagItem(self, bag, bag_item_name):
-        '''get databag item.'''
+    def _get_databag_item(self, bag, bag_item_name):
+        """get databag item."""
         from chef import DataBagItem
-        try:
-            return DataBagItem(bag, bag_item_name, api=self.api)
-        except Exception as error:
-            logging.error('%s failed to get bag item %s from %s',
-                          self.NAME, bag_item_name, bag)
-            logging.exception(error)
-            raise error
+        return DataBagItem(bag, bag_item_name, api=self.api_)
 
-    def getGlobalDataBagItem(self, bag):
-        '''get global databag item.'''
-        return self.getDataBagItem(
-            bag, self.global_databag_name())
+    def _get_global_databag_item(self, bag):
+        """get global databag item."""
+        return self._get_databag_item(
+            bag, self.global_databag_name_)
 
-    def getClusterDataBagItem(self, bag, clusterid, target_system):
-        '''get cluster databag item.'''
-        return self.getDataBagItem(
-            bag, self.cluster_databag_name(clusterid, target_system))
+    def _get_cluster_databag_item(self, bag, clusterid, target_system):
+        """get cluster databag item."""
+        return self._get_databag_item(
+            bag, self._cluster_databag_name(clusterid, target_system))
 
-    def getClusterConfig(self, clusterid, **kwargs):
-        '''get cluster config.'''
-        target_system = kwargs['target_system']
-        if target_system not in FROM_CLUSTER_TRANSLATORS:
-            return {}
-
-        bag = self.getDataBag(target_system)
-        global_bag_item = dict(self.getGlobalDataBagItem(bag))
-        bag_item = dict(self.getClusterDataBagItem(
+    def get_cluster_config(self, clusterid, target_system, **kwargs):
+        """get cluster config."""
+        bag = self._get_databag(target_system)
+        global_bag_item = dict(self._get_global_databag_item(bag))
+        bag_item = dict(self._get_cluster_databag_item(
             bag, clusterid, target_system))
-        util.mergeDict(bag_item, global_bag_item, False)
+        util.merge_dict(bag_item, global_bag_item, False)
 
         return FROM_CLUSTER_TRANSLATORS[target_system].translate(bag_item)
 
-    def updateClusterConfig(self, clusterid, config, **kwargs):
-        '''update cluster config.'''
-        target_system = kwargs['target_system']
-        bag = self.getDataBag(target_system)
-        global_bag_item = dict(self.getGlobalDataBagItem(bag))
-        bag_item = self.getClusterDataBagItem(bag, clusterid, target_system)
+    def update_cluster_config(self, clusterid, config,
+                              target_system, **kwargs):
+        """update cluster config."""
+        bag = self._get_databag(target_system)
+        global_bag_item = dict(self._get_global_databag_item(bag))
+        bag_item = self._get_cluster_databag_item(bag, clusterid, target_system)
         bag_item_dict = dict(bag_item)
-        util.mergeDict(bag_item_dict, global_bag_item, False)
-
-        if target_system not in TO_CLUSTER_TRANSLATORS:
-            return
-        
+        util.merge_dict(bag_item_dict, global_bag_item, False)
         translated_config = TO_CLUSTER_TRANSLATORS[target_system].translate(
             config)
-        util.mergeDict(bag_item_dict, translated_config)
+        util.merge_dict(bag_item_dict, translated_config)
 
         for key, value in bag_item_dict.items():
             bag_item[key] = value
 
         bag_item.save()
 
-    def updateHostConfig(self, hostid, config, **kwargs):
-        '''update host cnfig.'''
-        target_system = kwargs['target_system']
+    def update_host_config(self, hostid, config, target_system, **kwargs):
+        """update host cnfig."""
         clusterid = config['clusterid']
-        bag = self.getDataBag(target_system)
-        global_bag_item = dict(self.getGlobalDataBagItem(bag))
-        bag_item = self.getClusterDataBagItem(bag, clusterid, target_system)
+        bag = self._get_databag(target_system)
+        global_bag_item = dict(self._get_global_databag_item(bag))
+        bag_item = self._get_cluster_databag_item(bag, clusterid, target_system)
         bag_item_dict = dict(bag_item)
-        util.mergeDict(bag_item_dict, global_bag_item, False)
-
-        if target_system not in TO_HOST_TRANSLATORS:
-            return
-            
+        util.merge_dict(bag_item_dict, global_bag_item, False)
         translated_config = TO_HOST_TRANSLATORS[target_system].translate(
             config)
-        util.mergeDict(bag_item_dict, translated_config)
+        util.merge_dict(bag_item_dict, translated_config)
 
         for key, value in bag_item_dict.items():
             bag_item[key] = value

@@ -1,5 +1,6 @@
-"""Base class extended by specific vendor in vendors directory.
-   a vendor need to implment abstract methods of base class.
+"""
+Base class extended by specific vendor in vendors directory.
+a vendor need to implment abstract methods of base class.
 """
 
 
@@ -22,8 +23,8 @@ class BasePlugin(object):
         """Each vendors will have some plugins to do some operations.
            Plugin will process request data and return expected result.
 
-           :param args: arguments
-           :param **kwargs: key-value pairs of arguments
+        :param args: arguments
+        :param kwargs: key-value pairs of arguments
         """
         raise NotImplementedError
 

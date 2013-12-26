@@ -26,11 +26,12 @@ class TestInstallerFunctions(unittest2.TestCase):
 
     def test_found_installer(self):
         package_installer.register(DummyInstaller)
-        intaller = package_installer.getInstallerByName(DummyInstaller.NAME)
+        intaller = package_installer.get_installer_by_name(
+            DummyInstaller.NAME)
         self.assertIsInstance(intaller, DummyInstaller)
 
     def test_notfound_unregistered_installer(self):
-        self.assertRaises(KeyError, package_installer.getInstallerByName,
+        self.assertRaises(KeyError, package_installer.get_installer_by_name,
                           DummyInstaller.NAME)
 
     def test_multi_registered_installer(self):

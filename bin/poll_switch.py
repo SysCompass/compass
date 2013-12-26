@@ -74,7 +74,11 @@ def main(argv):
                     celery.send_task('compass.tasks.pollswitch',
                                      (switch_ips[switchid],))
                 else:
-                    poll_switch.poll_switch(switch_ips[switchid])
+                    try:
+                        poll_switch.poll_switch(switch_ips[switchid])
+                    except Exception as error:
+                        logging.error('failed to poll switch %s',
+                                      switch_ips[switchid])
 
         BUSY = False
         if KILLED:

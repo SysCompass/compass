@@ -77,6 +77,7 @@ def handle_duplicate_object(error, failed_objs=None):
 @app.errorhandler(MethodNotAllowed)
 def handle_not_allowed_method(error):
     """Handler of MethodNotAllowed Exception"""
+
     message = {"status": "Method Not Allowed",
                "message": "The method is not allowed to use"}
     return util.make_json_response(405, message)

@@ -1,5 +1,5 @@
 #!bin/bash
-source install.con
+source install.conf
 
 export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 echo "$ipaddr    $HOSTNAME" >> /etc/hosts

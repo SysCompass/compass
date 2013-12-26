@@ -15,15 +15,14 @@ class HDManager:
         self.vendor_plugins_dir = os.path.join(self.vendors_dir, '?/plugins')
 
     def learn(self, host, credential, vendor, req_obj, oper="SCAN", **kwargs):
-        """ Insert/update record of switch_info
-            Get expected results from switch according to sepcific operation.
+        """Insert/update record of switch_info. Get expected results from
+           switch according to sepcific operation.
 
-            :param str req_obj : the object of a machine
-            :param str host   : switch IP address
-            :param dict credientials : credientials to access switch
-            :param oper              : operations of the plugin
-                                      (SCAN, GETONE, SET)
-            :param kwargs(optional)  : key-value pairs
+        :param req_obj: the object of a machine
+        :param host: switch IP address
+        :param credientials: credientials to access switch
+        :param oper: operations of the plugin (SCAN, GETONE, SET)
+        :param kwargs(optional): key-value pairs
         """
         plugin_dir = self.vendor_plugins_dir.replace('?', vendor)
         if not os.path.exists(plugin_dir):
@@ -42,9 +41,9 @@ class HDManager:
     def is_valid_vendor(self, host, credential, vendor):
         """ Check if vendor is associated with this host and credential
 
-            :param str  host       : switch ip
-            :param dict credential : credential to access switch
-            :param str  vendor     : the vendor of switch
+        :param host: switch ip
+        :param credential: credential to access switch
+        :param vendor: the vendor of switch
         """
         vendor_dir = os.path.join(self.vendors_dir, vendor)
         if not os.path.exists(vendor_dir):
@@ -64,8 +63,8 @@ class HDManager:
     def get_vendor(self, host, credential):
         """ Check and get vendor of the switch.
 
-            :param str  host       : switch ip:
-            :param dict credential : credential to access switch
+        :param host: switch ip:
+        :param credential: credential to access switch
         """
         # List all vendors in vendors directory -- a directory but hidden
         # under ../vendors

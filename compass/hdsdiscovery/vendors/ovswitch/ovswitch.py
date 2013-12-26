@@ -16,9 +16,10 @@ class OVSwitch(base.BaseVendor):
         self.__name = "Open vSwitch"
 
     def is_this_vendor(self, host, credential):
-        """ Determine if the hostname is accociated witH this vendor.
-            param str host : swtich's IP address
-            param dict credential : credential to access switch
+        """Determine if the hostname is accociated witH this vendor.
+
+        :param host: swtich's IP address
+        :param credential: credential to access switch
         """
         if "username" in credential and "password" in credential:
             user = credential['username']

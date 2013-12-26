@@ -1,4 +1,7 @@
-'''Module to set the hosts configs from cluster config.'''
+"""Module to set the hosts configs from cluster config.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 from copy import deepcopy
 
@@ -7,145 +10,75 @@ from compass.utils import util
 
 
 class ConfigMapping(object):
-    '''
-       Class to merger config referred to path list in upper ref '
-       to to_key in lower refs.
-    
-    Examples:
-        upper_config = {
-            'network': {
-                'management': {
-                    'ip_start': '10.145.88.100',
-                    'ip_end': '10.145.88.255',
-                    'netmask': '255.255.255.0',
-                },
-                'public': {
-                    'ip_start': '192.168.100.100',
-                    'ip_end': '192.168.200.255',
-                },
-            },
-        }
-        lower_configs = {
-            1: {
-                'network': {
-                    'management': {
-                        'ip': '10.145.88.150',
-                    },
-                },
-            },
-            2: {
-                'network': {
-                    'management': {
-                        'ip': '10.145.88.151',
-                    },
-                },
-            },
-        }
-
-        upper_ref = ConfigReference(upper_config)
-        lower_refs = {}
-        for lower_key, lower_config in lower_configs.items():
-            lower_refs[lower_key] = ConfigReference(lower_config)
-
-        mapper = ConfigMapper(
-            path_list=['/network/*']
-            from_upper_keys={'ip_start': 'ip_start', 'ip_end': 'ip_end'},
-            to_key='ip',
-            value=config_merger_callbacks.assignIPs
-        )
-        mapper.merge(upper_ref, lower_refs)
-        lower_refs[0].config == {
-            'network': {
-                'management': {
-                    'ip': 10.145.88.150',
-                },
-                'public': {
-                    'ip': '192.168.100.100',
-                },
-            },
-        }
-        lower_refs[1].config == {
-            'network': {
-                'management': {
-                    'ip': 10.145.88.151',
-                },
-                'public': {
-                    'ip': '192.168.100.101',
-                },
-            },
-        }
-        mapper = ConfigMapper(
-            path_list=['/network/*/netmask']
-        )
-        mapper.merge(upper_ref, lower_refs)
-        lower_refs[0].config == {
-            'network': {
-                'management': {
-                    'ip': 10.145.88.150',
-                    'netmask': '255.255.255.0'
-                },
-                'public': {
-                    'ip': '192.168.100.100',
-                },
-            },
-        }
-        lower_refs[1].config == {
-            'network': {
-                'management': {
-                    'ip': 10.145.88.151',
-                    'netmask': '255.255.255.0',
-                },
-                'public': {
-                    'ip': '192.168.100.101',
-                },
-            },
-        }
-    '''
+    """Class to merge cluster config ref to host config ref by path list."""
 
     def __init__(self, path_list, from_upper_keys={},
-                 from_lower_keys={}, to_key='.', value=None):
-        self.path_list = path_list
-        self.from_upper_keys = from_upper_keys
-        self.from_lower_keys = from_lower_keys
-        self.to_key = to_key
-        self.value = value
+                 from_lower_keys={}, to_key='.',
+                 override=False, override_conditions={},
+                 value=None):
+        """Constructor
 
-    def __str__(self):
+        :param path_list: list of path to merge from cluster ref to host refs
+        :type path_list: list of str
+        :param from_upper_keys: kwargs from cluster ref for value callback.
+        :type from_upper_keys: dict of kwargs name to path in cluster ref
+        :param from_lower_keys: kwargs from host refs for value callback.
+        :type from_lower_keys: dict of kwargs name to path in host refs.
+        :param to_key: the path in host refs to be merged to.
+        :type to_key: str
+        :param override: if the path in host ref can be overridden.
+        :type override: callback or bool
+        :param override_conditions: kwargs from host ref for override callback
+        :type override_conditions: dict of kwargs name to path in host ref
+        :param value: the value to be set in host refs.
+        :type value: callback or any type
+        """
+        self.path_list_ = path_list
+        self.from_upper_keys_ = from_upper_keys
+        self.from_lower_keys_ = from_lower_keys
+        self.to_key_ = to_key
+        self.override_ = override
+        self.override_conditions_ = override_conditions
+        self.value_ = value
+
+    def __repr__(self):
         return (
-            '%s[path_list:%s, from_upper_keys:%s, '
-            'from_lower_keys: %s, to_key:%s, value:%s]'
+            '%s[path_list=%s,from_upper_keys=%s,'
+            'from_lower_keys=%s,to_key=%s,override=%s,'
+            'override_conditions=%s,value=%s]'
         ) % (
             self.__class__.__name__,
-            self.path_list, self.from_upper_keys,
-            self.from_lower_keys, self.to_key,
-            self.value)
+            self.path_list_, self.from_upper_keys_,
+            self.from_lower_keys_, self.to_key_,
+            self.override_, self.override_conditions_,
+            self.value_)
 
-    def _isValidPathList(self):
-        '''Check path_list are valid.'''
-        for i, path in enumerate(self.path_list):
+    def _is_valid_path_list(self):
+        """Check path_list are valid."""
+        for i, path in enumerate(self.path_list_):
             if not isinstance(path, str):
                 raise TypeError(
                     'path_list[%d] type is %s while '
                     'expected type is str: %s' % (
                         i, type(path), path))
 
-    def _isValidFromUpperKeys(self):
-        '''Check from_upper_keys are valid.'''
-        for mapping_key, from_upper_key in self.from_upper_keys.items():
+    def _is_valid_from_upper_keys(self):
+        """Check from_upper_keys are valid."""
+        for mapping_key, from_upper_key in self.from_upper_keys_.items():
             if not isinstance(from_upper_key, str):
                 raise TypeError(
                     'from_upper_keys[%s] type is %s'
                     'while expected type is str: %s' % (
                         mapping_key, type(from_upper_key), from_upper_key))
-            
+
             if '*' in from_upper_key:
                 raise KeyError(
                     'from_upper_keys[%s] %s contains *' % (
                         mapping_key, from_upper_key))
 
-    def _isValidFromLowerKeys(self):
-        '''Check from_lower_keys are valid.'''
-        for mapping_key, from_lower_key in self.from_lower_keys.items():
+    def _is_valid_from_lower_keys(self):
+        """Check from_lower_keys are valid."""
+        for mapping_key, from_lower_key in self.from_lower_keys_.items():
             if not isinstance(from_lower_key, str):
                 raise TypeError(
                     'from_lower_keys[%s] type'
@@ -157,221 +90,195 @@ class ConfigMapping(object):
                     'from_lower_keys[%s] %s contains *' % (
                         mapping_key, from_lower_key))
 
-    def _isValidFromKeys(self):
-        '''Check from keys are valid.'''
-        self._isValidFromUpperKeys()
-        self._isValidFromLowerKeys()
-        upper_keys = set(self.from_upper_keys.keys())
-        lower_keys = set(self.from_lower_keys.keys())
+    def _is_valid_from_keys(self):
+        """Check from keys are valid."""
+        self._is_valid_from_upper_keys()
+        self._is_valid_from_lower_keys()
+        upper_keys = set(self.from_upper_keys_.keys())
+        lower_keys = set(self.from_lower_keys_.keys())
         intersection = upper_keys.intersection(lower_keys)
         if intersection:
             raise KeyError(
                 'there is intersection between from_upper_keys %s'
                 ' and from_lower_keys %s: %s' % (
                     upper_keys, lower_keys, intersection))
-        
-    def _isValidToKey(self):
-        '''Check to_key is valid.'''
-        if '*' in self.to_key:
-            raise KeyError('to_key %s contains *' % self.to_key)
-       
-    def isValid(self):
-        '''Check ConfigMapping instance is valid.'''
-        self._isValidPathList()
-        self._isValidFromKeys()
-        self._isValidToKey()
 
-    def _getUpperSubRefs(self, upper_ref):
-        '''get sub_refs from upper_ref.''' 
+    def _is_valid_to_key(self):
+        """Check to_key is valid."""
+        if '*' in self.to_key_:
+            raise KeyError('to_key %s contains *' % self.to_key_)
+
+    def _is_valid_override_conditions(self):
+        """Check override conditions are valid."""
+        override_items = self.override_conditions_.items()
+        for mapping_key, override_condition in override_items:
+            if not util.is_instance(override_condition, [str, unicode]):
+                raise TypeError(
+                    'override_conditions[%s] type is %s '
+                    'while expected type is [str, unicode]: %s' % (
+                        mapping_key, type(override_condition),
+                        override_condition))
+
+            if '*' in override_condition:
+                raise KeyError(
+                    'override_conditions[%s] %s contains *' % (
+                        mapping_key, override_condition))
+
+    def _is_valid(self):
+        """Check ConfigMapping instance is valid."""
+        self._is_valid_path_list()
+        self._is_valid_from_keys()
+        self._is_valid_to_key()
+        self._is_valid_override_conditions()
+
+    def _get_upper_sub_refs(self, upper_ref):
+        """get sub_refs from upper_ref."""
         upper_refs = []
-        for path in self.path_list:
-            upper_refs.extend(upper_ref.refItems(path))
+        for path in self.path_list_:
+            upper_refs.extend(upper_ref.ref_items(path))
+
         return upper_refs
 
-    def _getMappingFromUpperKeys(self, ref_key, sub_ref):
-        '''Get upper config mapping from from_upper_keys.'''
+    def _get_mapping_from_upper_keys(self, ref_key, sub_ref):
+        """Get upper config mapping from from_upper_keys."""
         sub_configs = {}
-        for mapping_key, from_upper_key in self.from_upper_keys.items():
+        for mapping_key, from_upper_key in self.from_upper_keys_.items():
             if from_upper_key in sub_ref:
                 sub_configs[mapping_key] = sub_ref[from_upper_key]
             else:
-                logging.info('ignore from_upper_key %s in %s',
-                             from_upper_key, ref_key)
+                logging.info('%s ignore from_upper_key %s in %s',
+                             self, from_upper_key, ref_key)
         return sub_configs
 
-    def _getMappingFromLowerKeys(self, ref_key, lower_sub_refs):
-        '''Get lower config mapping from from_lower_keys.'''
+    def _get_mapping_from_lower_keys(self, ref_key, lower_sub_refs):
+        """Get lower config mapping from from_lower_keys."""
         sub_configs = {}
-        for mapping_key, from_lower_key in self.from_lower_keys.items():
+        for mapping_key, from_lower_key in self.from_lower_keys_.items():
             sub_configs[mapping_key] = {}
-            
+
         for lower_key, lower_sub_ref in lower_sub_refs.items():
-            for mapping_key, from_lower_key in self.from_lower_keys.items():
+            for mapping_key, from_lower_key in self.from_lower_keys_.items():
                 if from_lower_key in lower_sub_ref:
                     sub_configs[mapping_key][lower_key] = (
                         lower_sub_ref[from_lower_key])
                 else:
-                    msg = 'ignore from_lower_key %s in %s lower_key %s'
-                    logging.error(msg, from_lower_key, ref_key, lower_key)
-        return sub_configs 
+                    logging.error(
+                        '%s ignore from_lower_key %s in %s lower_key %s',
+                        self, from_lower_key, ref_key, lower_key)
 
-    def _getValues(self, ref_key, sub_ref, lower_sub_refs, sub_configs):
-        '''Get values to set to lower configs.'''
-        if self.value is None:
+        return sub_configs
+
+    def _get_values(self, ref_key, sub_ref, lower_sub_refs, sub_configs):
+        """Get values to set to lower configs."""
+        if self.value_ is None:
             lower_values = {}
             for lower_key in lower_sub_refs.keys():
                 lower_values[lower_key] = deepcopy(sub_ref.config)
 
             return lower_values
-        elif not callable(self.value):
+
+        if not callable(self.value_):
             lower_values = {}
             for lower_key in lower_sub_refs.keys():
-                lower_values[lower_key] = deepcopy(self.value)
+                lower_values[lower_key] = deepcopy(self.value_)
 
             return lower_values
 
-        try:
-            return self.value(sub_ref, ref_key, lower_sub_refs,
-                              self.to_key, **sub_configs)
-        except Exception as error:
-            logging.error(
-                '%s fails to get values from (%s, %s, %s, **%s)',
-                self, ref_key, sub_ref, lower_sub_refs, sub_configs)
-            logging.exception(error)
-            return {}
+        return self.value_(sub_ref, ref_key, lower_sub_refs,
+                           self.to_key_, **sub_configs)
+
+    def _get_override(self, ref_key, sub_ref):
+        """Get override from ref_key, ref from ref_key."""
+        if not callable(self.override_):
+            return bool(self.override_)
+
+        override_condition_configs = {}
+        override_items = self.override_conditions_.items()
+        for mapping_key, override_condition in override_items:
+            if override_condition in sub_ref:
+                override_condition_configs[mapping_key] = \
+                    sub_ref[override_condition]
+            else:
+                logging.info('%s no override condition %s in %s',
+                             self, override_condition, ref_key)
+
+        return self.override_(sub_ref, ref_key,
+                              **override_condition_configs)
 
     def merge(self, upper_ref, lower_refs):
-        '''merge upper config to lower configs.'''
-        upper_sub_refs = self._getUpperSubRefs(upper_ref)
+        """merge upper config to lower configs."""
+        upper_sub_refs = self._get_upper_sub_refs(upper_ref)
 
         for ref_key, sub_ref in upper_sub_refs:
-            sub_configs = self._getMappingFromUpperKeys(ref_key, sub_ref)
+            sub_configs = self._get_mapping_from_upper_keys(ref_key, sub_ref)
 
             lower_sub_refs = {}
             for lower_key, lower_ref in lower_refs.items():
                 lower_sub_refs[lower_key] = lower_ref.setdefault(ref_key)
 
-            lower_sub_configs = self._getMappingFromLowerKeys(
+            lower_sub_configs = self._get_mapping_from_lower_keys(
                 ref_key, lower_sub_refs)
 
-            util.mergeDict(sub_configs, lower_sub_configs)
+            util.merge_dict(sub_configs, lower_sub_configs)
 
-            values  = self._getValues(
+            values  = self._get_values(
                 ref_key, sub_ref, lower_sub_refs, sub_configs)
 
             logging.debug('%s set values %s to %s',
-                          ref_key,  self.to_key, values)
+                          ref_key,  self.to_key_, values)
             for lower_key, lower_sub_ref in lower_sub_refs.items():
                 if lower_key not in values:
                     logging.error('no key %s in %s', lower_key, values)
                     continue
+
                 value = values[lower_key]
-                lower_sub_ref.setdefault(self.to_key, value)
+                lower_to_ref = lower_sub_ref.setdefault(self.to_key_)
+                override = self._get_override(self.to_key_, lower_to_ref)
+                lower_to_ref.update(value, override)
 
 
 class ConfigMerger(object):
-    '''Class to merge upper config to lower configs.
- 
-    Examples:
-        upper_config = {
-            'network': {
-                'management': {
-                    'ip_start': '10.145.88.100',
-                    'ip_end': '10.145.88.255',
-                    'netmask': '255.255.255.0',
-                },
-                'public': {
-                    'ip_start': '192.168.100.100',
-                    'ip_end': '192.168.200.255',
-                },
-            },
-        }
-        lower_configs = {
-            1: {
-                'network': {
-                    'management': {
-                        'ip': '10.145.88.150',
-                    },
-                },
-            },
-            2: {
-                'network': {
-                    'management': {
-                        'ip': '10.145.88.151',
-                    },
-                },
-            },
-        }
-
-        merger = ConfigMerger(
-            mappings=[ConfigMapper(
-                path_list=['/network/*']
-                from_upper_keys={'ip_start': 'ip_start', 'ip_end': 'ip_end'},
-                to_key='ip',
-                value=config_merger_callbacks.assignIPs
-            ), ConfigMapper(
-                path_list=['/network/*/netmask']
-            )]
-        merger.merge(upper_config, lower_configs)
-        lower_configs == {
-            1: {
-                'network': {
-                    'management': {
-                        'ip': 10.145.88.150',
-                        'netmask': '255.255.255.0'
-                    },
-                    'public': {
-                        'ip': '192.168.100.100',
-                    },
-                },
-            },
-            2: {
-                'network': {
-                    'management': {
-                        'ip': 10.145.88.151',
-                        'netmask': '255.255.255.0',
-                    },
-                    'public': {
-                        'ip': '192.168.100.101',
-                    },
-                },
-            },
-        }
-    '''
+    """Class to merge clsuter config to host configs."""
 
     def __init__(self, mappings):
-        self.mappings = mappings
-        self.isValid()
+        """Constructor
 
-    def isValid(self):
-        '''Check ConfigMerger instance is valid.'''
-        for mapping in self.mappings:
-            if not mapping.isValid():
-                return False
-        return True
+        :param mappings: list of :class:`ConfigMapping` instance
+        """
+        self.mappings_ = mappings
+        self._is_valid()
+
+    def __repr__(self):
+        return '%s[mappings=%s]' % (self.__class__.__name__, self.mappings_)
+
+    def _is_valid(self):
+        """Check ConfigMerger instance is valid."""
+        if not isinstance(self.mappings_, list):
+            raise TypeError(
+                '%s mapping type is %s while expect type is list: %s' % (
+                    self.__class__.__name__, type(self.mappings_),
+                    self.mappings_))
 
     def merge(self, upper_config, lower_configs):
-        '''merge upper config to lower configs.
+        """Merge cluster config to host configs.
 
-        Args:
-            upper_config: any type.
-            lower_configs: dict of {str: any type}
-
-        Returns:
-            None
-        '''
+        :param upper_config: cluster configuration to merge from.
+        :type upper_config: dict
+        :param lower_configs: host configurations to merge to.
+        :type lower_configs: dict of host id to host config as dict
+        """
         upper_ref = config_reference.ConfigReference(upper_config)
         lower_refs = {}
         for lower_key, lower_config in lower_configs.items():
             lower_refs[lower_key] = config_reference.ConfigReference(
                 lower_config)
 
-        for mapping in self.mappings:
+        for mapping in self.mappings_:
             logging.debug('apply merging from the rule %s', mapping)
             mapping.merge(upper_ref, lower_refs)
 
         for lower_key, lower_config in lower_configs.items():
-            lower_configs[lower_key] = config_reference.getCleanConfig(
+            lower_configs[lower_key] = config_reference.get_clean_config(
                 lower_config)
 
         logging.debug('merged upper config\n%s\nto lower configs:\n%s',

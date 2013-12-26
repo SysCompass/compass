@@ -1,7 +1,4 @@
-'''
-   Poll switch to update the information fo the machines '
-   connected to the switch.
-'''
+"""Module to provider function to poll switch."""
 import logging
 
 from compass.db import database
@@ -10,11 +7,22 @@ from compass.hdsdiscovery.hdmanager import HDManager
 
 
 def poll_switch(ip_addr, req_obj='mac', oper="SCAN"):
-    """ Query switch and return expected result
+    """Query switch and return expected result
 
-        :param str ip_addr: switch ip address
-        :param str req_obj: the object requested to query from switch
-        :param str oper : the operation to query the switch(SCAN, GET, SET)
+    .. note::
+       When polling switch succeeds, for each mac it got from polling switch,
+       A Machine record associated with the switch is added to the database.
+
+    :param ip_addr: switch ip address.
+    :type ip_addr: str
+    :param req_obj: the object requested to query from switch.
+    :type req_obj: str
+    :param oper: the operation to query the switch.
+    :type oper: str, should be one of ['SCAN', 'GET', 'SET']
+
+    .. note::
+       The function should be called inside database session scope.
+
     """
     if not ip_addr:
         logging.error('No switch IP address is provided!')

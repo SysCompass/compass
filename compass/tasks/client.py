@@ -1,4 +1,11 @@
-'''Module to setup celery client.'''
+"""Module to setup celery client.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+
+   .. note::
+      If CELERY_CONFIG_MODULE is set in environment, load celery config from
+      the filename declared in CELERY_CONFIG_MODULE.
+"""
 import os
 
 from celery import Celery

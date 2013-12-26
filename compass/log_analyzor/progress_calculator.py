@@ -1,14 +1,19 @@
-'''module to provide updating installing process function.'''
+"""module to provide updating installing process function.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 
 from compass.log_analyzor.line_matcher import LineMatcher, IncrementalProgress
 from compass.log_analyzor.file_matcher import FileMatcher
 from compass.log_analyzor.adapter_matcher import AdapterMatcher
 from compass.log_analyzor.adapter_matcher import AdapterItemMatcher
+from compass.log_analyzor.adapter_matcher import OSMatcher
+from compass.log_analyzor.adapter_matcher import PackageMatcher
 
 
 # TODO(weidong): reconsider intialization method for the following.
-OS_CONFIGURATIONS = {
+OS_INSTALLER_CONFIGURATIONS = {
     'CentOS': AdapterItemMatcher(
         file_matchers=[
             FileMatcher(
@@ -190,7 +195,7 @@ OS_CONFIGURATIONS = {
 
 
 PACKAGE_INSTALLER_CONFIGURATIONS = {
-    'chef': AdapterItemMatcher(
+    'openstack': AdapterItemMatcher(
         file_matchers=[
             FileMatcher(
                 filename='chef-client.log',
@@ -200,7 +205,7 @@ PACKAGE_INSTALLER_CONFIGURATIONS = {
                     'start': LineMatcher(
                         pattern=(
                             r'Processing\s*(?P<install_type>.*)'
-                            '\[(?P<package>.*)\].*'),
+                            r'\[(?P<package>.*)\].*'),
                         progress=IncrementalProgress(0.0, .90, 0.005),
                         message_template=(
                             'Processing %(install_type)s %(package)s'),
@@ -225,46 +230,49 @@ PACKAGE_INSTALLER_CONFIGURATIONS = {
 
 ADAPTER_CONFIGURATIONS = [
     AdapterMatcher(
-        name='CentOS_Chef',
-        os_pattern='CentOS.*',
-        os_matcher=OS_CONFIGURATIONS['CentOS'],
-        min_os_progress=0.0,
-        max_os_progress=0.6,
-        package_installer_name='chef',
-        package_matcher=PACKAGE_INSTALLER_CONFIGURATIONS['chef'],
-        min_package_progress=0.6,
-        max_package_progress=1.0
-    ),
+        os_matcher=OSMatcher(
+            os_installer_name='cobbler',
+            os_pattern='CentOS.*',
+            item_matcher=OS_INSTALLER_CONFIGURATIONS['CentOS'],
+            min_progress=0.0,
+            max_progress=0.6),
+        package_matcher=PackageMatcher(
+            package_installer_name='chef',
+            target_system='openstack',
+            item_matcher=PACKAGE_INSTALLER_CONFIGURATIONS['openstack'],
+            min_progress=0.6,
+            max_progress=1.0)
+    )
 ]
 
 
-def getAdapterMatcher(os_name, package_installer):
-    '''get adapter matcher by os name and package installer name.'''
+def _get_adapter_matcher(os_installer, os_name,
+                        package_installer, target_system):
+    """Get adapter matcher by os name and package installer name."""
     for configuration in ADAPTER_CONFIGURATIONS:
-        if configuration.match(os_name, package_installer):
+        if configuration.match(os_installer, os_name,
+                               package_installer, target_system):
             return configuration
 
-    logging.error('No configuration found with os %s package_installer %s',
-                  os_name, package_installer)
+    logging.error('No configuration found with os installer %s os %s '
+                  'package_installer %s, target_system %s',
+                  os_installer, os_name, package_installer, target_system)
     return None
 
 
-def updateProgress(os_name, package_installer,
-                   clusterid, hostids):
-    '''Update adapter installing progress.
+def update_progress(os_installer, os_name, package_installer, target_system,
+                    clusterid, hostids):
+    """Update adapter installing progress.
 
-    Args:
-        os_name: str, os name.
-        package_installer: str, package installer name.
-        clusterid: int, cluster id.
-        hostids: list of int, hosts ids.
-
-    Returns:
-        None
-    '''
-    adapter = getAdapterMatcher(os_name, package_installer)
+    :param os_installer: os installer name
+    :param os_name: os name.
+    :param package_installer: package installer name.
+    :param clusterid: cluster id.
+    :param hostids: hosts ids.
+    """
+    adapter = _get_adapter_matcher(os_installer, os_name,
+                                   package_installer, target_system)
     if not adapter:
-        logging.error('there is no adapter found for os=%s', os_name)
         return
 
-    adapter.updateProgress(clusterid, hostids)
+    adapter.update_progress(clusterid, hostids)

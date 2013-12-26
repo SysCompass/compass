@@ -88,7 +88,7 @@ sudo \cp -rf $WEB_HOME/public/* /var/www/compass_web/
 sudo chmod +x /etc/init.d/compassd
 sudo chmod +x /usr/bin/compassd
 
-/opt/compsas/bin/addcookbooks.py
+/opt/compass/bin/addcookbooks.py
 /opt/compass/bin/adddatabags.py
 /opt/compass/bin/addroles.py
  

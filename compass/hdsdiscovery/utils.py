@@ -8,10 +8,11 @@ import logging
 
 def load_module(mod_name, path, host=None, credential=None):
     """ Load a module instance.
-        param str mod_name : module name
-        param str path     : directory of the module
-        param str host     : switch ip address
-        param str credential : credential used to access switch
+
+    :param str mod_name: module name
+    :param str path: directory of the module
+    :param str host: switch ip address
+    :param str credential: credential used to access switch
     """
     instance = None
     try:
@@ -32,11 +33,12 @@ def load_module(mod_name, path, host=None, credential=None):
 
 
 def ssh_remote_execute(host, username, password, cmd, *args):
-    """ SSH to execute script on remote machine
-        param str host     : ip of the remote machine
-        param str username : username to access the remote machine
-        param str password : password to access the remote machine
-        param str cmd      : command to execute
+    """SSH to execute script on remote machine
+
+    :param host: ip of the remote machine
+    :param username: username to access the remote machine
+    :param password: password to access the remote machine
+    :param cmd: command to execute
     """
     try:
         import paramiko
@@ -83,11 +85,11 @@ AUTH_VERSIONS = {'v1': 1,
 
 
 def snmp_walk(host, credential, *args):
-    """ Impelmentation of snmpwalk functionality
+    """Impelmentation of snmpwalk functionality
 
-        param str  host: switch ip
-        param dict credential: credential to access switch
-        param *args: OIDs
+    :param host: switch ip
+    :param credential: credential to access switch
+    :param args: OIDs
     """
     try:
         import netsnmp
@@ -127,11 +129,11 @@ def snmp_walk(host, credential, *args):
 
 
 def snmp_get(host, credential, object_type):
-    """ Impelmentation of snmp get functionality
+    """Impelmentation of snmp get functionality
 
-        param str  object_type : mib object
-        param str  host        : switch ip
-        param dict credential  : credential to access switch
+    :param object_type: mib object
+    :param host: switch ip
+    :param credential: the dict of credential to access switch
     """
     try:
         import netsnmp

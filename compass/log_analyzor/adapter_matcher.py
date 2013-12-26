@@ -1,4 +1,7 @@
-'''Module to provider installing progress update functions for the adapter.'''
+"""Module to provider installing progress calculation for the adapter.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 import re
 
@@ -8,105 +11,146 @@ from compass.log_analyzor.line_matcher import Progress
 
 
 class AdapterItemMatcher(object):
-    '''
-       progress matcher for the os installing or package installing.
-    '''
+    """Progress matcher for the os installing or package installing."""
+
     def __init__(self, file_matchers):
-        self.file_matchers = file_matchers
-        self.min_progress = 0.0
-        self.max_progress = 1.0
+        self.file_matchers_ = file_matchers
+        self.min_progress_ = 0.0
+        self.max_progress_ = 1.0
 
     def update_progress_range(self, min_progress, max_progress):
-        '''update min_progress and max_progress.'''
-        self.min_progress = min_progress
-        self.max_progress = max_progress
-        for file_matcher in self.file_matchers:
+        """update min_progress and max_progress."""
+        self.min_progress_ = min_progress
+        self.max_progress_ = max_progress
+        for file_matcher in self.file_matchers_:
             file_matcher.update_absolute_progress_range(
-                self.min_progress, self.max_progress)
+                self.min_progress_, self.max_progress_)
 
     def __str__(self):
         return '%s[file_matchers: %s, min_progress: %s, max_progress: %s]' % (
-            self.__class__.__name__, self.file_matchers,
-            self.min_progress, self.max_progress)
+            self.__class__.__name__, self.file_matchers_,
+            self.min_progress_, self.max_progress_)
 
-    def updateProgress(self, hostname, progress):
-        '''Update progress.
+    def update_progress(self, hostname, progress):
+        """Update progress.
 
-        Args:
-            hostname: str, the hostname of the installing host.
-            progress: Progress instance to update.
+        :param hostname: the hostname of the installing host.
+        :type hostname: str
+        :param progress: Progress instance to update.
+        """
+        for file_matcher in self.file_matchers_:
+            file_matcher.update_progress(hostname, progress)
 
-        Returns:
-            None
-        '''
-        for file_matcher in self.file_matchers:
-            file_matcher.updateProgress(hostname, progress)
+
+class OSMatcher(object):
+    """Progress matcher for os installer."""
+
+    def __init__(self, os_installer_name, os_pattern,
+                 item_matcher, min_progress, max_progress):
+        if not (0.0 <= min_progress <= max_progress <= 1.0):
+            raise IndexError('%s restriction not mat:'
+                             '0.0 <= min_progress(%s) '
+                             '<= max_progress(%s) <= 1.0' % (
+                                 self.__class__.__name__,
+                                 min_progress, max_progress))
+
+        self.name_ = os_installer_name
+        self.os_regex_ = re.compile(os_pattern)
+        self.matcher_ = item_matcher
+        self.matcher_.update_progress_range(min_progress, max_progress)
+
+    def __repr__(self):
+        return '%s[name:%s, os_pattern:%s, matcher:%s]' % (
+            self.__class__.__name__, self.name_,
+            self.os_regex_.pattern, self.matcher_)
+
+    def match(self, os_installer_name, os_name):
+        """Check if the os matcher is acceptable."""
+        return all([
+            self.name_ == os_installer_name,
+            self.os_regex_.match(os_name)])
+
+    def update_progress(self, hostname, progress):
+        """Update progress."""
+        self.matcher_.update_progress(hostname, progress)
+
+
+class PackageMatcher(object):
+    """Progress matcher for package installer."""
+
+    def __init__(self, package_installer_name, target_system,
+                 item_matcher, min_progress, max_progress):
+        if not (0.0 <= min_progress <= max_progress <= 1.0):
+            raise IndexError('%s restriction not mat:'
+                             '0.0 <= min_progress(%s) '
+                             '<= max_progress(%s) <= 1.0' % (
+                                 self.__class__.__name__,
+                                 min_progress, max_progress))
+
+        self.name_ = package_installer_name
+        self.target_system_ = target_system
+        self.matcher_ = item_matcher
+        self.matcher_.update_progress_range(min_progress, max_progress)
+
+    def __repr__(self):
+        return '%s[name:%s, target_system:%s, matcher:%s]' % (
+            self.__class__.__name__, self.name_,
+            self.target_system_, self.matcher_)
+
+    def match(self, package_installer_name, target_system):
+        """Check if the package matcher is acceptable."""
+        return all([
+            self.name_ == package_installer_name,
+            self.target_system_ == target_system])
+
+    def update_progress(self, hostname, progress):
+        """Update progress."""
+        self.matcher_.update_progress(hostname, progress)
 
 
 class AdapterMatcher(object):
-    '''Adapter matcher to update adapter installing progress.'''
+    """Adapter matcher to update adapter installing progress."""
 
-    # TODO(weidong): arg list too long
-    def __init__(self, name, os_pattern, os_matcher,
-                 min_os_progress, max_os_progress,
-                 package_installer_name, package_matcher,
-                 min_package_progress, max_package_progress):
-        if not (0.0 <= min_os_progress <= max_os_progress  <=
-                   min_package_progress <= max_package_progress <= 1.0):
-            raise IndexError('%s restriction is not met: '
-                             '0.0 <= min_os_progress(%s) <='
-                             ' max_os_progress(%s) <= min_package_progress(%s)'
-                             ' <= max_package_progress(%s)' % (
-                                 name, min_os_progress, max_os_progress,
-                                 min_package_progress, max_package_progress))
+    def __init__(self, os_matcher, package_matcher):
+        self.os_matcher_ = os_matcher
+        self.package_matcher_ = package_matcher
 
-        self.name = name
-        self.os_regex = re.compile(os_pattern)
-        self.os_matcher = os_matcher
-        self.os_matcher.update_progress_range(
-            min_os_progress, max_os_progress)
-        self.package_installer_name = package_installer_name
-        self.package_matcher = package_matcher
-        self.package_matcher.update_progress_range(
-            min_package_progress, max_package_progress)
+    def match(self, os_installer_name, os_name,
+              package_installer_name, target_system):
+        """Check if the adapter matcher is acceptable.
 
-    def match(self, os_name, package_installer_name):
-        '''
-           Check if the adapter matcher is acceptable for the given 
-           os name and package installer.
+        :param os_installer_name: the os installer name.
+        :type os_installer_name: str
+        :param os_name: the os name.
+        :type os_name: str
+        :param package_installer_name: the package installer name.
+        :type package_installer_name: str
+        :param target_system: the target system to deploy
+        :type target_system: str
 
-        Args:
-            os_name: str, the os name.
-            package_installer_name: str, the package installer name.
+        :returns: bool
 
-        Returns:
-            True if found the AdapterMatcher can process the log files
-            generated for the os installation and package installation.
-        '''
-        if (self.os_regex.match(os_name) and
-               self.package_installer_name == package_installer_name):
-            return True
-
-        return False
+           .. note::
+              Return True if the AdapterMatcher can process the log files
+              generated from the os installation and package installation.
+        """
+        return all([
+            self.os_matcher_.match(os_installer_name, os_name),
+            self.package_matcher_.match(
+                package_installer_name, target_system)])
 
     def __str__(self):
-        return '%s[name:%s, os_matcher:%s, package_matcher:%s]' % (
-            self.__class__.__name__, self.name,
-            self.os_matcher, self.package_matcher)
+        return '%s[os_matcher:%s, package_matcher:%s]' % (
+            self.__class__.__name__,
+            self.os_matcher_, self.package_matcher_)
 
     @classmethod
-    def getHostProgress(cls, hostid):
-        '''Get Host Progress from database.
+    def _get_host_progress(cls, hostid):
+        """Get Host Progress from database.
 
-        Args:
-            hostid: int, the id of host in database.
-
-        Returns:
-            Progress instance got from database or None if there is
-            no such record.
-
-        Notes: The function should be called out of database session. 
-        '''
+        .. notes::
+           The function should be called out of database session.
+        """
         with database.session() as session:
             host = session.query(
                 ClusterHost).filter_by(
@@ -129,23 +173,13 @@ class AdapterMatcher(object):
                          host.state.severity))
 
     @classmethod
-    def updateHostProgress(cls, hostid, progress):
-        '''update host progress to database.
+    def _update_host_progress(cls, hostid, progress):
+        """Update host progress to database.
 
-        Args:
-            hostid: int, the id of the ClusterHost in database.
-            progress: Progress instance to update.
-
-        Returns:
-            None
-
-        the progress will be updated to database if the value is greater than
-        the progress in the database or the value is the same but the message
-        is different.
-
-        Notes: the function should be called out of the database session.
-        '''
-        with database.session() as session:        
+        .. note::
+           The function should be called out of the database session.
+        """
+        with database.session() as session:
             host = session.query(
                 ClusterHost).filter_by(id=hostid).first()
             if not host:
@@ -180,7 +214,7 @@ class AdapterMatcher(object):
 
             if progress.progress >= 1.0:
                 host.state.state = 'READY'
-            
+
             host.state.progress = progress.progress
             host.state.message = progress.message
 
@@ -194,17 +228,12 @@ class AdapterMatcher(object):
                     hostid, host.state)
 
     @classmethod
-    def getClusterProgress(cls, clusterid):
-        '''Get cluster progress from database.
+    def _get_cluster_progress(cls, clusterid):
+        """Get cluster progress from database.
 
-        Args:
-            clusterid: int, cluster id for the cluster.
-
-        Returns:
-            Progress instance from database.
-
-        Notes: the function should be called out of database session.
-        '''
+        .. notes::
+           The function should be called out of database session.
+        """
         with database.session() as session:
             cluster = session.query(Cluster).filter_by(id=clusterid).first()
             if not cluster:
@@ -222,22 +251,12 @@ class AdapterMatcher(object):
                          cluster.state.severity))
 
     @classmethod
-    def updateClusterProgress(cls, clusterid, progress):
-        '''update cluster installing progress to database.
+    def _update_cluster_progress(cls, clusterid, progress):
+        """Update cluster installing progress to database.
 
-        Args:
-            clusterid: int, cluster id.
-            progress: Progress instance to update to database.
-
-        Returns:
-            None
-
-        the progress will be updated to database if the value is greater than
-        the progress in the database or the value is the same but the message
-        is different.
-
-        Notes: the function should be called out of the database session.
-        '''
+        .. note::
+           The function should be called out of the database session.
+        """
         with database.session() as session:
             cluster = session.query(
                 Cluster).filter_by(id=clusterid).first()
@@ -269,7 +288,7 @@ class AdapterMatcher(object):
                     'ignore update cluster  %s progress %s to %s',
                     clusterid, progress, cluster.state)
                 return
-                            
+
             if progress.progress >= 1.0:
                 cluster.state.state = 'READY'
 
@@ -278,7 +297,7 @@ class AdapterMatcher(object):
 
             if progress.severity:
                 cluster.state.severity = progress.severity
-            
+
             if progress.severity == 'ERROR':
                 cluster.state.state = 'ERROR'
 
@@ -286,17 +305,16 @@ class AdapterMatcher(object):
                 'update cluster %s state %s',
                 clusterid, cluster.state)
 
-    def updateProgress(self, clusterid, hostids):
-        '''update cluster progress and hosts progresses.
+    def update_progress(self, clusterid, hostids):
+        """Update cluster progress and hosts progresses.
 
-        Args:
-            clusterid: int, the cluster id.
-            hostids: list of int, the host ids.
-
-        Returns:
-            None
-        '''
-        cluster_state, cluster_progress = self.getClusterProgress(clusterid)
+        :param clusterid: the cluster id.
+        :type clusterid: int
+        :param hostids: the host ids.
+        :type hostids: list of int
+        """
+        cluster_state, cluster_progress = self._get_cluster_progress(
+            clusterid)
         if not cluster_progress:
             logging.error(
                 'nothing to update cluster %s => state %s progress %s',
@@ -307,12 +325,13 @@ class AdapterMatcher(object):
                       clusterid, cluster_state, cluster_progress)
         host_progresses = {}
         for hostid in hostids:
-            hostname, host_state, host_progress = self.getHostProgress(hostid)
+            hostname, host_state, host_progress = self._get_host_progress(
+                hostid)
             if not hostname or not host_progress:
                 logging.error(
                     'nothing to update host %s => hostname %s '
                     'state %s progress %s',
-                    hostid, hostname, host_state, host_progress)  
+                    hostid, hostname, host_state, host_progress)
                 continue
 
             logging.debug('got host %s hostname %s state %s progress %s',
@@ -322,11 +341,11 @@ class AdapterMatcher(object):
         for hostid, host_value in host_progresses.items():
             hostname, host_state, host_progress = host_value
             if host_state == 'INSTALLING' and host_progress.progress < 1.0:
-                self.os_matcher.updateProgress(
+                self.os_matcher_.update_progress(
                     hostname, host_progress)
-                self.package_matcher.updateProgress(
+                self.package_matcher_.update_progress(
                     hostname, host_progress)
-                self.updateHostProgress(hostid, host_progress)
+                self._update_host_progress(hostid, host_progress)
             else:
                 logging.error(
                     'there is no need to update host %s '
@@ -357,4 +376,4 @@ class AdapterMatcher(object):
                 cluster_progress.severity = cluster_severity
                 break
 
-        self.updateClusterProgress(clusterid, cluster_progress)
+        self._update_cluster_progress(clusterid, cluster_progress)

@@ -1,10 +1,9 @@
-'''cobbler plugins as os installer.'''
+"""os installer cobbler plugin"""
 import functools
 import logging
 import xmlrpclib
 
 from compass.config_management.installers import os_installer
-from compass.config_management.installers import package_installer
 from compass.config_management.utils.config_translator import ConfigTranslator
 from compass.config_management.utils.config_translator import KeyTranslator
 from compass.config_management.utils import config_translator_callbacks
@@ -37,71 +36,71 @@ TO_HOST_TRANSLATOR = ConfigTranslator(
         )],
         '/security/server_credentials/password': [KeyTranslator(
             translated_keys=['/ksmeta/password'],
-            translated_value=config_translator_callbacks.getEncryptedValue
+            translated_value=config_translator_callbacks.get_encrypted_value
         )],
         '/partition': [KeyTranslator(
             translated_keys=['/ksmeta/partition']
         )],
         '/networking/interfaces/*/mac': [KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/macaddress-%(nic)s')],
             from_keys={'nic': '../nic'},
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management')
         )],
         '/networking/interfaces/*/ip': [KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/ipaddress-%(nic)s')],
             from_keys={'nic': '../nic'},
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management')
         )],
         '/networking/interfaces/*/netmask': [KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/netmask-%(nic)s')],
             from_keys={'nic': '../nic'},
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management')
         )],
         '/networking/interfaces/*/dns_alias': [KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/dnsname-%(nic)s')],
             from_keys={'nic': '../nic'},
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management')
         )],
         '/networking/interfaces/*/nic': [KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/static-%(nic)s')],
             from_keys={'nic': '../nic'},
             translated_value=True,
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management'),
         ), KeyTranslator(
             translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
+                config_translator_callbacks.get_key_from_pattern,
                 to_pattern='/modify_interface/management-%(nic)s')],
             from_keys={'nic': '../nic'},
             translated_value=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management'),
             override=functools.partial(
-                config_translator_callbacks.overridePathHas,
+                config_translator_callbacks.override_path_has,
                 should_exist='management')
         ), KeyTranslator(
             translated_keys=['/ksmeta/promisc_nics'],
             from_values={'condition': '../promisc'},
-            translated_value=config_translator_callbacks.addValue,
+            translated_value=config_translator_callbacks.add_value,
             override=True,
         )],
     }
@@ -109,62 +108,50 @@ TO_HOST_TRANSLATOR = ConfigTranslator(
 
 
 class Installer(os_installer.Installer):
-    '''cobbler installer'''
+    """cobbler installer"""
     NAME = 'cobbler'
 
-    def __init__(self):
+    def __init__(self, package_installer):
         # the connection is created when cobbler installer is initialized.
-        try:
-            self.remote = xmlrpclib.Server(
-                setting.COBBLER_INSTALLER_URL,
-                allow_none=True)
-            self.token = self.remote.login(
-                *setting.COBBLER_INSTALLER_TOKEN)
-        except Exception as error:
-            logging.error('failed to login %s with (user, password) %s',
-                          setting.COBBLER_INSTALLER_URL,
-                          setting.COBBLER_INSTALLER_TOKEN)
-            logging.exception(error)
-            raise error
+        self.remote_ = xmlrpclib.Server(
+            setting.COBBLER_INSTALLER_URL,
+            allow_none=True)
+        self.token_ = self.remote_.login(
+            *setting.COBBLER_INSTALLER_TOKEN)
 
         # cobbler tries to get package related config from package installer.
-        self.package_installer = package_installer.getInstaller()
-        logging.debug('%s instance created: %s', self.NAME, self)
+        self.package_installer_ = package_installer
+        logging.debug('%s instance created', self)
 
-    def __str__(self):
-        return (
-            'remote:%s, token:%s, package_installer:%s') % (
-                self.remote, self.token,
-                self.package_installer)
+    def __repr__(self):
+        return '%s[name=%s,remote=%s,token=%s' % (
+            self.__class__.__name__, self.NAME,
+            self.remote_, self.token_)
 
-    def getOSes(self):
-        '''get supported os versions.
-        
-        In cobbler, we treat profile name as the indicator
-        of supported os version. It is just a simple indicator
-        and is not so accurate.
-        '''
-        profiles = self.remote.get_profiles()
+    def get_oses(self):
+        """get supported os versions.
+
+        :returns: list of os version.
+
+        .. note::
+           In cobbler, we treat profile name as the indicator
+           of os version. It is just a simple indicator
+           and not accurate.
+        """
+        profiles = self.remote_.get_profiles()
         oses = []
         for profile in profiles:
             oses.append(profile['name'])
         return oses
 
     def sync(self):
-        '''sync cobbler to catch up the latest update config.'''
+        """Sync cobbler to catch up the latest update config."""
         logging.debug('sync %s', self)
-        try:
-            self.remote.sync(self.token)
-        except Exception as error:
-            logging.error('failed to sync configs to %s',
-                          self)
-            logging.exception(error)
+        self.remote_.sync(self.token_)
 
-    def _getModifySystemFromConfig(self, hostname,
-                                   profile, config, **kwargs):
-        '''get modified system config.'''
-        logging.debug('%s[%s] get modify system from config: %s',
-                      self, hostname, config)
+    def _get_modify_system(self, hostname,
+                           profile, config, **kwargs):
+        """get modified system config."""
         system_config = {
             'name': hostname,
             'hostname': hostname,
@@ -172,93 +159,61 @@ class Installer(os_installer.Installer):
         }
 
         translated_config = TO_HOST_TRANSLATOR.translate(config)
-        logging.debug('%s[%s] get translated config: %s',
-                      self.NAME, hostname, translated_config)
-        util.mergeDict(system_config, translated_config)
+        util.merge_dict(system_config, translated_config)
 
         ksmeta = system_config.setdefault('ksmeta', {})
-        package_config = {'tool': self.package_installer.NAME}
-        util.mergeDict(
+        package_config = {'tool': self.package_installer_.NAME}
+        util.merge_dict(
             package_config,
-            self.package_installer.os_installer_config(
+            self.package_installer_.os_installer_config(
                 config, **kwargs))
-        logging.debug('%s[%s] get package config: %s',
-                      self.NAME, hostname, package_config)
-        util.mergeDict(ksmeta, package_config)
+        util.merge_dict(ksmeta, package_config)
 
         return system_config
 
-    def _getProfile(self, **kwargs):
-        '''get profile name.'''
-        try:
-            os_version = kwargs['os_version']
-            profile_found = self.remote.find_profile(
-                {'name': os_version})
-            return profile_found[0]
-        except Exception as error:
-            logging.error('%s failed to found profile from %s',
-                          self, kwargs)
-            logging.exception(error)
-            return None
+    def _get_profile(self, os_version, **_kwargs):
+        """get profile name."""
+        profile_found = self.remote_.find_profile(
+            {'name': os_version})
+        return profile_found[0]
 
-    def _getSystem(self, hostid, config):
-        '''get system reference id.'''
-        try:
-            hostname = config['hostname']
-            sys_found = self.remote.find_system(
-                {"hostname": hostname})
+    def _get_system(self, config):
+        """get system reference id."""
+        hostname = config['hostname']
+        sys_found = self.remote_.find_system(
+            {'hostname': hostname})
 
-            if sys_found:
-                sys_id = self.remote.get_system_handle(
-                    sys_found[0], self.token)
-                logging.debug('using existing system %s from %s',
-                              sys_id, sys_found)
-            else:
-                sys_id = self.remote.new_system(self.token)
-                logging.debug('create new system %s', sys_id)
-            return (hostname, sys_id)
-        except Exception as error:
-            logging.error('%s failed to get system config for %s',
-                          self, hostid)
-            logging.exception(error)
-            return (None, None)
+        if sys_found:
+            sys_id = self.remote_.get_system_handle(
+                sys_found[0], self.token_)
+            logging.debug('using existing system %s from %s',
+                          sys_id, sys_found)
+        else:
+            sys_id = self.remote_.new_system(self.token_)
+            logging.debug('create new system %s', sys_id)
+        return (hostname, sys_id)
 
-    def _saveSystem(self, sys_id):
-        '''save system config update.'''
-        try:
-            self.remote.save_system(sys_id, self.token)
-        except Exception as error:
-            logging.error(
-                '%s failed to save config to %s',
-                self, sys_id)
-            logging.exception(error)
+    def _save_system(self, sys_id):
+        """save system config update."""
+        self.remote_.save_system(sys_id, self.token_)
 
-    def _updateModifySystem(self, sys_id, system_config):
-        '''update modify system'''
+    def _update_modify_system(self, sys_id, system_config):
+        """update modify system"""
         for key, value in system_config.items():
-            try:
-                self.remote.modify_system(
-                    sys_id, key, value, self.token)
-            except Exception as error:
-                logging.error(
-                    '%s failed to update config to %s[%s]: %s',
-                    self, sys_id, key, value)
-                logging.exception(error)
+            self.remote_.modify_system(
+                sys_id, key, value, self.token_)
 
-    def updateHostConfig(self, hostid, config, **kwargs):
-        '''update host config.'''
-        profile = self._getProfile(**kwargs)
-        hostname, sys_id = self._getSystem(hostid, config)
-        if profile is None or sys_id is None:
-            return
-
-        system_config = self._getModifySystemFromConfig(
+    def update_host_config(self, hostid, config, **kwargs):
+        """update host config."""
+        profile = self._get_profile(**kwargs)
+        hostname, sys_id = self._get_system(config)
+        system_config = self._get_modify_system(
             hostname, profile, config, **kwargs)
         logging.debug('%s system config to update: %s',
                       hostid, system_config)
 
-        self._updateModifySystem(sys_id, system_config)
-        self._saveSystem(sys_id)
+        self._update_modify_system(sys_id, system_config)
+        self._save_system(sys_id)
 
 
 

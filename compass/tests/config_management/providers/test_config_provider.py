@@ -25,17 +25,18 @@ class TestProviderRegisterFunctions(unittest2.TestCase):
         config_provider.PROVIDERS = {}
 
     def test_found_provider(self):
-        config_provider.registerProvider(DummyProvider)
-        provider = config_provider.getProviderByName(DummyProvider.NAME)
+        config_provider.register_provider(DummyProvider)
+        provider = config_provider.get_provider_by_name(
+            DummyProvider.NAME)
         self.assertIsInstance(provider, DummyProvider)
 
     def test_notfound_unregistered_provider(self):
-        self.assertRaises(KeyError, config_provider.getProviderByName,
+        self.assertRaises(KeyError, config_provider.get_provider_by_name,
                           DummyProvider.NAME)
 
     def test_multi_registered_provider(self):
-        config_provider.registerProvider(DummyProvider)
-        self.assertRaises(KeyError, config_provider.registerProvider,
+        config_provider.register_provider(DummyProvider)
+        self.assertRaises(KeyError, config_provider.register_provider,
                           Dummy2Provider)
 
 

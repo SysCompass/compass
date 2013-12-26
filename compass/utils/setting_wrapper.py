@@ -1,12 +1,15 @@
+"""comapss setting wrapper."""
 import logging
 import os
 
 
+if 'COMPASS_SETTING' in os.environ:
+    SETTING = os.environ['COMPASS_SETTING']
+else:
+    SETTING = '/etc/compass/setting'
+
 try:
-    if 'COMPASS_SETTING' in os.environ:
-        compass_setting = os.environ['COMPASS_SETTING']
-    else:
-         compass_setting = '/etc/compass/setting'
-    execfile(compass_setting, globals(), locals())
-except Exception as e:
-    logging.exception(e)
+    execfile(SETTING, globals(), locals())
+except Exception as error:
+    logging.exception(error)
+    raise error

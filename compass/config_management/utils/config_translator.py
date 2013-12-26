@@ -1,5 +1,7 @@
-'''Config Translator module to translate orign config to dest config.
-'''
+"""Config Translator module to translate orign config to dest config.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 
 from compass.config_management.utils import config_reference
@@ -7,92 +9,47 @@ from compass.utils import util
 
 
 class KeyTranslator(object):
-    '''
-       Translate refs to the path in origin config to
-       expected position in dest config. 
+    """Class to translate origin ref to dest ref."""
 
-    Example:
-        config = {
-            'networking': {
-                'management': {
-                    'ip': '1.2.3.4',
-                    'nic': 'eth0',
-                },
-                'public': {
-                    'ip': '2.3.4.5',
-                    'nic': 'eth0',
-                },
-            },
-            'security': {
-                'user': 'root',
-                'password': 'root',
-            },
-        }
-        ref = ConfigReference(config)
-        translated_ref = ConfigReference({})
-        translator = KeyTranslator(
-            translated_keys=[
-                functools.partial(
-                    config_translator_callbacks.getKeyFromPattern,
-                    to_pattern='/modify_interface/ipaddress-%(nic)s'),
-                ),
-            ],
-            from_keys={'nic': '../nic'},
-            override=functools.partial(
-                config_translator_callbacks.overridePathHas,
-                should_exist='management')
-        )
-        translator.translte(ref, '/networking/*/ip', translated_ref)
-        translated_ref.config == {
-            'modify_interface': {
-                'ipaddress-eth0': '1.2.3.4',
-            },
-        }
-        translator = KeyTranslator(
-            translated_keys=[functools.partial(
-                config_translator_callbacks.getKeyFromPattern,
-                to_pattern='/modify_interface/static-%(nic)s')],
-            from_keys={'nic': '../nic'},
-            translated_value=True,
-            override=functools.partial(
-                config_translator_callbacks.overridePathHas,
-                should_exist='management'),
-        )
-        translator.translate(ref, '/networking/*/nic', translated_ref)
-        translated_ref.config == {
-            'modify_interface': {
-                'ipaddress-eth0': '1.2.3.4',
-                'static-eth0': True 
-            },
-        }
-        translator = KeyTranslator(
-            translated_keys=['/ksmeta/username'] 
-        )
-        translator.translate(ref, '/security/user', translated_ref)
-        translated_ref.config == {
-            'modify_interface': {
-                'ipaddress-eth0': '1.2.3.4',
-                'static-eth0': True 
-            },
-            'ksmeta': {
-                'username': 'root',
-            },
-        }
-    '''
     def __init__(self, translated_keys=[], from_keys={}, translated_value=None,
                  from_values={}, override=False, override_conditions={}):
-        self.translated_keys = translated_keys
-        self.from_keys = from_keys
-        self.translated_value = translated_value
-        self.from_values = from_values
-        self.override = override
-        self.override_conditions = override_conditions
-        self.isValid()
+        """Constructor
 
-    def _isValidTranslatedKeys(self):
-        '''Check translated keys are valid.'''
-        for i, translated_key in enumerate(self.translated_keys):
-            if util.isInstanceOf(translated_key, [str, unicode]):
+        :param translated_keys: keys in dest ref to be translated to.
+        :type translated_keys: list of str
+        :param from_keys: extra kwargs parsed to translated key callback.
+        :type: from_keys: dict mapping name of kwargs to path in origin ref
+        :param translated_value: value or callback to get translated value.
+        :type translated_value: callback or any type
+        :param from_values: extra kwargs parsed to translated value callback.
+        :type from_vlaues: dictr mapping name of kwargs to path in origin ref.
+        :param override: if the translated value can be overridden.
+        :type override: callback or bool
+        :param override_conditions: extra kwargs parsed to override callback.
+        :type override_conditions: dict of kwargs name to origin ref path.
+        """
+        self.translated_keys_ = translated_keys
+        self.from_keys_ = from_keys
+        self.translated_value_ = translated_value
+        self.from_values_ = from_values
+        self.override_ = override
+        self.override_conditions_ = override_conditions
+        self._is_valid()
+
+    def  __repr__(self):
+        return (
+            '%s[translated_keys=%s,from_keys=%s,translated_value=%s,'
+            'from_values=%s,override=%s,override_conditions=%s]'
+        ) % (
+            self.__class__.__name__, self.translated_keys_,
+            self.from_keys_, self.translated_value_, self.from_values_,
+            self.override_, self.override_conditions_
+        )
+
+    def _is_valid_translated_keys(self):
+        """Check translated keys are valid."""
+        for i, translated_key in enumerate(self.translated_keys_):
+            if util.is_instance(translated_key, [str, unicode]):
                 if '*' in translated_key:
                     raise KeyError(
                         'transalted_keys[%d] %s should not contain *' % (
@@ -103,39 +60,39 @@ class KeyTranslator(object):
                      'types are str or callable: %s' % (
                          i, type(translated_key), translated_key))
 
-    def _isValidFromKeys(self):
-        '''Check from keys are valid.'''
-        for mapping_key, from_key in self.from_keys.items():
-            if not util.isInstanceOf(from_key, [str, unicode]):
+    def _is_valid_from_keys(self):
+        """Check from keys are valid."""
+        for mapping_key, from_key in self.from_keys_.items():
+            if not util.is_instance(from_key, [str, unicode]):
                 raise TypeError(
                     'from_keys[%s] type is %s while '
                     'expected type is [str, unicode]: %s' % (
                         mapping_key, type(from_key), from_key))
-            
+
             if '*' in from_key:
                 raise KeyError(
                     'from_keys[%s] %s contains *' % (
                         mapping_key, from_key))
-   
-    def _isValidFromValues(self):
-        '''Check from values are valid.''' 
-        for mapping_key, from_value in self.from_values.items():
-            if not util.isInstanceOf(from_value, [str, unicode]):
+
+    def _is_valid_from_values(self):
+        """Check from values are valid."""
+        for mapping_key, from_value in self.from_values_.items():
+            if not util.is_instance(from_value, [str, unicode]):
                 raise TypeError(
                     'from_values[%s] type is %s while '
                     'expected type is [str, unicode]: %s' % (
                         mapping_key, type(from_value), from_value))
-            
+
             if '*' in from_value:
                 raise KeyError(
                     'from_values[%s] %s contains *' % (
                         mapping_key, from_value))
 
-    def _isValidOverrideConditions(self):
-        '''Check override conditions are valid.'''
-        override_items = self.override_conditions.items()
+    def _is_valid_override_conditions(self):
+        """Check override conditions are valid."""
+        override_items = self.override_conditions_.items()
         for mapping_key, override_condition in override_items:
-            if not util.isInstanceOf(override_condition, [str, unicode]):
+            if not util.is_instance(override_condition, [str, unicode]):
                 raise TypeError(
                     'override_conditions[%s] type is %s '
                     'while expected type is [str, unicode]: %s' % (
@@ -147,202 +104,131 @@ class KeyTranslator(object):
                     'override_conditions[%s] %s contains *' % (
                         mapping_key, override_condition))
 
-    def isValid(self):
-        '''Check key translator is valid.'''
-        self._isValidTranslatedKeys()
-        self._isValidFromKeys()
-        self._isValidFromValues()
-        self._isValidOverrideConditions()    
+    def _is_valid(self):
+        """Check key translator is valid."""
+        self._is_valid_translated_keys()
+        self._is_valid_from_keys()
+        self._is_valid_from_values()
+        self._is_valid_override_conditions()
 
-    def getTranslatedKeys(self, ref_key, sub_ref):
-        '''Get translated keys from ref_key and ref to ref_key.'''
+    def _get_translated_keys(self, ref_key, sub_ref):
+        """Get translated keys."""
         key_configs = {}
-        for mapping_key, from_key in self.from_keys.items():
+        for mapping_key, from_key in self.from_keys_.items():
             if from_key in sub_ref:
                 key_configs[mapping_key] = sub_ref[from_key]
             else:
-                logging.error('from_key %s missing in %s',
-                              from_key, sub_ref)
+                logging.error('%s from_key %s missing in %s',
+                              self, from_key, sub_ref)
 
         translated_keys = []
-        for translated_key in self.translated_keys:
+        for translated_key in self.translated_keys_:
             if callable(translated_key):
-                try:
-                    translated_key = translated_key(
-                        sub_ref, ref_key, **key_configs)
-                except Exception as error:
-                    msg = '%s fails to get translated key by %s[%s](**%s)'
-                    logging.error(msg, translated_key, ref_key, key_configs)
-                    logging.exception(error)
-                    continue
+                translated_key = translated_key(
+                    sub_ref, ref_key, **key_configs)
 
             if not translated_key:
+                logging.debug('%s ignore empty translated key', self)
                 continue
 
-            if not util.isInstanceOf(translated_key, [str, unicode]):
-                logging.error('translated key %s should be [str, unicode]',
-                              translated_key)
+            if not util.is_instance(translated_key, [str, unicode]):
+                logging.error(
+                    '%s translated key %s should be [str, unicode]',
+                    self, translated_key)
                 continue
 
             translated_keys.append(translated_key)
 
         return translated_keys
 
-    def getTranslatedValue(self, ref_key, sub_ref,
-                           translated_key,  translated_sub_ref):
-        '''
-           Get translated value from ref_key, ref from ref_key,
-           translated_key, translated_ref from translated_key.
-        '''
-        if self.translated_value is None:
+    def _get_translated_value(self, ref_key, sub_ref,
+                              translated_key,  translated_sub_ref):
+        """Get translated value."""
+        if self.translated_value_ is None:
             return sub_ref.config
-        elif not callable(self.translated_value):
-            return self.translated_value
+        elif not callable(self.translated_value_):
+            return self.translated_value_
 
         value_configs = {}
-     
-        for mapping_key, from_value in self.from_values.items():
+
+        for mapping_key, from_value in self.from_values_.items():
             if from_value in sub_ref:
                 value_configs[mapping_key] = sub_ref[from_value]
             else:
-                logging.info('ignore from value %s for key %s',
-                             from_value, ref_key)
-          
-        try:
-            return self.translated_value(
-                sub_ref, ref_key, translated_sub_ref,
-                translated_key, **value_configs)
-        except Exception as error:
-            logging.error(
-                '%s failed to get translated_value to %s by %s(**%s)',
-                self, translated_key, ref_key, value_configs)
-            logging.exception(error)
-            return None
+                logging.info('%s ignore from value %s for key %s',
+                             self, from_value, ref_key)
 
-    def getOverride(self, ref_key, sub_ref,
-                    translated_key, translated_sub_ref):
-        '''
-           Get override from ref_key, ref from ref_key,
-           translated_key, translated_ref from translated_key.
-        '''
-        if not callable(self.override):
-            return self.override
+        return self.translated_value_(
+            sub_ref, ref_key, translated_sub_ref,
+            translated_key, **value_configs)
+
+    def _get_override(self, ref_key, sub_ref,
+                      translated_key, translated_sub_ref):
+        """Get override."""
+        if not callable(self.override_):
+            return self.override_
 
         override_condition_configs = {}
-        override_items = self.override_conditions.items()
+        override_items = self.override_conditions_.items()
         for mapping_key, override_condition in override_items:
             if override_condition in sub_ref:
-                override_condition_configs[mapping_key] = \
-                    sub_ref[override_condition]
+                override_condition_configs[mapping_key] = (
+                    sub_ref[override_condition])
             else:
-                logging.info('no override condition %s in %s',
-                             override_condition, ref_key)
+                logging.error('%s no override condition %s in %s',
+                              self, override_condition, ref_key)
 
-        try:
-            return self.override(sub_ref, ref_key,
-                                 translated_sub_ref,
-                                 translated_key,
-                                 **override_condition_configs)
-        except Exception as error:
-            msg = '%s failed to get override by (%s, %s, **%s)'
-            logging.error(msg, self.override, ref_key,
-                          translated_key,
-                          override_condition_configs)
-            logging.exception(error)
-            return False
-   
+        return self.override_(sub_ref, ref_key,
+                              translated_sub_ref,
+                              translated_key,
+                              **override_condition_configs)
+
     def translate(self, ref, key, translated_ref):
-        '''translate content in ref[key] to translated_ref.''' 
-        for ref_key, sub_ref in ref.refItems(key):
-            translated_keys = self.getTranslatedKeys(ref_key, sub_ref)
+        """Translate content in ref[key] to translated_ref."""
+        for ref_key, sub_ref in ref.ref_items(key):
+            translated_keys = self._get_translated_keys(ref_key, sub_ref)
             for translated_key in translated_keys:
                 translated_sub_ref = translated_ref.setdefault(
                     translated_key)
-                translated_value = self.getTranslatedValue(
+                translated_value = self._get_translated_value(
                     ref_key, sub_ref, translated_key, translated_sub_ref)
 
                 if translated_value is None:
                     continue
-                
-                override = self.getOverride(
+
+                override = self._get_override(
                     ref_key, sub_ref, translated_key, translated_sub_ref)
+                logging.debug('%s translate to %s value %s', ref_key,
+                              translated_key, translated_value)
                 translated_sub_ref.update(translated_value, override)
 
 
 class ConfigTranslator(object):
-    '''
-        Class to translate origin config to expected dest config.
-
-    Example:
-        config = {
-            'networking': {
-                'management': {
-                    'ip': '1.2.3.4',
-                    'nic': 'eth0',
-                },
-                'public': {
-                    'ip': '2.3.4.5',
-                    'nic': 'eth0',
-                },
-            },
-            'security': {
-                'user': 'root',
-                'password': 'root',
-            },
-        }
-        translator = ConfigTranslator(
-            '/networking/*/ip': [KeyTranslator(
-                translated_keys=[
-                    functools.partial(
-                        config_translator_callbacks.getKeyFromPattern,
-                        to_pattern='/modify_interface/ipaddress-%(nic)s'),
-                    ),
-                ],
-                from_keys={'nic': '../nic'},
-                override=functools.partial(
-                    config_translator_callbacks.overridePathHas,
-                    should_exist='management')
-            )],
-            '/networking/*/nic': [KeyTranslator(
-                translated_keys=[functools.partial(
-                    config_translator_callbacks.getKeyFromPattern,
-                    to_pattern='/modify_interface/static-%(nic)s')],
-                from_keys={'nic': '../nic'},
-                translated_value=True,
-                override=functools.partial(
-                    config_translator_callbacks.overridePathHas,
-                    should_exist='management'),
-            )],
-            '/security/user': [KeyTranslator(
-                translated_keys=['/ksmeta/username'] 
-            )],
-        translated_config = translator.translate(config)
-        translated_config == {
-            'modify_interface': {
-                'ipaddress-eth0': '1.2.3.4',
-                'static-eth0': True 
-            },
-            'ksmeta': {
-                'username': 'root',
-            },
-        }
-    '''
+    """Class to translate origin config to expected dest config."""
 
     def __init__(self, mapping):
-        self.mapping = mapping
-        self.isValid()
+        """Constructor
 
-    def isValid(self):
-        '''Check if COnfigTranslator is valid.'''
-        if not isinstance(self.mapping, dict):
+        :param mapping: dict of config path to :class:`KeyTranslator` instance
+        """
+        self.mapping_ = mapping
+        self._is_valid()
+
+    def __repr__(self):
+        return '%s[mapping=%s]' % (self.__class__.__name__, self.mapping_)
+
+    def _is_valid(self):
+        """Check if ConfigTranslator is valid."""
+        if not isinstance(self.mapping_, dict):
             raise TypeError(
                 'mapping type is %s while expected type is dict: %s' % (
-                    type(self.mapping), self.mapping))
+                    type(self.mapping_), self.mapping_))
 
-        for key, values in self.mapping.items():
+        for key, values in self.mapping_.items():
             if not isinstance(values, list):
                 msg = 'mapping[%s] type is %s while expected type is list: %s'
                 raise TypeError(msg % (key, type(values), values))
+
             for i, value in enumerate(values):
                 if not isinstance(value, KeyTranslator):
                     msg = (
@@ -351,21 +237,19 @@ class ConfigTranslator(object):
                     raise TypeError(msg % (key, i, type(value), value))
 
     def translate(self, config):
-        '''translate config.
+        """Translate config.
 
-        Args:
-            config: any type of data.
+        :param config: configuration to translate.
 
-        Returns:
-            the translated config.
-        '''
+        :returns: the translated configuration.
+        """
         ref = config_reference.ConfigReference(config)
         translated_ref = config_reference.ConfigReference({})
-        for key, values in self.mapping.items():
+        for key, values in self.mapping_.items():
             for value in values:
                 value.translate(ref, key, translated_ref)
-        
-        translated_config = config_reference.getCleanConfig(
+
+        translated_config = config_reference.get_clean_config(
             translated_ref.config)
         logging.debug('translate config\n%s\nto\n%s',
                       config, translated_config)

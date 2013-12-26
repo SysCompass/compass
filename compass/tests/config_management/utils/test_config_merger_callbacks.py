@@ -20,7 +20,7 @@ class TestAssignRoles(unittest2.TestCase):
         maxs = {'control': 1, 'api': 2, 'compute': -1}
         default_min = 1
         exclusives = ['control']
-        assigned = config_merger_callbacks.assignRoles(
+        assigned = config_merger_callbacks.assign_roles(
             None, None, lower_refs, 'roles', roles=roles,
             maxs=maxs,
             default_min=default_min,
@@ -43,7 +43,7 @@ class TestAssignRoles(unittest2.TestCase):
         lower_refs = {}
         for hostid, config in lower_configs.items():
             lower_refs[hostid] = config_reference.ConfigReference(config)
-        assigned = config_merger_callbacks.assignRoles(
+        assigned = config_merger_callbacks.assign_roles(
             None, None, lower_refs, 'roles', roles=roles,
             maxs=maxs, default_min=default_min,
             exclusives=exclusives)
@@ -67,7 +67,7 @@ class TestAssignRoles(unittest2.TestCase):
         lower_refs = {}
         for hostid, config in lower_configs.items():
             lower_refs[hostid] = config_reference.ConfigReference(config)
-        assigned = config_merger_callbacks.assignRoles(
+        assigned = config_merger_callbacks.assign_roles(
             None, None, lower_refs, 'roles', roles=roles,
             maxs=maxs, default_min=default_min,
             exclusives=exclusives, bundles=bundles)

@@ -1,4 +1,7 @@
-'''provider Base class for os installer.'''
+"""Module for interface of os installer.
+
+   .. moduleauthor::: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 
 from compass.config_management.installers import installer
@@ -6,35 +9,46 @@ from compass.utils import setting_wrapper as setting
 
 
 class Installer(installer.Installer):
-    '''Base class for os installer.'''
+    """Interface for os installer."""
     NAME = 'os_installer'
 
-    def getOSes(self):
-        '''interface to get supported oses.
+    def get_oses(self):
+        """virtual method to get supported oses.
 
-        Returns:
-            list of str, each is the supported os name and version.
-        '''
+        :returns: list of str, each is the supported os version.
+        """
         return []
 
 
 INSTALLERS = {}
 
 
-def getInstallerByName(name):
-    '''Get os installer by name.'''
+def get_installer_by_name(name, package_installer):
+    """Get os installer by name.
+
+    :param name: os installer name.
+    :type name: str
+    :param package_installer: package installer instance.
+
+    :returns: :instance of subclass of :class:`Installer`
+    :raises: KeyError
+    """
     if name not in INSTALLERS:
         logging.error('os installer name %s is not in os installers %s',
                       name, INSTALLERS)
         raise KeyError('os installer name %s is not in os INSTALLERS')
 
-    os_installer = INSTALLERS[name]()
+    os_installer = INSTALLERS[name](package_installer)
     logging.debug('got os installer %s', os_installer)
     return os_installer
 
 
 def register(os_installer):
-    '''Register os installer.'''
+    """Register os installer.
+
+    :param os_installer: subclass of :class:`Installer`
+    :raises: KeyError
+    """
     if os_installer.NAME in INSTALLERS:
         logging.error(
             'os installer %s is already registered in INSTALLERS %s',
@@ -46,6 +60,6 @@ def register(os_installer):
     INSTALLERS[os_installer.NAME] = os_installer
 
 
-def getInstaller():
-    '''Get default os installer.'''
-    return getInstallerByName(setting.OS_INSTALLER)
+def get_installer(package_installer):
+    """Get default os installer from compass setting."""
+    return get_installer_by_name(setting.OS_INSTALLER, package_installer)

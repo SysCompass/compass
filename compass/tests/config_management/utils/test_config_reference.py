@@ -9,16 +9,12 @@ class TestConfigReference(unittest2.TestCase):
     def test_init(self):
         config = {'1': {'2': 3, '10': {}}, '4': [5, 6, 7], '8': 8}
         ref = config_reference.ConfigReference(config)
-        self.assertIsNone(ref.parent)
-        self.assertIsNone(ref.parent_key)
         config2 = {'5': {'6': 6}}
         ref2 = config_reference.ConfigReference(config2['5'], ref, '5')
         expected_config = deepcopy(config)
-        util.mergeDict(expected_config, config2)
+        util.merge_dict(expected_config, config2)
         self.assertEqual(ref.config, expected_config)
         self.assertEqual(id(ref.config['5']), id(ref2.config))
-        self.assertEqual(ref2.parent, ref)
-        self.assertEqual(ref2.parent_key, '5')
         config3 = {'5': {'7': 7}}
         ref3 = config_reference.ConfigReference(config3['5'], ref, '5')
         self.assertEqual(id(ref.config['5']), id(ref3.config))
@@ -53,15 +49,15 @@ class TestConfigReference(unittest2.TestCase):
     def test_refs(self):
         config = {'1': {'2': 3, '10': {}}, '4': [5, 6, 7], '8': 8, '88': 88}
         ref = config_reference.ConfigReference(config)
-        refkeys = ref.refKeys('1')
+        refkeys = ref.ref_keys('1')
         self.assertEqual(set(refkeys), set(['1']))
-        refkeys = ref.refKeys('/1/*')
+        refkeys = ref.ref_keys('/1/*')
         self.assertEqual(set(refkeys), set(['/1/2', '/1/10']))
-        refkeys = ref.refKeys('*')
+        refkeys = ref.ref_keys('*')
         self.assertEqual(set(refkeys), set(['1', '4', '8', '88']))
-        refkeys = ref.refKeys('8*')
+        refkeys = ref.ref_keys('8*')
         self.assertEqual(set(refkeys), set(['8', '88']))
-        self.assertRaises(KeyError, ref.refKeys, '')
+        self.assertRaises(KeyError, ref.ref_keys, '')
 
     def test_contains(self):
         config = {'1': {'2': '3', '10': {}}, '4': [5, 6, 7], '8': 8}
@@ -119,7 +115,7 @@ class TestConfigReference(unittest2.TestCase):
 
         ref = config_reference.ConfigReference(config)
         config2 = {'9': 9, '10': {'10': 10}}
-        util.mergeDict(expected_config, config2)
+        util.merge_dict(expected_config, config2)
         ref.update(config2)
         self.assertEqual(ref.config, expected_config)
         ref.update(10, False)
@@ -132,6 +128,7 @@ class TestConfigReference(unittest2.TestCase):
         ref = config_reference.ConfigReference(config)
         keys = ref.keys()
         self.assertEqual(set(keys), set(['1', '1/2', '1/10', '4', '8']))
+
 
 if __name__ == '__main__':
     unittest2.main()

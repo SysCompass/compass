@@ -1,40 +1,52 @@
-'''compass api client library.'''
+"""Compass api client library.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 import json
 import requests
 
 
 class Client(object):
-    '''wrapper for compass restful api.'''
+    """wrapper for compass restful api.
 
-    def __init__(self, url, auth=None, cert=None, cookies=None,
-                headers=None, proxies=None, stream=None):
-        self.url = url
-        self.session = requests.Session()
-        if auth:
-            self.session.auth = auth
+    .. note::
+       Every api client method returns (status as int, resp as dict).
+       If the api succeeds, the status is 2xx, the resp includes
+       {'status': 'OK'} and other keys depend on method.
+       If the api fails, the status is 4xx, the resp includes {
+       'status': '...', 'message': '...'}
+    """
 
-        if cert:
-            self.session.cert = cert
+    def __init__(self, url, headers=None, proxies=None, stream=None):
+        """Restful api client initialization.
 
-        if cookies:
-            self.session.cookies = cookies
-
+        :param url: url to the compass web service.
+        :type url: str.
+        :param headers: http header sent in each restful request.
+        :type headers: dict of header name (str) to heade value (str).
+        :param proxies: the proxy address for each protocol.
+        :type proxies: dict of protocol (str) to proxy url (str).
+        :param stream: wether the restful response should be streamed.
+        :type stream: bool.
+        """
+        self.url_ = url
+        self.session_ = requests.Session()
         if headers:
-            self.session.headers = headers
+            self.session_.headers = headers
 
         if proxies is not None:
-            self.session.proxies = proxies
+            self.session_.proxies = proxies
 
         if stream is not None:
-            self.session.stream = stream
+            self.session_.stream = stream
 
     def __del__(self):
-        self.session.close()
+        self.session_.close()
 
     @classmethod
-    def get_response(cls, resp):
-        '''decapsulate the resp to status code and python formatted data.'''
+    def _get_response(cls, resp):
+        """decapsulate the resp to status code and python formatted data."""
         resp_obj = {}
         try:
             resp_obj = resp.json()
@@ -47,70 +59,56 @@ class Client(object):
 
         return resp.status_code, resp_obj
 
-    def get(self, relative_url, params=None):
-        '''encapsulate get method.'''
-        url = '%s%s' % (self.url, relative_url)
+    def _get(self, relative_url, params=None):
+        """encapsulate get method."""
+        url = '%s%s' % (self.url_, relative_url)
         if params:
-            resp = self.session.get(url, params=params)
+            resp = self.session_.get(url, params=params)
         else:
-            resp = self.session.get(url)
+            resp = self.session_.get(url)
 
-        return self.get_response(resp)
+        return self._get_response(resp)
 
-    def post(self, relative_url, data=None):
-        '''encapsulate post method.'''
-        url = '%s%s' % (self.url, relative_url)
+    def _post(self, relative_url, data=None):
+        """encapsulate post method."""
+        url = '%s%s' % (self.url_, relative_url)
         if data:
-            resp = self.session.post(url, json.dumps(data))
+            resp = self.session_.post(url, json.dumps(data))
         else:
-            resp = self.session.post(url)
+            resp = self.session_.post(url)
 
-        return self.get_response(resp)
+        return self._get_response(resp)
 
-    def put(self, relative_url, data=None):
-        '''encapsulate put method.'''
-        url = '%s%s' % (self.url, relative_url)
+    def _put(self, relative_url, data=None):
+        """encapsulate put method."""
+        url = '%s%s' % (self.url_, relative_url)
         if data:
-            resp = self.session.put(url, json.dumps(data))
+            resp = self.session_.put(url, json.dumps(data))
         else:
-            resp = self.session.put(url)
+            resp = self.session_.put(url)
 
-        return self.get_response(resp)
+        return self._get_response(resp)
 
-    def delete(self, relative_url):
-        '''encapsulate delete method.'''
-        url = '%s%s' % (self.url, relative_url)
-        return self.get_response(self.session.delete(url))
+    def _delete(self, relative_url):
+        """encapsulate delete method."""
+        url = '%s%s' % (self.url_, relative_url)
+        return self._get_response(self.session_.delete(url))
 
     def get_switches(self, switch_ips=None, switch_networks=None, limit=None):
-        '''
-           Get the details of switches filtered by switch_ips,
-           switch_networks. The returned switches is limited by limit.
+        """List details for switches.
 
-        Args:
-            switch_ips: list of str. Each is as 'xxx.xxx.xxx.xxx'.
-                        Only the switch(es) with the IP(s) will be returned.
-            switch_networks: list of str. Each is as 'xxx.xxx.xxx.xxx/xx'.
-                             Only the switch(es) with the IP(s) will
-                             be returned.
-            limit: int, Only the switch(es) with the IP(s) will be returned.
+        .. note::
+           The switches can be filtered by switch_ips, siwtch_networks and
+           limit. These params can be None or missing. If the param is None
+           or missing, that filter will be ignored.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200.
-                    resp_obj = {
-                        'status': 'OK',
-                        'switches': [{
-                            'id': 1,
-                            'state': 'under_monitoring',
-                        }]
-                    }
-            error: status_code = 400 (UserInvalidUsage)
-                   resp_obj = {
-                       'status': '...'
-                       'message': '...'
-                   }
-        '''
+        :param switch_ips: Filter switch(es) with IP(s).
+        :type switch_ips: list of str. Each is as 'xxx.xxx.xxx.xxx'.
+        :param switch_networks: Filter switche(es) with network(s).
+        :type switch_networks: list of str. Each is as 'xxx.xxx.xxx.xxx/xx'.
+        :param limit: int, The maximum number of switches to return.
+        :type limit: int. 0 means unlimited.
+        """
         params = {}
         if switch_ips:
             params['switchIp'] = switch_ips
@@ -120,67 +118,36 @@ class Client(object):
 
         if limit:
             params['limit'] = limit
-        return self.get('/api/switches', params=params)
+        return self._get('/api/switches', params=params)
 
     def get_switch(self, switch_id):
-        '''Lists details for a specified switch
+        """Lists details for a specified switch.
 
-        Args:
-            switch_id: int, switch id.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'switch': {
-                            'id': 1,
-                            'state': 'under_monitoring',
-                        },
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-        '''
-        return self.get('/api/switches/%s' % switch_id)
+        :param switch_id: switch id.
+        :type switch_id: int.
+        """
+        return self._get('/api/switches/%s' % switch_id)
 
     def add_switch(self, switch_ip, version=None, community=None,
                    username=None, password=None):
-        '''
-           Create a switch by providing a switch IP address and associated
-           credentials.  The POST action shall trigger switch polling. During
-           the polling process, MAC address of the devices connected to the
+        """Create a switch with specified details.
+
+        .. note::
+           It will trigger switch polling if successful. During
+           the polling, MAC address of the devices connected to the
            switch will be learned by SNMP or SSH.
 
-        Args:
-            switch_ip: str, The switch IP address.
-            version: str, SNMP version when accessing the specified
-                     switch by SNMP.
-            community: SNMP community when accessing the specified
-                       switch by SNMP.
-            username: SSH username when accessing the specified
-                      switch by SSH.
-            password: SSH password when accessing the specified
-                      switch by SSH.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 202 (ObjectDoesNotExist)
-                    resp_obj = {
-                        'status': 'accepted',
-                        'switch': {
-                            'id': 1,
-                            'state': 'not_reached',
-                        },
-                    }
-            error: status_code = 409 (ObjectDuplicateError) or
-                   status_code = 400 (UserInvalidUsage)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
+        :param switch_ip: the switch IP address.
+        :type switch_ip: str, as xxx.xxx.xxx.xxx.
+        :param version: SNMP version when using SNMP to poll switch.
+        :type version: str, one in ['v1', 'v2c', 'v3']
+        :param community: SNMP community when using SNMP to poll switch.
+        :type community: str, usually 'public'.
+        :param username: SSH username when using SSH to poll switch.
+        :type username: str.
+        :param password: SSH password when using SSH to poll switch.
+        :type password: str.
+        """
         data = {}
         data['switch'] = {}
         data['switch']['ip'] = switch_ip
@@ -197,43 +164,30 @@ class Client(object):
         if password:
             data['switch']['credential']['password'] = password
 
-        return self.post('/api/switches', data=data)
+        return self._post('/api/switches', data=data)
 
     def update_switch(self, switch_id, ip_addr=None,
                       version=None, community=None,
                       username=None, password=None):
-        '''
-           Updates the credentials of a specified switch, triggering polling
-           switch action once update is successful.
+        """Updates a switch with specified details.
 
-        Args:
-            switch_id: int, switch id
-            ip_addr: str, as 'xxx.xxx.xxx.xxx' format. The switch IP address.
-            version: str, one in ['v1', 'v2c'].
-                     SNMP version when accessing the specified switch by SNMP.
-            community: str, generally 'public'.
-                       SNMP community when accessing the specified switch
-                       by SNMP.
-            username: str, SSH username when accessing the specified
-                      switch by SSH.
-            password: str, SSH password when accessing the specified
-                      switch by SSH.
+        .. note::
+           It will trigger switch polling if successful. During
+           the polling, MAC address of the devices connected to the
+           switch will be learned by SNMP or SSH.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 202
-                    resp_obj = {
-                        'status': 'accepted',
-                        'switch': {
-                            'state': 'not_reached',
-                        },
-                    }
-            error: status_code = 404,
-                   resp_obj = {
-                       'status': '...'
-                       'message': '...',
-                   }
-        '''
+        :param switch_id: switch id
+        :type switch_id: int.
+        :param ip_addr: the switch ip address.
+        :type ip_addr: str, as 'xxx.xxx.xxx.xxx' format.
+        :param version: SNMP version when using SNMP to poll switch.
+        :type version: str, one in ['v1', 'v2c', 'v3'].
+        :param community: SNMP community when using SNMP to poll switch.
+        :type community: str, usually be 'public'.
+        :param username: username when using SSH to poll switch.
+        :type username: str.
+        :param password: password when using SSH to poll switch.
+        """
         data = {}
         data['switch'] = {}
         if ip_addr:
@@ -252,47 +206,30 @@ class Client(object):
         if password:
             data['switch']['credential']['password'] = password
 
-        return self.put('/api/switches/%s' % switch_id, data=data)
+        return self._put('/api/switches/%s' % switch_id, data=data)
 
     def delete_switch(self, switch_id):
-        '''Not implemented in api.'''
-        return self.delete('api/switches/%s' % switch_id)
+        """Not implemented in api."""
+        return self._delete('api/switches/%s' % switch_id)
 
     def get_machines(self, switch_id=None, vlan_id=None,
                      port=None, limit=None):
-        '''
-           Queries and lists the details for the device(s)
-           filtered by switch ID or a switch IP network, and returns
-           a specified number of results as designated by limit.
+        """Get the details of machines.
 
-        Args:
-            switch_id: int, Device(s) connected to the switch with
-                            this ID will be returned.
-            vlan_id: int, Device(s) belonging to this Vlan ID
-                     will be returned.
-            port: int, Device(s) having this Port number will be
-                       returned
-            limit: int, Up to this number of results will be returned.
+        .. note::
+           The machines can be filtered by switch_id, vlan_id, port
+           and limit. These params can be None or missing. If the param
+           is None or missing, the filter will be ignored.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'machines': [{
-                            'mac': '28:6e:d4:47:c8:6c',
-                            'vlan': 1,
-                            'id': 30,
-                            'port': 1,
-                            'switch_ip': '172.29.8.40'
-                        }],
-                     }
-            error: status_code = 400 (UserInvalidUsage)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
+        :param switch_id: Return machine(s) connected to the switch.
+        :type switch_id: int.
+        :param vlan_id: Return machine(s) belonging to the vlan.
+        :type vlan_id: int.
+        :param port: Return machine(s) connect to the port.
+        :type port: int.
+        :param limit: the maximum number of machines will be returned.
+        :type limit: int. 0 means no limit.
+        """
         params = {}
         if switch_id:
             params['switchId'] = switch_id
@@ -306,388 +243,218 @@ class Client(object):
         if limit:
             params['limit'] = limit
 
-        return self.get('/api/machines', params=params)
+        return self._get('/api/machines', params=params)
 
     def get_machine(self, machine_id):
-        '''Lists the details for a specified device.
+        """Lists the details for a specified machine.
 
-        Args:
-            machine_id: int, The Device with this ID will be return.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'machine': {
-                            'mac': '28:6e:d4:47:c8:6c',
-                            'vlan': 1,
-                            'id': 30,
-                            'port': 1,
-                            'switch_ip': '172.29.8.40'
-                        }
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
-        return self.get('/api/machines/%s' % machine_id)
+        :param machine_id: Return machine with the id.
+        :type machine_id: int.
+        """
+        return self._get('/api/machines/%s' % machine_id)
 
     def get_clusters(self):
-        '''Lists the details for all the clusters
-
-        Args:
-            No args.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'clusters': [{
-                            'id': 1,
-                            'clusterName': 'cluster1',
-                        }],
-                    }
-        '''
-        return self.get('/api/clusters')
+        """Lists the details for all clusters.
+        """
+        return self._get('/api/clusters')
 
     def get_cluster(self, cluster_id):
-        '''Lists the details of the specified cluster.
+        """Lists the details of the specified cluster.
 
-        Args:
-            cluster_id: int, The unique identifier of the cluster.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'cluster': {
-                            'id': 1,
-                            'clusterName': 'cluster1',
-                        },
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
-        return self.get('/api/clusters/%s' % cluster_id)
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        """
+        return self._get('/api/clusters/%s' % cluster_id)
 
     def add_cluster(self, cluster_name, adapter_id):
-        '''Creates a cluster by user-specified name.
+        """Creates a cluster by specified name and given adapter id.
 
-        Args:
-            cluster_name: str, The unique name of the cluster
-                          specified by the user.
-            adapter_id: int, The unique identifier of adapter.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code  = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'cluster': {
-                            'id': 1,
-                            'name': 'cluster1',
-                        },
-                    }
-            error: status_code = 409 (ObjectDuplicateError)
-                   resp_obj = {
-                       'status': '...',
-                       'mesage': '...',
-                   }
-        '''
+        :param cluster_name: cluster name.
+        :type cluster_name: str.
+        :param adapter_id: adapter id.
+        :type adapter_id: int.
+        """
         data = {}
         data['cluster'] = {}
         data['cluster']['name'] = cluster_name
         data['cluster']['adapter_id'] = adapter_id
-        return self.post('/api/clusters', data=data)
+        return self._post('/api/clusters', data=data)
 
     def add_hosts(self, cluster_id, machine_ids):
-        '''add the specified machine(s) as the host(s) to the cluster.
+        """add the specified machine(s) as the host(s) to the cluster.
 
-        Args:
-            cluster_id: int, The unique identifier of the cluster
-            machine_ids: list of int, each is the id of one machine.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'clusterHosts': [{
-                            'id': 1,
-                            'machine_id': 1,
-                        }],
-                    }
-            error: status_code = 400 (UserInvalidUsage),
-                                 404 (ObjectDoesNotExist)
-                                 409 (ObjectDuplicateError)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        :param machine_ids: machine ids to add to cluster.
+        :type machine_ids: list of int, each is the id of one machine.
+        """
         data = {}
         data['addHosts'] = machine_ids
-        return self.post('/api/clusters/%s/action' % cluster_id, data=data)
+        return self._post('/api/clusters/%s/action' % cluster_id, data=data)
 
     def remove_hosts(self, cluster_id, host_ids):
-        '''remove the specified machine(s) as the host(s) from the cluster.
+        """remove the specified host(s) from the cluster.
 
-        Args:
-            cluster_id: int, The unique identifier of the cluster
-            host_ids: list of int, each is the id of one host.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'clusterHosts': [{
-                            'id': 1,
-                            'machine_id': 1,
-                        }],
-                    }
-            error: status_code = 400 (UserInvalidUsage),
-                                 404 (ObjectDoesNotExist)
-                                 409 (ObjectDuplicateError)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        :param host_ids: host ids to remove from cluster.
+        :type host_ids: list of int, each is the id of one host.
+        """
         data = {}
         data['removeHosts'] = host_ids
-        return self.post('/api/clusters/%s/action' % cluster_id, data=data)
+        return self._post('/api/clusters/%s/action' % cluster_id, data=data)
 
     def replace_hosts(self, cluster_id, machine_ids):
-        '''replace the cluster hosts with the specified machine(s).
+        """replace the cluster hosts with the specified machine(s).
 
-        Args:
-            cluster_id: int, The unique identifier of the cluster
-            machine_ids: list of int, each is the id of one machine.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'clusterHosts': [{
-                            'id': 1,
-                            'machine_id': 1,
-                        }],
-                    }
-            error: status_code = 400 (UserInvalidUsage),
-                                 404 (ObjectDoesNotExist)
-                                 409 (ObjectDuplicateError)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
+        :param cluster_id: int, The unique identifier of the cluster.
+        :type cluster_id: int.
+        :param machine_ids: the machine ids to replace the hosts in cluster.
+        :type machine_ids: list of int, each is the id of one machine.
+        """
         data = {}
         data['replaceAllHosts'] = machine_ids
-        return self.post('/api/clusters/%s/action' % cluster_id, data=data)
+        return self._post('/api/clusters/%s/action' % cluster_id, data=data)
 
     def deploy_hosts(self, cluster_id):
-        '''deploy the cluster..
+        """Deploy the cluster.
 
-        Args:
-            cluster_id: int, The unique identifier of the cluster
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'accepted',
-                        'deployment': '/progress/cluster/1',
-                    }
-            error: status_code = 400 (UserInvalidUsage),
-                                 404 (ObjectDoesNotExist)
-                                 409 (ObjectDuplicateError)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
+        :param cluster_id: The unique identifier of the cluster
+        :type cluster_id: int.
+        """
         data = {}
         data['deploy'] = {}
-        return self.post('/api/clusters/%s/action' % cluster_id, data=data)
+        return self._post('/api/clusters/%s/action' % cluster_id, data=data)
 
     @classmethod
     def parse_security(cls, kwargs):
-        '''parse the arguments to security data.'''
+        """parse the arguments to security data."""
         data = {}
         for key, value in kwargs.items():
-            if key.endswith('_username'):
-                key_name = key[:-len('_username')]
-                data.setdefault(
-                    '%s_credentials' % key_name, {})['username'] = value
-            elif key.endswith('_password'):
-                key_name = key[:-len('_password')]
-                data.setdefault(
-                    '%s_credentials' % key_name, {})['password'] = value
+            if '_' not in key:
+                continue
+            key_name, key_value = key.split('_', 1)
+            data.setdefault(
+                '%s_credentials' % key_name, {})[key_value] = value
 
         return data
 
     def set_security(self, cluster_id, **kwargs):
-        '''Update the cluster security configuration.
+        """Update the cluster security configuration.
 
-        Args:
-            cluster_id: int, cluster id.
-            <security_name>_username: str, username of the security name.
-            <security_name>_password: str, passowrd of the security name.
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        :param <security_name>_username: username of the security name.
+        :type <security_name>_username: str.
+        :param <security_name>_password: passowrd of the security name.
+        :type <security_name>_password: str.
 
-            security_name should be one of ['server', 'service', 'console'].
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code  = 200
-                    resp_obj = {
-                        'status': 'OK',
-                    }
-            error: status_code = 400 (UserInvalidUsage, InputMissingError),
-                                 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
+        .. note::
+           security_name should be one of ['server', 'service', 'console'].
+        """
         data = {}
         data['security'] = self.parse_security(kwargs)
-        return self.put('/api/clusters/%s/security' % cluster_id, data=data)
+        return self._put('/api/clusters/%s/security' % cluster_id, data=data)
 
     @classmethod
-    def parse_networks(cls, kwargs):
-        '''parse arguments to network data.'''
+    def parse_networking(cls, kwargs):
+        """parse arguments to network data."""
         data = {}
+        possible_keys = [
+            'nameservers', 'search_path', 'gateway', 'proxy', 'ntp_server']
         for key, value in kwargs.items():
-            if key.endswith('_interface'):
-                key_name = key[:-len('_interface')]
-                data[key_name] = value
+            if key in possible_keys:
+                data.setdefault('global', {})[key] = value
+            else:
+                if '_' not in key:
+                    continue
+                key_name, key_value = key.split('_', 1)
+                data.setdefault(
+                    'interfaces', {}).setdefault(
+                    key_name, {})[key_value] = value
 
         return data
 
-    def set_networking(self, cluster_id,
-                       global_setting, **kwargs):
-        '''Update the cluster network configuration.
+    def set_networking(self, cluster_id, **kwargs):
+        """Update the cluster network configuration.
 
-        Args:
-            cluster_id: int, cluster id.
-            global_setting: dict, global network setting.
-                            the key should be:
-                            'nameservers': str, comma seperated
-                                           nameserver ip addr.
-                            'search_path': str, dns name search path.
-                            'gateway': str, gateway ip addr.
-                            'proxy': str, optional. proxy url.
-                            'ntp_server': str, optional, ip addr of
-                                          ntp server.
-            <interface_name>_intereface: dict, interface setting
-                                         for interface_name.
-                                         the interface name should be in:
-                                         ['management', 'tenant', 'public',
-                                          'storage']
-                                         the key should be:
-                                         'ip_start': str, start ip addr.
-                                         'ip_end': str, end ip addr.
-                                         'netmask': str, net mask of the
-                                                    interface.
-                                         'nic': str, physical if name.
-                                         'promisc': 0 or 1. if the physical
-                                                    if in promiscous mode.
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        :param nameservers: comma seperated nameserver ip address.
+        :type nameservers: str.
+        :param search_path: comma seperated dns name search path.
+        :type search_path: str.
+        :param gateway: gateway ip address for routing to outside.
+        :type gateway: str.
+        :param proxy: proxy url for downloading packages.
+        :type proxy: str.
+        :param ntp_server: ntp server ip address to sync timestamp.
+        :type ntp_server: str.
+        :param <interface>_ip_start: start ip address to host's interface.
+        :type <interface>_ip_start: str.
+        :param <interface>_ip_end: end ip address to host's interface.
+        :type <interface>_ip_end: str.
+        :param <interface>_netmask: netmask to host's interface.
+        :type <interface>_netmask: str.
+        :param <interface>_nic: host physical interface name.
+        :type <interface>_nic: str.
+        :param <interface>_promisc: if the interface in promiscous mode.
+        :type <interface>_promisc: int, 0 or 1.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code  = 200
-                    resp_obj = {
-                        'status': 'OK',
-                    }
-            error: status_code = 400 (UserInvalidUsage, InputMissingError),
-                                 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
+        .. note::
+           interface should be one of ['management', 'tenant',
+           'public', 'storage'].
+        """
         data = {}
-        data['networking'] = {}
-        data['networking']['global'] = global_setting
-        data['networking']['interfaces'] = self.parse_networks(kwargs)
-        return self.put('/api/clusters/%s/networking' % cluster_id, data=data)
+        data['networking'] = self.parse_networking(kwargs)
+        return self._put('/api/clusters/%s/networking' % cluster_id, data=data)
 
     @classmethod
     def parse_partition(cls, kwargs):
-        '''parse arguments to partition data.'''
+        """parse arguments to partition data."""
         data = {}
         for key, value in kwargs.items():
-            if key.endswith('_partition_percentage'):
-                key_name = key[:-len('_partition_percentage')]
+            if key.endswith('_percentage'):
+                key_name = key[:-len('_percentage')]
                 data[key_name] = '%s%%' % value
-            elif key.endswitch('_partition_mbytes'):
-                key_name = key[:-len('_partition_mbytes')]
+            elif key.endswitch('_mbytes'):
+                key_name = key[:-len('_mbytes')]
                 data[key_name] = str(value)
 
-        partition = ';'.join([
+        return ';'.join([
             '/%s %s' % (key, value) for key, value in data.items()
         ])
-        return partition
 
     def set_partition(self, cluster_id, **kwargs):
-        '''Update the cluster partition configuration.
+        """Update the cluster partition configuration.
 
-        Args:
-            cluster_id: int, cluster id.
-            <partition_name>_partition_percentage: float between 0 to 100.
-                                                   percentage the partiton in
-                                                   the total volume.
-            <partition_name>_partition_mbytes: int, mbytes in partition.
-            partition_name should be ['home', 'var', 'tmp']
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        :param <partition>_percentage: the partiton percentage.
+        :type <partition>_percentage: float between 0 to 100.
+        :param <partition>_mbytes: the partition mbytes.
+        :type <partition>_mbytes: int.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code  = 200
-                    resp_obj = {
-                        'status': 'OK',
-                    }
-            error: status_code = 400 (UserInvalidUsage, InputMissingError),
-                                 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
+        .. note::
+           partition should be one of ['home', 'var', 'tmp'].
+        """
         data = {}
         data['partition'] = self.parse_partition(kwargs)
-        return self.put('/api/clusters/%s/partition' % cluster_id, data=data)
+        return self._put('/api/clusters/%s/partition' % cluster_id, data=data)
 
     def get_hosts(self, hostname=None, clustername=None):
-        '''
-           Queries and lists the details for all hosts or the host(s)
-           specified by hostname and(or) clustername.
+        """Lists the details of hosts.
 
-        Args:
-            hostname: str, The name of a host.
-            clustername: str, The name of a cluster.
+        .. note::
+           The hosts can be filtered by hostname, clustername.
+           These params can be None or missing. If the param
+           is None or missing, the filter will be ignored.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'cluster_hosts': [{
-                            'id': 1,
-                            'hostname': 'host1',
-                            'mutable': true,
-                        ]},
-                    }
-        '''
+        :param hostname: The name of a host.
+        :type hostname: str.
+        :param clustername: The name of a cluster.
+        :type clustername: str.
+        """
         params = {}
         if hostname:
             params['hostname'] = hostname
@@ -695,299 +462,149 @@ class Client(object):
         if clustername:
             params['clustername'] = clustername
 
-        return self.get('/api/clusterhosts', params=params)
+        return self._get('/api/clusterhosts', params=params)
 
     def get_host(self, host_id):
-        '''Lists the details for the specified host.
+        """Lists the details for the specified host.
 
-        Args:
-            No args.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'cluster_host': {
-                            'id': 1,
-                            'hostname': 'host1',
-                            'mutable': true,
-                        },
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'satus': '...',
-                       'message': '...',
-                   }
-        '''
-        return self.get('/api/clusterhosts/%s' % host_id)
+        :param host_id: host id.
+        :type host_id: int.
+        """
+        return self._get('/api/clusterhosts/%s' % host_id)
 
     def get_host_config(self, host_id):
-        '''Lists the details of the config for the specified host.
+        """Lists the details of the config for the specified host.
 
-        Args:
-            host_id: int, host id.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'config': {
-                            'hostid': 1,
-                            'hostname': 'host1',
-                            'networking': {...},
-                            'security': {...},
-                            'partition': {...},
-                            'roles': [...],
-                        },
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'satus': '...',
-                       'message': '...',
-                   }
-        '''
-        return self.get('/api/clusterhosts/%s/config' % host_id)
+        :param host_id: host id.
+        :type host_id: int.
+        """
+        return self._get('/api/clusterhosts/%s/config' % host_id)
 
     def update_host_config(self, host_id, hostname=None,
-                           networking_global_setting=None,
                            roles=None, **kwargs):
-        '''
-           Updates one or more editable attributes in config for
-           the specified host.
+        """Updates config for the host.
 
-        Args:
-            host_id: int, host id.
-            hostname: str, host name.
-            networking_global_setting: dict, global network setting.
-            roles: list of str, roles the host act as in the cluster.
-            <security_name>_username: str, username of the <security_name>.
-            <security_name>_password: str, password of the <security_name>.
-            <interface_name>_interface: dict network interface configuration
-                                        for <interface_name>.
-            <partition_name>_partition_percentage: float, partition percentage
-                                                   for <partition_name>.
-            <partition_name>_partition_mbytes: int, partition mbytes for
-                                               <partition_name>
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                                 400 (UserInvalidUsage,  InputMissingError)
-                   resp_obj = {
-                       'satus': '...',
-                       'message': '...',
-                   }
-        '''
+        :param host_id: host id.
+        :type host_id: int.
+        :param hostname: host name.
+        :type hostname: str.
+        :param security_<security>_username: username of the security name.
+        :type security_<security>_username: str.
+        :param security_<security>_password: passowrd of the security name.
+        :type security_<security>_password: str.
+        :param networking_nameservers: comma seperated nameserver ip address.
+        :type networking_nameservers: str.
+        :param networking_search_path: comma seperated dns name search path.
+        :type networking_search_path: str.
+        :param networking_gateway: gateway ip address for routing to outside.
+        :type networking_gateway: str.
+        :param networking_proxy: proxy url for downloading packages.
+        :type networking_proxy: str.
+        :param networking_ntp_server: ntp server ip address to sync timestamp.
+        :type networking_ntp_server: str.
+        :param networking_<interface>_ip: ip address to host interface.
+        :type networking_<interface>_ip: str.
+        :param networking_<interface>_netmask: netmask to host's interface.
+        :type networking_<interface>_netmask: str.
+        :param networking_<interface>_nic: host physical interface name.
+        :type networking_<interface>_nic: str.
+        :param networking_<interface>_promisc: if the interface is promiscous.
+        :type networking_<interface>_promisc: int, 0 or 1.
+        :param partition_<partition>_percentage: the partiton percentage.
+        :type partition_<partition>_percentage: float between 0 to 100.
+        :param partition_<partition>_mbytes: the partition mbytes.
+        :type partition_<partition>_mbytes: int.
+        :param roles: host assigned roles in the cluster.
+        :type roles: list of str.
+        """
         data = {}
         if hostname:
             data['hostname'] = hostname
 
-        if networking_global_setting:
-            data.setdefault('networking', {})['global'] = (
-                networking_global_setting)
+        sub_kwargs = {}
+        for key, value in kwargs.items():
+            key_name, key_value = key.split('_', 1)
+            sub_kwargs.setdefault(key_name, {})[key_value] = value
 
-        networking_interfaces = self.parse_networks(kwargs)
-        if networking_interfaces:
-            data.setdefault('networking', {})['interfaces'] = (
-                networking_interfaces)
+        if 'security' in sub_kwargs:
+            data['security'] = self.parse_security(sub_kwargs['security'])
 
-        security = self.parse_security(kwargs)
-        if security:
-            data['security'] = security
-
-        partition = self.parse_partition(kwargs)
-        if partition:
-            data['partition'] = partition
+        if 'networking' in sub_kwargs:
+            data['networking'] = self.parse_networking(
+                sub_kwargs['networking'])
+        if 'partition' in sub_kwargs:
+            data['partition'] = self.parse_partition(sub_kwargs['partition'])
 
         if roles:
             data['roles'] = roles
 
-        return self.put('/api/clusterhosts/%s/config' % host_id, data)
+        return self._put('/api/clusterhosts/%s/config' % host_id, data)
 
     def delete_from_host_config(self, host_id, delete_key):
-        '''
-           Deletes one of editable attributes (as sub_key)
-           in config for the specified host.
+        """Deletes one key in config for the host.
 
-        Args:
-            host_id: int, host id.
-            delete_key: str, the key in config to delete.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                                 400 (UserInvalidUsage)
-                   resp_obj = {
-                       'satus': '...',
-                       'message': '...',
-                   }
-        '''
-        return self.delete('/api/clusterhosts/%s/config/%s' % (
+        :param host_id: host id.
+        :type host_id: int.
+        :param delete_key: the key in host config to be deleted.
+        :type delete_key: str.
+        """
+        return self._delete('/api/clusterhosts/%s/config/%s' % (
             host_id, delete_key))
 
     def get_adapters(self, name=None):
-        '''Lists details for the specified adapters by name.
+        """Lists details of adapters.
 
-        Args:
-            name: string, adapter name.
+        .. note::
+           the adapter can be filtered by name of name is given and not None.
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'adapters': [{
-                            'id': 1,
-                            'name': 'CentOS_Openstack',
-                            'os': 'CentOS',
-                            'target_system': 'Openstack',
-                        }]
-                    }
-        '''
+        :param name: adapter name.
+        :type name: str.
+        """
         params = {}
         if name:
             params['name'] = name
 
-        return self.get('/api/adapters', params=params)
+        return self._get('/api/adapters', params=params)
 
     def get_adapter(self, adapter_id):
-        '''Lists details for the specified adapter.
+        """Lists details for the specified adapter.
 
-        Args:
-            adapter_id: int, adapter id.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'adapter': {
-                            'id': 1,
-                            'name': 'CentOS_Openstack',
-                            'os': 'CentOS',
-                            'target_system': 'Openstack',
-                        }
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
-        return self.get('/api/adapters/%s' % adapter_id)
+        :param adapter_id: adapter id.
+        :type adapter_id: int.
+        """
+        return self._get('/api/adapters/%s' % adapter_id)
 
     def get_adapter_roles(self, adapter_id):
-        '''Lists details of roles for the specified adapter
+        """Lists roles to assign to hosts for the specified adapter.
 
-        Args:
-            adapter_id: int, adapter id.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'roles': [{
-                            'name': '...',
-                            'description': '...',
-                        }]
-                    }
-            error': status_code = 404 (ObjectDoesNotExist)
-                    resp_obj = {
-                        'status': '...',
-                        'message': '...'
-                    }
-        '''
-        return self.get('/api/adapters/%s/roles' % adapter_id)
+        :param adapter_id: adapter id.
+        :type adapter_id: int.
+        """
+        return self._get('/api/adapters/%s/roles' % adapter_id)
 
     def get_host_installing_progress(self, host_id):
-        '''Lists progress details for the specified host.
+        """Lists progress details for the specified host.
 
-        Args:
-            host_id: int, host id.
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'progress': {
-                            'id': 10,
-                            'state': 'INSTALLING',
-                            'percentage': 0.3,
-                            'message': '...',
-                            'severity': 'INFO',
-                        }
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
-        return self.get('/api/clusterhosts/%s/progress' % host_id)
+        :param host_id: host id.
+        :type host_id: int.
+        """
+        return self._get('/api/clusterhosts/%s/progress' % host_id)
 
     def get_cluster_installing_progress(self, cluster_id):
-        '''Lists progress details for the specified cluster.
+        """Lists progress details for the specified cluster.
 
-        Args:
-            cluster_id: int, cluster id.
+        :param cluster_id: cluster id.
+        :param cluster_id: int.
+        """
 
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'progress': {
-                            'id': 10,
-                            'state': 'INSTALLING',
-                            'percentage': 0.3,
-                            'messages': ['...'],
-                            'severity': 'INFO',
-                        }
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...',
-                   }
-        '''
-
-        return self.get('/api/clusters/%s/progress' % cluster_id)
+        return self._get('/api/clusters/%s/progress' % cluster_id)
 
     def get_dashboard_links(self, cluster_id):
-        '''
-           Lists links for dashboards of the systems deployed
-           on the specified cluster successfully
+        """Lists links for dashboards of deployed cluster.
 
-        Args:
-            cluster_id: int, cluster id
-
-        Returns:
-            status_code as int, resp_obj as dict.
-            normal: status_code = 200
-                    resp_obj = {
-                        'status': 'OK',
-                        'dashboardlinks': {
-                            '<role-name>': '<dashboard link>',
-                        }
-                    }
-            error: status_code = 404 (ObjectDoesNotExist)
-                   resp_obj = {
-                       'status': '...',
-                       'message': '...'
-                   }
-        '''
+        :param cluster_id: cluster id.
+        :type cluster_id: int.
+        """
         params = {}
         params['cluser_id'] = cluster_id
-        return self.get('/api/dashboardlinks', params)
+        return self._get('/api/dashboardlinks', params)

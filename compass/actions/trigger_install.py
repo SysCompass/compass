@@ -1,4 +1,7 @@
-'''module to trigger the install progress for a given cluster.'''
+"""Module to deploy a given cluster
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import logging
 
 from compass.db import database
@@ -7,15 +10,14 @@ from compass.config_management.utils.config_manager import ConfigManager
 
 
 def trigger_install(clusterid):
-    '''trigger installer to start install for a given cluster.
+    """Deploy a given cluster.
 
-    Args:
-        clusterid: int, the id of the cluster.
+    :param clusterid: the id of the cluster to deploy.
+    :type clusterid: int
 
-    Returns:
-        None
-    '''
-    manager = ConfigManager()
+    .. note::
+        The function should be called in database session.
+    """
     session = database.current_session()
     cluster = session.query(Cluster).filter_by(id=clusterid).first()
     if not cluster:
@@ -49,6 +51,8 @@ def trigger_install(clusterid):
         host.state.state = 'INSTALLING'
         update_hostids.append(host.id)
 
-    manager.updateClusterAndHostConfigs(clusterid, hostids, update_hostids,
-                                        adapter.os, adapter.target_system)
+    manager = ConfigManager()
+    manager.update_cluster_and_host_configs(
+        clusterid, hostids, update_hostids,
+        adapter.os, adapter.target_system)
     manager.sync()

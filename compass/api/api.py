@@ -18,6 +18,7 @@ from compass.db.model import Role
 
 class SwitchList(Resource):
     """Query detals of switches and poll swithes"""
+
     ENDPOINT = "/switches"
 
     SWITCHIP = 'switchIp'
@@ -26,12 +27,12 @@ class SwitchList(Resource):
 
     def get(self):
         """
-        List details of all swithes which qualifies the query conditions.
-        Filtered by:
-            switchIp: switch IP address
-            switchIpNetwork: switch IP network
-            limit: the number of records excepted to return
+        List details of all switches, optionally filtered by some conditions.
         Note: switchIp and swtichIpNetwork cannot be combined to use.
+
+        :param switchIp: switch IP address
+        :param switchIpNetwork: switch IP network
+        :param limit: the number of records excepted to return
         """
         qkeys = request.args.keys()
         logging.info('SwitchList query strings : %s', qkeys)
@@ -110,6 +111,7 @@ class SwitchList(Resource):
             for switch in switches:
                 switch_res = {}
                 switch_res['id'] = switch.id
+                switch_res['ip'] = switch.ip
                 switch_res['state'] = switch.state
                 switch_res['link'] = {
                     'rel': 'self',
@@ -162,6 +164,7 @@ class SwitchList(Resource):
             session.add(switch)
             session.flush()
             new_switch['id'] = switch.id
+            new_switch['ip'] = switch.ip
             new_switch['state'] = switch.state
             link = {'rel': 'self',
                     'href': '/'.join((self.ENDPOINT, str(switch.id)))}
@@ -180,8 +183,8 @@ class Switch(Resource):
     ENDPOINT = "/switches"
 
     def get(self, switch_id):
-        """
-        Lists details of the switch with the specific switch id.
+        """Lists details of the specified switch.
+
         :param switch_id: switch ID in db
         """
         switch_res = {}
@@ -198,6 +201,7 @@ class Switch(Resource):
                     )
 
             switch_res['id'] = switch.id
+            switch_res['ip'] = switch.ip
             switch_res['state'] = switch.state
             switch_res['link'] = {
                 'rel': 'self',
@@ -209,9 +213,9 @@ class Switch(Resource):
                   "switch": switch_res})
 
     def put(self, switch_id):
-        """
-        Update an existing switch information.
-        :param switch_id: the switch ID in db
+        """Update an existing switch information.
+
+        :param switch_id: the unqiue identifier of the switch
         """
         switch = None
         with database.session() as session:
@@ -240,6 +244,7 @@ class Switch(Resource):
 
             ip_addr = switch.ip
             switch_res['id'] = switch.id
+            switch_res['ip'] = switch.ip
             switch_res['state'] = switch.state
             link = {'rel': 'self',
                     'href': '/'.join((self.ENDPOINT, str(switch.id)))}
@@ -251,8 +256,9 @@ class Switch(Resource):
                   "switch": switch_res})
 
     def delete(self, switch_id):
-        """
-        No implementation
+        """No implementation.
+
+        :param switch_id: the unique identifier of the switch.
         """
         return errors.handle_not_allowed_method(
             errors.MethodNotAllowed())
@@ -269,12 +275,13 @@ class MachineList(Resource):
 
     def get(self):
         """
-        Lists details of machines.
-        Filtered by:
-            switchId: the switch ID in db
-            vladId: the vlan ID
-            port: port number
-            limit: the number of records expected to return
+        Lists details of machines, optionally filtered by some conditions as
+        the following.
+
+        :param switchId: the unique identifier of the switch
+        :param vladId: the vlan ID
+        :param port: the port number
+        :param limit: the number of records expected to return
         """
         machines_result = []
         switch_id = request.args.get(self.SWITCHID, type=int)
@@ -340,8 +347,9 @@ class Machine(Resource):
 
     def get(self, machine_id):
         """
-        Lists details of the machine with specific machine id.
-        :param machine_id: the machine ID in db
+        Lists details of the specified machine.
+
+        :param machine_id: the unique identifier of the machine
         """
         machine_res = {}
         with database.session() as session:
@@ -386,9 +394,10 @@ class Cluster(Resource):
 
     def get(self, cluster_id, resource=None):
         """
-        Lists details of a specific cluster if resource is not specified.
+        Lists details of the specified cluster if resource is not specified.
         Otherwise, lists details of the resource of this cluster
-        :param cluster_id: the cluster ID in db
+
+        :param cluster_id: the unique identifier of the cluster
         :param resource: the resource name(security, networking, partition)
         """
         cluster_resp = {}
@@ -434,10 +443,10 @@ class Cluster(Resource):
         return util.make_json_response(200, resp)
 
     def post(self):
-        """
-        Create a new cluster.
-        :param name: name of the cluster
-        :param adapter_id: adapter ID in db
+        """Create a new cluster.
+
+        :param name: the name of the cluster
+        :param adapter_id: the unique identifier of the adapter
         """
         request_data = None
         request_data = json.loads(request.data)
@@ -473,8 +482,9 @@ class Cluster(Resource):
 
     def put(self, cluster_id, resource):
         """
-        Update the resource information of a specific cluster in database
-        :param cluster_id: the cluster ID in db
+        Update the resource information of the specified cluster in database
+
+        :param cluster_id: the unique identifier of the cluster
         :param resource: resource name(security, networking, partition)
         """
         resources = {
@@ -548,14 +558,14 @@ def list_clusters():
 
 @app.route("/clusters/<string:cluster_id>/action", methods=['POST'])
 def execute_cluster_action(cluster_id):
-    """
-    Execute a specific action to the cluster:
-    addHosts: add excepted hosts to the cluster
-    removeHosts: remove expected hosts from the cluster
-    replaceAllHosts: remove all existing hosts in cluster and add new hosts
-    deploy: start to deploy
+    """Execute the specified  action to the cluster.
 
-    :param cluster_id: string of cluster id
+    :param cluster_id: the unique identifier of the cluster
+    :param addHosts: the action of adding excepted hosts to the cluster
+    :param removeHosts: the action of removing expected hosts from the cluster
+    :param replaceAllHosts: the action of removing all existing hosts in
+                            cluster and add new hosts
+    :param deploy: the action of starting to deploy
     """
     def _add_hosts(cluster_id, hosts):
         """Add cluster host(s) to the cluster by cluster_id"""
@@ -606,7 +616,7 @@ def execute_cluster_action(cluster_id):
         return util.make_json_response(
             200, {
                 "status": "OK",
-                "clusterHosts": cluseter_hosts
+                "cluster_hosts": cluseter_hosts
                 }
             )
 
@@ -650,7 +660,7 @@ def execute_cluster_action(cluster_id):
         return util.make_json_response(
             200, {
                 "status": "OK",
-                "clusterHosts": removed_hosts
+                "cluster_hosts": removed_hosts
                 }
             )
 
@@ -678,8 +688,9 @@ def execute_cluster_action(cluster_id):
                 return errors.handle_not_exist(
                     errors.ObjectDoesNotExist(error_msg))
 
-            for host_id in cluster_hosts_ids:
-                progress_url = '/cluster_hosts/%s/progress' % str(host_id)
+            for elm in cluster_hosts_ids:
+                host_id = str(elm[0])
+                progress_url = '/cluster_hosts/%s/progress' % host_id
                 deploy_hosts_urls.append(progress_url)
 
             # Lock cluster hosts and its cluster
@@ -732,9 +743,9 @@ class ClusterHostConfig(Resource):
     """Lists and update/delete cluster host configurations"""
 
     def get(self, host_id):
-        """
-        Lists configuration details of a specific cluster host
-        :param host_id: the cluster host ID
+        """Lists configuration details of the specified cluster host
+
+        :param host_id: the unique identifier of the host
         """
         config_res = {}
         with database.session() as session:
@@ -755,8 +766,9 @@ class ClusterHostConfig(Resource):
 
     def put(self, host_id):
         """
-        Update configuration of a specific cluster host
-        :param host_id: string of cluster host id
+        Update configuration of the specified cluster host
+
+        :param host_id: the unique identifier of the host
         """
         with database.session() as session:
             host = session.query(ModelClusterHost).filter_by(id=host_id)\
@@ -795,11 +807,12 @@ class ClusterHostConfig(Resource):
 
     def delete(self, host_id, subkey):
         """
-        Delete one attribute in configuration of a specific cluster host
-        :param host_id: the cluster host ID
+        Delete one attribute in configuration of the specified cluster host
+
+        :param host_id: the unique identifier of the host
         :param subkey: the attribute name in configuration
         """
-        available_delete_keys = ['ip', 'role']
+        available_delete_keys = ['ip', 'roles']
         with database.session() as session:
             host = session.query(ModelClusterHost).filter_by(id=host_id)\
                                                   .first()
@@ -832,9 +845,9 @@ class ClusterHost(Resource):
     ENDPOINT = '/clusterhosts'
 
     def get(self, host_id):
-        """
-        Lists details of a specific cluster host
-        :param host_id: cluster host ID in db
+        """Lists details of the specified cluster host
+
+        :param host_id: the unique identifier of the host
         """
         host_res = {}
         with database.session() as session:
@@ -858,7 +871,11 @@ class ClusterHost(Resource):
 
 @app.route("/clusterhosts", methods=['GET'])
 def list_clusterhosts():
-    """Lists details of all cluster hosts
+    """
+    Lists details of all cluster hosts, optionally filtered by some conditions.
+
+    :param hostname: the name of the host
+    :param clstername: the name of the cluster
     """
     endpoint = '/clusterhosts'
     key_hostname = 'hostname'
@@ -905,8 +922,9 @@ def list_clusterhosts():
 @app.route("/adapters/<string:adapter_id>", methods=['GET'])
 def list_adapter(adapter_id):
     """
-    Lists details of a specific adapter
-    :param adapter_id: the adapter ID in db
+    Lists details of the specified adapter.
+
+    :param adapter_id: the unique identifier of the adapter
     """
     endpoint = '/adapters'
     adapter_res = {}
@@ -931,9 +949,9 @@ def list_adapter(adapter_id):
 
 @app.route("/adapters/<string:adapter_id>/roles", methods=['GET'])
 def list_adapter_roles(adapter_id):
-    """
-    Lists details of all roles of a specific adapter
-    :param adapter_id: the adaper ID in db
+    """Lists details of all roles of the specified adapter
+
+    :param adapter_id: the unique identifier of the adapter
     """
     roles_list = []
     with database.session() as session:
@@ -962,16 +980,23 @@ def list_adapter_roles(adapter_id):
 
 @app.route("/adapters", methods=['GET'])
 def list_adapters():
-    """
-    Lists details of the adapter with a specific name
+    """Lists details of the adapters, optionally filtered by adapter name.
+
+    :param name: the name of the adapter
     """
     endpoint = '/adapters'
-    name = request.args.get('name')
+    name = request.args.get('name', type=str)
+    adapter_list = []
     adapter_res = {}
     with database.session() as session:
-        adapter = session.query(Adapter).filter_by(name=name).first()
+        adapters = []
+        if name:
+            adapters = session.query(Adapter).filter_by(name=name).all()
+        else:
+            adapters = session.query(Adapter).all()
 
-        if adapter:
+        for adapter in adapters:
+            adapter_res = {}
             adapter_res['name'] = adapter.name
             adapter_res['os'] = adapter.os
             adapter_res['target_system'] = adapter.target_system
@@ -979,19 +1004,20 @@ def list_adapters():
             adapter_res['link'] = {
                 "href": "/".join((endpoint, str(adapter.id))),
                 "rel": "self"}
+            adapter_list.append(adapter_res)
 
     return util.make_json_response(
         200, {"status": "OK",
-              "adapter": adapter_res})
+              "adapters": adapter_list})
 
 
 class HostInstallingProgress(Resource):
     """Get host installing progress information"""
 
     def get(self, host_id):
-        """
-        Lists progress details of a specific cluster host
-        :param host_id: cluster host ID in db
+        """Lists progress details of a specific cluster host
+
+        :param host_id: the unique identifier of the host
         """
         progress_result = {}
         with database.session() as session:
@@ -1027,9 +1053,9 @@ class ClusterInstallingProgress(Resource):
     """Get cluster installing progress information"""
 
     def get(self, cluster_id):
-        """
-        Lists progress details of a specific cluster
-        :param cluster_id: the cluster ID in db
+        """Lists progress details of a specific cluster
+
+        :param cluster_id: the unique identifier of the cluster
         """
         progress_result = {}
         with database.session() as session:
@@ -1084,7 +1110,7 @@ class DashboardLinks(Resource):
             for host in hosts:
                 config = host.config
                 if ('has_dashboard_roles' in config and
-                       config['has_dashboard_roles']):
+                        config['has_dashboard_roles']):
                     ip = config.get(
                         'networking', {}).get(
                         'interfaces', {}).get(

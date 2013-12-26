@@ -18,12 +18,13 @@ class Hp(base.BaseVendor):
         self.names = ['hp', 'procurve']
 
     def is_this_vendor(self, host, credential):
-        """ Determine if the hostname is accociated witH this vendor.
-            This example will use snmp sysDescr OID ,regex to extract
-            the vendor's name ,and then compare with self.name variable.
+        """
+        Determine if the hostname is accociated witH this vendor.
+        This example will use snmp sysDescr OID ,regex to extract
+        the vendor's name ,and then compare with self.name variable.
 
-            param str host : switch's IP address
-            param dict credential : credential to access switch
+        :param host: switch's IP address
+        :param credential: credential to access switch
         """
 
         if "Version" not in credential or "Community" not in credential:

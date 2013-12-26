@@ -111,7 +111,7 @@ class TestConfigMerger(unittest2.TestCase):
                 path_list=['/networking/interfaces/*'],
                 from_upper_keys={'ip_start': 'ip_start', 'ip_end': 'ip_end'},
                 to_key='ip',
-                value=config_merger_callbacks.assignIPs
+                value=config_merger_callbacks.assign_ips
             ),
             config_merger.ConfigMapping(
                 path_list=['/role_assign_policy'],
@@ -119,13 +119,13 @@ class TestConfigMerger(unittest2.TestCase):
                     'policy_by_host_numbers': 'policy_by_host_numbers',
                     'default': 'default'},
                 to_key='/roles',
-                value=config_merger_callbacks.assignRolesByHostNumbers
+                value=config_merger_callbacks.assign_roles_by_host_numbers
             ),
             config_merger.ConfigMapping(
                 path_list=['/dashboard_roles'],
                 from_lower_keys={'lower_values': '/roles'},
                 to_key='/has_dashboard_roles',
-                value=config_merger_callbacks.hasIntersection
+                value=config_merger_callbacks.has_intersection
             ),
             config_merger.ConfigMapping(
                 path_list=[
@@ -144,7 +144,7 @@ class TestConfigMerger(unittest2.TestCase):
                                  'search_path': '/networking/global/search_path'},
                 from_lower_keys={'hostname': '/hostname'},
                 to_key='dns_alias',
-                value=functools.partial(config_merger_callbacks.assignFromPattern,
+                value=functools.partial(config_merger_callbacks.assign_from_pattern,
                                         upper_keys=['search_path', 'clustername'],
                                         lower_keys=['hostname'])
             ),
@@ -154,7 +154,7 @@ class TestConfigMerger(unittest2.TestCase):
                 from_lower_keys={'hostnames': '/hostname',
                                  'ips': '/networking/interfaces/management/ip'},
                 to_key='ignore_proxy',
-                value=config_merger_callbacks.assignNoProxy
+                value=config_merger_callbacks.assign_noproxy
             )
         ]
         merger = config_merger.ConfigMerger(mappings)

@@ -47,6 +47,7 @@ class ApiTestCase(unittest2.TestCase):
 class TestSwtichMachineAPI(ApiTestCase):
 
     SWITCH_RESP_TPL = {"state": "not_reached",
+                       "ip": "",
                        "link": {"href": "",
                                 "rel": "self"},
                        "id": ""}
@@ -165,6 +166,7 @@ class TestSwtichMachineAPI(ApiTestCase):
         expected_switch_resp = self.SWITCH_RESP_TPL.copy()
         expected_switch_resp['link']['href'] = correct_url
         expected_switch_resp['id'] = 1
+        expected_switch_resp['ip'] = "10.10.10.1"
 
         self.assertEqual(rv.status_code, 200)
         self.assertEqual(data["status"], "OK")
@@ -459,7 +461,7 @@ class TestClusterAPI(ApiTestCase):
         rv = self.app.post(url, data=json.dumps(request))
         self.assertEqual(rv.status_code, 200)
         data = json.loads(rv.get_data())
-        self.assertEqual(len(data['clusterHosts']), 3)
+        self.assertEqual(len(data['cluster_hosts']), 3)
 
         # 4. try to remove some hosts which do not exists
         request = {'removeHosts': [1, 1000, 1001]}
@@ -473,14 +475,14 @@ class TestClusterAPI(ApiTestCase):
         rv = self.app.post(url, data=json.dumps(request))
         self.assertEqual(rv.status_code, 200)
         data = json.loads(rv.get_data())
-        self.assertEqual(len(data['clusterHosts']), 2)
+        self.assertEqual(len(data['cluster_hosts']), 2)
 
         # 6. Test 'replaceAllHosts' action on cluster_01
         request = {'replaceAllHosts': [1, 2, 3]}
         rv = self.app.post(url, data=json.dumps(request))
         self.assertEqual(rv.status_code, 200)
         data = json.loads(rv.get_data())
-        self.assertEqual(len(data['clusterHosts']), 3)
+        self.assertEqual(len(data['cluster_hosts']), 3)
 
         # 7. Test 'deploy' action on cluster_01
         request = {'deploy': {}}
@@ -512,7 +514,7 @@ class ClusterHostAPITest(ApiTestCase):
                     "management": {
                         "ip": "192.168.1.1"}},
                 "global": {}},
-            "role": ""}
+            "roles": ""}
         # Insert a host into database for testing
         with database.session() as session:
             clusters_list = [Cluster(name='cluster_01'),
@@ -552,7 +554,7 @@ class ClusterHostAPITest(ApiTestCase):
 
     def test_clusterHost_put_config(self):
         config = deepcopy(self.test_config_data)
-        config['role'] = 'base'
+        config['roles'] = ['base']
 
         # 1. Try to put a config of the cluster host which does not exist
         url = '/clusterhosts/1000/config'
@@ -733,8 +735,14 @@ class TestAdapterAPI(ApiTestCase):
                                "href": "/adapters/1",
                                "rel": "self"}
                            }
-        self.assertDictEqual(execpted_result, data['adapter'])
-
+        self.assertDictEqual(execpted_result, data['adapters'][0])
+        
+        url = '/adapters'
+        rv = self.app.get(url)
+        data = json.loads(rv.get_data())
+        self.assertEqual(200, rv.status_code)
+        self.assertEqual(2, len(data['adapters']))
+        
 
 if __name__ == '__main__':
     unittest2.main()

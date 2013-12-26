@@ -1,4 +1,7 @@
-'''ConfigMerger Callbacks module.'''
+"""ConfigMerger Callbacks module.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import itertools
 import logging
 from copy import deepcopy
@@ -7,19 +10,9 @@ from netaddr import IPSet, IPRange
 from compass.utils import util
 
 
-def _getRoleBundleMapping(roles, bundles):
-    '''Get role bundles.
-
-    Args:
-        roles: list of string.
-        bundles: list of lsit of str.
-
-    Returns:
-        bundle_mapping: dict of {str: str}, mapping from role to
-                        its bundled role.
-        role_bundles: dict of {str: set of str}, mapping
-                      bundled role to the roles bundled to it.
-    '''
+def _get_role_bundle_mapping(roles, bundles):
+    """Get role bundles.
+    """
     bundle_mapping = {}
     for role in roles:
         bundle_mapping[role] = role
@@ -49,8 +42,8 @@ def _getRoleBundleMapping(roles, bundles):
     return bundle_mapping, role_bundles
 
 
-def _getBundledExclusives(exclusives, bundle_mapping):
-    '''Get bundled exclusives.'''
+def _get_bundled_exclusives(exclusives, bundle_mapping):
+    """Get bundled exclusives."""
     bundled_exclusives = set()
     for exclusive in exclusives:
         if exclusive not in bundle_mapping:
@@ -64,15 +57,34 @@ def _getBundledExclusives(exclusives, bundle_mapping):
     return bundled_exclusives
 
 
-def _getBundledMaxMins(maxs, mins, default_max, default_min, role_bundles):
-    '''Get max and mins for each bundled role.'''
+def _get_max(lhs, rhs):
+    """Get max value"""
+    if lhs < 0:
+        return lhs
+
+    if rhs < 0:
+        return rhs
+
+    return max(lhs, rhs)
+
+
+def _get_min(lhs, rhs):
+    """Get min value"""
+    if lhs < 0:
+        return rhs
+
+    if rhs < 0:
+        return lhs
+
+    return min(lhs, rhs)
+
+
+def _get_bundled_max_mins(maxs, mins, default_max, default_min, role_bundles):
+    """Get max and mins for each bundled role."""
     bundled_maxs = {}
     bundled_mins = {}
     default_min = max(default_min, 0)
-    if default_max < 0:
-        default_max = default_max
-    else:
-        default_max = max(default_max, default_min)
+    default_max = _get_max(default_max, default_min)
 
     for bundled_role, roles in role_bundles.items():
         bundled_min = None
@@ -87,15 +99,9 @@ def _getBundledMaxMins(maxs, mins, default_max, default_min, role_bundles):
 
             if bundled_max is None:
                 bundled_max = new_max
-            elif bundled_max < 0:
-                if new_max >= 0:
-                    bundled_max = max(new_max, bundled_min)
-                else:
-                    bundled_max = new_max
-            elif new_max >= 0:
-                bundled_max = max(min(bundled_max, new_max), bundled_min)
             else:
-                bundled_max = max(bundled_max, bundled_min)
+                bundled_max = _get_min(
+                    bundled_max, _get_max(new_max, bundled_min))
 
         if bundled_min is None:
             bundled_min = default_min
@@ -111,12 +117,12 @@ def _getBundledMaxMins(maxs, mins, default_max, default_min, role_bundles):
     return bundled_maxs, bundled_mins
 
 
-def _updateAssignedRoles(lower_refs, to_key, bundle_mapping,
-                         role_bundles, bundled_maxs, bundled_mins):
-    '''
-       update bundled maxs/mins and get assign roles to each
-       host, unassigned host.
-    '''
+def _update_assigned_roles(lower_refs, to_key, bundle_mapping,
+                           role_bundles, bundled_maxs, bundled_mins):
+    """
+    Update bundled maxs/mins and get assign roles to each host,
+    unassigned host.
+    """
     lower_roles = {}
     unassigned_hosts = []
     for lower_key, lower_ref in lower_refs.items():
@@ -142,10 +148,10 @@ def _updateAssignedRoles(lower_refs, to_key, bundle_mapping,
     return lower_roles, unassigned_hosts
 
 
-def _updateExclusiveRoles(bundled_exclusives, lower_roles,
-                          unassigned_hosts, bundled_maxs,
-                          bundled_mins, role_bundles):
-    '''Assign exclusive roles to hosts.'''
+def _update_exclusive_roles(bundled_exclusives, lower_roles,
+                            unassigned_hosts, bundled_maxs,
+                            bundled_mins, role_bundles):
+    """Assign exclusive roles to hosts."""
     for bundled_exclusive in bundled_exclusives:
         while bundled_mins[bundled_exclusive] > 0:
             if not unassigned_hosts:
@@ -155,6 +161,7 @@ def _updateExclusiveRoles(bundled_exclusives, lower_roles,
             bundled_mins[bundled_exclusive] -= 1
             bundled_maxs[bundled_exclusive] -= 1
             lower_roles[host] = list(role_bundles[bundled_exclusive])
+
         del role_bundles[bundled_exclusive]
 
     logging.debug('assigned roles after assigning exclusives: %s', lower_roles)
@@ -164,19 +171,21 @@ def _updateExclusiveRoles(bundled_exclusives, lower_roles,
     logging.debug('bundled mins after assigning exclusives: %s', bundled_mins)
 
 
-def _assignRolesByMins(role_bundles, lower_roles, unassigned_hosts,
-                       bundled_maxs, bundled_mins):
-    '''Assign roles to hosts by min restriction.'''
+def _assign_roles_by_mins(role_bundles, lower_roles, unassigned_hosts,
+                         bundled_maxs, bundled_mins):
+    """Assign roles to hosts by min restriction."""
     available_hosts = deepcopy(unassigned_hosts)
     for bundled_role, roles in role_bundles.items():
         while bundled_mins[bundled_role] > 0:
             if not available_hosts:
                 raise ValueError('no enough available hosts to assign to %s',
                                  bundled_role)
+
             host = available_hosts.pop(0)
             available_hosts.append(host)
             if host in unassigned_hosts:
                 unassigned_hosts.remove(host)
+
             bundled_mins[bundled_role] -= 1
             bundled_maxs[bundled_role] -= 1
             lower_roles[host] = list(roles)
@@ -187,9 +196,9 @@ def _assignRolesByMins(role_bundles, lower_roles, unassigned_hosts,
     logging.debug('bundled maxs after assigning mins: %s', bundled_maxs)
 
 
-def _assignRolesByMaxs(role_bundles, lower_roles, unassigned_hosts,
-                       bundled_maxs):
-    '''Assign roles to host by max restriction.'''
+def _assign_roles_by_maxs(role_bundles, lower_roles, unassigned_hosts,
+                          bundled_maxs):
+    """Assign roles to host by max restriction."""
     available_lists = []
     default_roles = []
     for bundled_role in role_bundles.keys():
@@ -198,11 +207,13 @@ def _assignRolesByMaxs(role_bundles, lower_roles, unassigned_hosts,
                 [bundled_role]*bundled_maxs[bundled_role])
         else:
             default_roles.append(bundled_role)
-    available_list = util.getListWithPossibility(available_lists)
+
+    available_list = util.flat_lists_with_possibility(available_lists)
 
     for bundled_role in available_list:
         if not unassigned_hosts:
             break
+
         host = unassigned_hosts.pop(0)
         lower_roles[host] = list(role_bundles[bundled_role])
 
@@ -221,53 +232,53 @@ def _assignRolesByMaxs(role_bundles, lower_roles, unassigned_hosts,
     logging.debug('unassigned hosts: %s', unassigned_hosts)
 
 
-def assignRoles(_upper_ref, _from_key, lower_refs, to_key,
-                roles=[], maxs={}, mins={}, default_max=-1,
-                default_min=0, exclusives=[], bundles=[], **_kwargs):
-    '''Assign roles to lower configs.'''
+def assign_roles(_upper_ref, _from_key, lower_refs, to_key,
+                 roles=[], maxs={}, mins={}, default_max=-1,
+                 default_min=0, exclusives=[], bundles=[], **_kwargs):
+    """Assign roles to lower configs."""
     logging.debug(
         'assignRoles with roles=%s, maxs=%s, mins=%s, '
         'default_max=%s, default_min=%s, exclusives=%s, bundles=%s',
         roles, maxs, mins, default_max,
         default_min, exclusives, bundles)
-    bundle_mapping, role_bundles = _getRoleBundleMapping(roles, bundles)
-    bundled_exclusives = _getBundledExclusives(exclusives, bundle_mapping)
-    bundled_maxs, bundled_mins = _getBundledMaxMins(
+    bundle_mapping, role_bundles = _get_role_bundle_mapping(roles, bundles)
+    bundled_exclusives = _get_bundled_exclusives(exclusives, bundle_mapping)
+    bundled_maxs, bundled_mins = _get_bundled_max_mins(
         maxs, mins, default_max, default_min, role_bundles)
 
-    lower_roles, unassigned_hosts = _updateAssignedRoles(
+    lower_roles, unassigned_hosts = _update_assigned_roles(
         lower_refs, to_key, bundle_mapping, role_bundles,
         bundled_maxs, bundled_mins)
-    _updateExclusiveRoles(bundled_exclusives, lower_roles, unassigned_hosts,
-                          bundled_maxs, bundled_mins, role_bundles)
+    _update_exclusive_roles(bundled_exclusives, lower_roles, unassigned_hosts,
+                            bundled_maxs, bundled_mins, role_bundles)
 
-    _assignRolesByMins(
+    _assign_roles_by_mins(
         role_bundles, lower_roles, unassigned_hosts,
         bundled_maxs, bundled_mins)
-    _assignRolesByMaxs(
+    _assign_roles_by_maxs(
         role_bundles, lower_roles, unassigned_hosts,
         bundled_maxs)
-    
+
     return lower_roles
 
 
-def assignRolesByHostNumbers(upper_ref, from_key, lower_refs, to_key,
-                             policy_by_host_numbers={}, default={},
-                             **_kwargs):
-    '''assign roles by role assign policy.'''
+def assign_roles_by_host_numbers(upper_ref, from_key, lower_refs, to_key,
+                                 policy_by_host_numbers={}, default={},
+                                 **_kwargs):
+    """Assign roles by role assign policy."""
     host_numbers = str(len(lower_refs))
     policy_kwargs = deepcopy(default)
     if host_numbers in policy_by_host_numbers:
-        util.mergeDict(policy_kwargs, policy_by_host_numbers[host_numbers])
+        util.merge_dict(policy_kwargs, policy_by_host_numbers[host_numbers])
 
-    return assignRoles(upper_ref, from_key, lower_refs,
-                       to_key, **policy_kwargs)
+    return assign_roles(upper_ref, from_key, lower_refs,
+                        to_key, **policy_kwargs)
 
 
-def hasIntersection(upper_ref, from_key, _lower_refs, to_key,
-                    lower_values={}, **_kwargs):
-    '''Check if upper config has intersection with lower values.'''
-    has_intersection = {}
+def has_intersection(upper_ref, from_key, _lower_refs, _to_key,
+                     lower_values={}, **_kwargs):
+    """Check if upper config has intersection with lower values."""
+    has = {}
     for lower_key, lower_value in lower_values.items():
         values = set(lower_value)
         intersection = values.intersection(set(upper_ref.config))
@@ -276,18 +287,17 @@ def hasIntersection(upper_ref, from_key, _lower_refs, to_key,
             'with from_key %s value %s: %s',
             lower_key, values, from_key, upper_ref.config, intersection)
         if intersection:
-            has_intersection[lower_key] = True
+            has[lower_key] = True
         else:
-            has_intersection[lower_key] = False
+            has[lower_key] = False
 
-    logging.debug('assign %s: %s', to_key, has_intersection)
-    return has_intersection
+    return has
 
 
-def assignIPs(_upper_ref, _from_key, lower_refs, to_key,
-              ip_start='192.168.0.1', ip_end='192.168.0.254',
-              **_kwargs):
-    '''assign ips to hosts.'''
+def assign_ips(_upper_ref, _from_key, lower_refs, to_key,
+               ip_start='192.168.0.1', ip_end='192.168.0.254',
+               **_kwargs):
+    """Assign ips to hosts' configurations."""
     if not ip_start or not ip_end:
         return {}
     host_ips = {}
@@ -312,46 +322,51 @@ def assignIPs(_upper_ref, _from_key, lower_refs, to_key,
     return host_ips
 
 
-def assignFromPattern(_upper_ref, from_key, lower_refs, to_key,
-                      upper_keys=[], lower_keys=[], pattern='', **kwargs):
-    '''assign to_key by pattern.'''
+def assign_from_pattern(_upper_ref, _from_key, lower_refs, to_key,
+                        upper_keys=[], lower_keys=[], pattern='', **kwargs):
+    """assign to_key by pattern."""
     host_values = {}
     upper_configs = {}
     for key in upper_keys:
-        upper_configs[key] = kwargs.get(key, '')
+        upper_configs[key] = kwargs[key]
 
     for lower_key, _ in lower_refs.items():
         group = deepcopy(upper_configs)
         for key in lower_keys:
-            group[key] = kwargs.get(key, {}).get(lower_key, '')
+            group[key] = kwargs[key][lower_key]
 
-        try: 
+        try:
             host_values[lower_key] = pattern % group
         except Exception as error:
             logging.error('failed to assign %s[%s] = %s %% %s',
                           lower_key, to_key, pattern, group)
-            logging.exception(error)
+            raise error
 
-    logging.debug('assign %s from %s: %s', to_key, from_key, host_values)
     return host_values
 
 
-def assignNoProxy(_upper_ref, _from_key, lower_refs,
-                  to_key, default=[], hostnames={}, ips={},
-                  **_kwargs):
-    '''Assign no proxy to hosts.'''
+def assign_noproxy(_upper_ref, _from_key, lower_refs,
+                   to_key, default=[], hostnames={}, ips={},
+                   **_kwargs):
+    """Assign no proxy to hosts."""
     no_proxy_list = deepcopy(default)
     for _, hostname in hostnames.items():
         no_proxy_list.append(hostname)
 
     for _, ip_addr in ips.items():
         no_proxy_list.append(ip_addr)
-    
-    logging.debug('no_proxy_list: %s', no_proxy_list)
+
     no_proxy = ','.join(no_proxy_list)
     host_no_proxy = {}
     for lower_key, _ in lower_refs.items():
         host_no_proxy[lower_key] = no_proxy
 
-    logging.debug('assign %s: %s', to_key, host_no_proxy)
     return host_no_proxy
+
+
+def override_if_empty(lower_ref, _ref_key):
+    """Override if the configuration value is empty."""
+    if lower_ref.config:
+        return True
+
+    return False

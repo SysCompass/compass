@@ -1,4 +1,7 @@
-'''config provider read config from file.'''
+"""config provider read config from file.
+
+   .. moduleauthor:: Xiaodong Wang <xiaodongwang@huawei.com>
+"""
 import json
 import logging
 
@@ -7,40 +10,40 @@ from compass.utils import setting_wrapper as setting
 
 
 class FileProvider(config_provider.ConfigProvider):
-    '''config provider which reads config from file.'''
+    """config provider which reads config from file."""
     NAME = 'file'
 
     def __init__(self):
-        pass
+        self.config_dir_ = setting.CONFIG_DIR
+        self.global_config_filename_ = setting.GLOBAL_CONFIG_FILENAME
+        self.config_file_format_ = setting.CONFIG_FILE_FORMAT
 
-    @classmethod
-    def _globalConfigFilename(cls):
-        '''Get global config file name.'''
+    def _global_config_filename(self):
+        """Get global config file name."""
         return '%s/%s' % (
-            setting.CONFIG_DIR, setting.GLOBAL_CONFIG_FILENAME)
+            self.config_dir_, self.global_config_filename_)
+
+    def _config_format(self):
+        """Get config file format."""
+        return self.config_file_format_
 
     @classmethod
-    def _getConfigFormat(cls):
-        '''Get config file format.'''
-        return setting.CONFIG_FILE_FORMAT
-
-    @classmethod
-    def _configFormatIsPython(cls, config_format):
-        '''Check if config file is stored as python formatted.'''
+    def _config_format_python(cls, config_format):
+        """Check if config file is stored as python formatted."""
         if config_format == 'python':
             return True
         return False
 
     @classmethod
-    def _configFormatIsJson(cls, config_format):
-        '''Check if config file is stored as json formatted.'''
+    def _config_format_json(cls, config_format):
+        """Check if config file is stored as json formatted."""
         if config_format == 'json':
             return True
         return False
 
     @classmethod
-    def _readConfigFromFile(cls, filename, config_format):
-        '''read config from file.'''
+    def _read_config_from_file(cls, filename, config_format):
+        """read config from file."""
         config_globals = {}
         config_locals = {}
         content = ''
@@ -52,7 +55,7 @@ class FileProvider(config_provider.ConfigProvider):
             logging.exception(error)
             return {}
 
-        if cls._configFormatIsPython(config_format):
+        if cls._config_format_python(config_format):
             try:
                 exec(content, config_globals, config_locals)
             except Exception as error:
@@ -60,7 +63,7 @@ class FileProvider(config_provider.ConfigProvider):
                 logging.exception(error)
                 return {}
 
-        elif cls._configFormatIsJson(config_format):
+        elif cls._config_format_json(config_format):
             try:
                 config_locals = json.loads(content)
             except Exception as error:
@@ -70,11 +73,11 @@ class FileProvider(config_provider.ConfigProvider):
 
         return config_locals
 
-    def getGlobalConfig(self):
-        '''read global config from file.'''
-        return self._readConfigFromFile(
-            self._globalConfigFilename(),
-            self._getConfigFormat())
+    def get_global_config(self):
+        """read global config from file."""
+        return self._read_config_from_file(
+            self._global_config_filename(),
+            self._config_format())
 
 
-config_provider.registerProvider(FileProvider)
+config_provider.register_provider(FileProvider)

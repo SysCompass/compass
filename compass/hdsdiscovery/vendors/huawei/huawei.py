@@ -18,13 +18,13 @@ class Huawei(base.BaseVendor):
         self.__name = "huawei"
 
     def is_this_vendor(self, host, credential):
-        """ Determine if the hostname is accociated witH this vendor.
-            This example will use snmp sysDescr OID ,regex to extract
-            the vendor's name ,and then compare with self.name variable.
+        """
+        Determine if the hostname is accociated witH this vendor.
+        This example will use snmp sysDescr OID ,regex to extract
+        the vendor's name ,and then compare with self.name variable.
 
-            param str host : swtich's IP address
-            param dict credential : credential to access switch
-
+        :param host: swtich's IP address
+        :param credential: credential to access switch
         """
         if not utils.valid_ip_format(host):
             #invalid ip address
