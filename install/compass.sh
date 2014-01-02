@@ -1,6 +1,5 @@
 #!/bin/bash
-source install.conf
-
+COMPASSDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
 copygit2dir()
 {
     destdir=$1
@@ -14,7 +13,7 @@ copygit2dir()
 }
 SCRIPT_DIR=$(cd $(dirname "$0") && pwd)
 cd $SCRIPT_DIR
-export ipaddr=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+#export ipaddr=$(ifconfig $NIC | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 
 WEB_HOME=${WEB_HOME:-'/tmp/web/'}
 ADAPTER_HOME=${ADAPTER_HOME:-'/tmp/adapter/'}
@@ -29,7 +28,7 @@ sudo \cp -rf $JS_MVC/. $WEB_HOME/public/
 
 # update squid conf
 sudo rm /etc/squid/squid.conf 
-sudo cp ../misc/squid/squid.conf /etc/squid/
+sudo cp $COMPASSDIR/misc/squid/squid.conf /etc/squid/
 sudo chmod 644 /etc/squid/squid.conf
 sudo mkdir -p /var/squid/cache
 sudo chown -R squid:squid /var/squid
@@ -40,7 +39,7 @@ sudo yum install -y net-snmp-utils net-snmp net-snmp-python
 if [ ! -d "/usr/local/share/snmp/" ]; then
   sudo mkdir /usr/local/share/snmp/
 fi
-sudo cp -rf ../mibs /usr/local/share/snmp/
+sudo cp -rf $COMPASSDIR/mibs /usr/local/share/snmp/
 sudo cat >> /etc/snmp/snmp.conf <<EOF
 mibdirs +/usr/local/share/snmp/mibs
 EOF
@@ -50,7 +49,7 @@ sudo cp -r /var/lib/cobbler/snippets /root/backup/cobbler/
 sudo cp -r /var/lib/cobbler/kickstarts/ /root/backup/cobbler/
 sudo rm -rf /var/lib/cobbler/snippets/*
 sudo cp -r $ADAPTER_HOME/cobbler/snippets/* /var/lib/cobbler/snippets/
-cp /etc/chef-server/chef-validator.pem /var/lib/cobbler/snippets/chef-validator.pem
+#sudo cp -rf /etc/chef-server/chef-validator.pem /var/lib/cobbler/snippets/chef-validator.pem
 sudo chmod 777 /var/lib/cobbler/snippets
 sudo chmod 666 /var/lib/cobbler/snippets/*
 sudo rm /var/lib/cobbler/kickstarts/default.ks
@@ -74,19 +73,23 @@ mkdir -p /var/log/compass
 mkdir -p /opt/compass/db
 mkdir -p /var/www/compass
 
-sudo \cp -rf ../misc/apache/ods-server /etc/httpd/conf.d/ods-server.conf
-sudo \cp -rf ../misc/apache/compass.wsgi /var/www/compass/compass.wsgi
-sudo \cp -rf ../conf/celeryconfig /etc/compass/
-sudo \cp -rf ../conf/global_config /etc/compass/
-sudo \cp -rf ../conf/setting /etc/compass/
-sudo \cp -rf ../conf/compassd /etc/init.d/
-sudo \cp -rf ../bin/*.py /opt/compass/bin/
-sudo \cp -rf ../bin/*.sh /opt/compass/bin/
-sudo \cp -rf ../bin/chef/* /opt/compass/bin/
-sudo \cp -rf ../bin/compassd /usr/bin/
+sudo \cp -rf $COMPASSDIR/misc/apache/ods-server /etc/httpd/conf.d/ods-server.conf
+sudo \cp -rf $COMPASSDIR/misc/apache/compass.wsgi /var/www/compass/compass.wsgi
+sudo \cp -rf $COMPASSDIR/conf/celeryconfig /etc/compass/
+sudo \cp -rf $COMPASSDIR/conf/global_config /etc/compass/
+sudo \cp -rf $COMPASSDIR/conf/setting /etc/compass/
+sudo \cp -rf $COMPASSDIR/conf/compassd /etc/init.d/
+sudo \cp -rf $COMPASSDIR/bin/*.py /opt/compass/bin/
+sudo \cp -rf $COMPASSDIR/bin/*.sh /opt/compass/bin/
+sudo \cp -rf $COMPASSDIR/bin/chef/* /opt/compass/bin/
+sudo \cp -rf $COMPASSDIR/conf/compassd /usr/bin/
 sudo \cp -rf $WEB_HOME/public/* /var/www/compass_web/
 sudo chmod +x /etc/init.d/compassd
 sudo chmod +x /usr/bin/compassd
+
+sudo chmod +x /opt/compass/bin/addcookbooks.py
+sudo chmod +x /opt/compass/bin/adddatabags.py
+sudo chmod +x /opt/compass/bin/addroles.py
 
 /opt/compass/bin/addcookbooks.py
 /opt/compass/bin/adddatabags.py
@@ -101,8 +104,10 @@ sudo chmod -R 777 /var/log/compass
 sudo echo "export C_FORCE_ROOT=1" > /etc/profile.d/celery_env.sh
 sudo chmod +x /etc/profile.d/celery_env.sh
 sudo service httpd restart
-cd ..
+
+cd $COMPASSDIR
 sudo python setup.py install
 sudo sed -i "/COBBLER_INSTALLER_URL/c\COBBLER_INSTALLER_URL = 'http:\/\/$ipaddr/cobbler_api'" /etc/compass/setting
 sudo sed -i "/CHEF_INSTALLER_URL/c\CHEF_INSTALLER_URL = 'https:\/\/$ipaddr/'" /etc/compass/setting
+sudo sh /opt/compass/bin/refresh.sh
 figlet -ctf slant Installation Complete!
