@@ -11,7 +11,7 @@ LOCKFD=99
 
 # PRIVATE
 _lock()             { flock -$1 $LOCKFD; }
-_no_more_locking()  { _lock u; _lock xn && rm -f $LOCKFILE; echo -e "\nNot allowed multiple instances of the script run at the same time, please check the status with 'ps -ef|grep install.sh'."; }
+_no_more_locking()  { _lock u; _lock xn && rm -f $LOCKFILE; }
 _prepare_locking()  { eval "exec $LOCKFD>\"$LOCKFILE\""; trap _no_more_locking EXIT; }
 
 # ON START

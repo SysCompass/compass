@@ -125,7 +125,7 @@ sudo cobbler repo add --mirror=/var/lib/cobbler/repo_mirror/ppa_repo --name=ppa_
 cd /var/lib/cobbler/repo_mirror/ppa_repo/
 sudo curl http://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-11.8.0-1.el6.x86_64.rpm > chef-11.8.0-1.el6.x86_64.rpm
 
-sudo curl http://vault.centos.org/6.4/os/Source/SPackages/ntp-4.2.4p8-3.el6.centos.src.rpm > ntp-4.2.4p8-3.el6.centos.x86_64.rpm
+sudo curl ftp://rpmfind.net/linux/centos/6.5/os/x86_64/Packages/ntp-4.2.6p5-1.el6.centos.x86_64.rpm > ntp-4.2.6p5-1.el6.centos.x86_64.rpm
 
 sudo curl http://vault.centos.org/6.4/os/Source/SPackages/openssh-5.3p1-84.1.el6.src.rpm > openssh-clients-5.3p1-84.1.el6.x86_64.rpm
 
