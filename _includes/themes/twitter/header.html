@@ -1,35 +1,36 @@
-<nav class="navbar  navbar-inverse navbar-fixed-top" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="/index.html">Compass</a>
-  </div>
-<!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="/">Home</a></li>
-      <li><a href="http://wiki.openstack.org/Compass">Wiki</a></li>
-      <li><a href="/user.html">Try Compass</a></li>
-      <li><a href="/developer.html">Become a developer</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">User Manual</a></li>
-          <li><a href="#">Developer's Guide</a></li>
-          <li><a href="/apirefs/overview.html">API Reference</a></li>
-          <li class="divider"></xli>
-          <li><a href="/pydocs/index.html">Python Documentation</a></li>
+<!-- Navbar
+================================================== -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="/index.html">Compass</a>
+      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="nav-collapse collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav">
+          <li class="{% if page.title == 'Compass' %} active {% endif %}"><a href="/">Home</a></li>
+          <li><a href="http://wiki.openstack.org/Compass">Wiki</a></li>
+          <li class="{% if page.title == 'userguide' %} active {% endif %}"><a href="/user.html">Try Compass</a></li>
+          <li class="{% if page.title == 'developer' %} active {% endif %}"><a href="/developer.html">Become a developer</a></li>
+          <li class="dropdown {% if page.title == 'Documentation' %} active {% endif %}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li class="disabled"><a href="#">User Manual</a></li>
+              <li class="disabled"><a href="#">Developer's Guide</a></li>
+              <li><a href="/apirefs/overview.html">API Reference</a></li>
+              <li class="divider"></xli>
+              <li><a href="/pydocs/index.html">Python Documentation</a></li>
+            </ul>
+          </li>
+          <li><a href="mailto:dev@syscompass.org">Contact Us</a></li>
         </ul>
-      </li>
-    </ul>
+      </div><!-- /.navbar-collapse -->
 
-    <ul class="nav navbar-nav navbar-inverse">
-      <li><a href="mailto:dev@syscompass.org">Contact Us</a></li>
-    </ul>
-  </div><!-- /.navbar-collapse -->
+    </div>
+  </div>
 </nav>

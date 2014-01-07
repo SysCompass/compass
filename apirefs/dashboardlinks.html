@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Overview"
+title: "Documentation"
 description: ""
 apis:
   - switch.md
@@ -8,6 +8,15 @@ apis:
 ---
 
 {% include JB/setup %}
+
+
+{% capture subhead %}
+  <h1>API Reference</h1>
+  <p class="lead">Reference doc of Compass RESTful API</p>
+{% endcapture %}
+
+
+{% capture maincontent %}
 
 {% include apirefs/links.md %}
 
@@ -36,3 +45,7 @@ apis:
 </tr>
 
 </table>
+
+{% endcapture %}
+
+{% include /apirefs/template.html %}

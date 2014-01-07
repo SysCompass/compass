@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Overview"
+title: "Documentation"
 description: ""
 apis:
   - switch.md
@@ -9,12 +9,19 @@ apis:
 
 {% include JB/setup %}
 
+
+
+{% capture subhead %}
+  <h1>API Reference</h1>
+  <p class="lead">Reference doc of Compass RESTful API</p>
+{% endcapture %}
+
+
+{% capture maincontent %}
+
 {% include apirefs/links.md %}
 
-
-Adapter Methods
-===============
-
+<h3>Adapter Methods</h3>
 
 <table class="table table-stripped">
 <thead>
@@ -79,3 +86,7 @@ data-target="#adapters_get" data-toggle="collapse">Detail</button></td>
 </tr>
 
 </table>
+
+{% endcapture %}
+
+{% include /apirefs/template.html %}

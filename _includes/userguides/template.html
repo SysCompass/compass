@@ -1,0 +1,22 @@
+<!-- Subhead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    {{ subhead }}
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="row">
+    <div class="span3 bs-docs-sidebar" id="myNav">
+    {{ sidebar }}
+    </div>
+
+    <div class="span9" id="myContent">
+    {{ maincontent | markdownify }}
+    </div>
+
+  </div>
+</div>
+

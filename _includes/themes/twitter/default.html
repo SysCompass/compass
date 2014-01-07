@@ -6,28 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <meta name="twitter:widgets:csp" content="on">
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="{{ ASSET_PATH }}/css/3.0/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="{{ ASSET_PATH }}/css/docs.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/css/docs.css?body=1" rel="stylesheet">
+    <link href="/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
 
-    <style type="text/css">
-        html {
-            height: 100%;
-        }
-        body {
-            height: 100%;
-        }
-    </style>
-    <!-- Le fav and touch icons -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
   </head>
 
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -35,14 +25,35 @@
 
 {% include themes/twitter/header.html %}
 
-
 {{ content }}
 
 
 
 
-
+  <!-- Le javascript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <script src="/assets/js/jquery.js"></script>
+  <script src="/assets/js/bootstrap-transition.js"></script>
+  <script src="/assets/js/bootstrap-alert.js"></script>
+  <script src="/assets/js/bootstrap-modal.js"></script>
+  <script src="/assets/js/bootstrap-dropdown.js"></script>
+  <script src="/assets/js/bootstrap-scrollspy.js"></script>
+  <script src="/assets/js/bootstrap-tab.js"></script>
+  <script src="/assets/js/bootstrap-tooltip.js"></script>
+  <script src="/assets/js/bootstrap-popover.js"></script>
+  <script src="/assets/js/bootstrap-button.js"></script>
+  <script src="/assets/js/bootstrap-collapse.js"></script>
+  <script src="/assets/js/bootstrap-carousel.js"></script>
+  <script src="/assets/js/bootstrap-typeahead.js"></script>
+  <script src="/assets/js/bootstrap-affix.js"></script>
+
+  <script src="/assets/js/holder/holder.js"></script>
+  <script src="/assets/js/google-code-prettify/prettify.js"></script>
+
+  <script src="/assets/js/application.js"></script>
+
   </body>
 </html>
 
