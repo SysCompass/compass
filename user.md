@@ -8,7 +8,7 @@ title: userguide
 
 {% capture subhead %}
   <h1>Try Compass</h1>
-  <p class="lead">Compass Golden Image: an illusion of Compass magic</p>
+  <p class="lead">Compass Golden Image: an illustration of Compass magic</p>
 {% endcapture %}
 
 
