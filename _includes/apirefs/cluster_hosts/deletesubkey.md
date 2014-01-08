@@ -63,6 +63,6 @@ Lists the details of the config for the specified host.
 
 {% highlight javascript %}
 {
-    "status": "OK",
+    "status": "OK"
 }
 {% endhighlight  %}
