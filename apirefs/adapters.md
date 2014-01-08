@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "Documentation"
+tag_li: "adapter"
 description: ""
 apis:
   - switch.md
