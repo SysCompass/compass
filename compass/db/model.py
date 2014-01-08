@@ -5,6 +5,7 @@ import logging
 import uuid
 from sqlalchemy import Column, ColumnDefault, Integer, String
 from sqlalchemy import Float, Enum, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -404,14 +405,16 @@ class ClusterHost(BASE):
     machine_id = Column(Integer, ForeignKey('machine.id',
                                             onupdate='CASCADE',
                                             ondelete='CASCADE'),
-                        nullable=True)
+                        nullable=True, unique=True)
 
     cluster_id = Column(Integer, ForeignKey('cluster.id',
                                             onupdate='CASCADE',
                                             ondelete='SET NULL'),
                         nullable=True)
 
-    hostname = Column(String, unique=True)
+    hostname = Column(String)
+    UniqueConstraint('cluster_id', 'hostname', name='unique_1')
+
     config_data = Column(Text)
     mutable = Column(Boolean, default=True)
 

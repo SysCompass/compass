@@ -15,13 +15,23 @@ class Installer(object):
     def __repr__(self):
         return '%s[%s]' % (self.__class__.__name__, self.NAME)
 
-    def sync(self):
+    def sync(self, **kwargs):
         """virtual method to sync installer."""
         pass
 
     def get_global_config(self, **kwargs):
         """virtual method to get global config."""
         return {}
+
+    def clean_cluster_config(self, clusterid, config, **kwargs):
+        """virtual method to clean cluster config.
+
+        :param clusterid: the id of the cluster to cleanup.
+        :type clusterid: int
+        :param config: cluster configuration to cleanup.
+        :type config: dict
+        """
+        pass
 
     def get_cluster_config(self, clusterid, **kwargs):
         """virtual method to get cluster config.
@@ -33,6 +43,16 @@ class Installer(object):
         """
         return {}
 
+    def clean_host_config(self, hostid, config, **kwargs):
+        """virtual method to clean host config.
+
+        :param hostid: the id of the host to cleanup.
+        :type hostid: int
+        :param config: host configuration to cleanup.
+        :type config: dict
+        """
+        pass
+
     def get_host_config(self, hostid, **kwargs):
         """virtual method to get host config.
 
@@ -42,6 +62,14 @@ class Installer(object):
         :returns: host configuration as dict.
         """
         return {}
+
+    def clean_host_configs(self, host_configs, **kwargs):
+        """Wrapper method to clean hosts' configs.
+
+        :param host_configs: dict of host id to host configuration as dict
+        """
+        for hostid, host_config in host_configs.items():
+            self.clean_host_config(hostid, host_config, **kwargs)
 
     def get_host_configs(self, hostids, **kwargs):
         """Wrapper method get hosts' configs.

@@ -188,7 +188,6 @@ def is_valid_networking_config(config):
         """Valid the format of 'global' section in config"""
 
         required_fields = ['nameservers', 'search_path', 'gateway']
-        other_fields = ['proxy', 'ntp_server']
         global_keys = global_config.keys()
         for key in required_fields:
             if key not in global_keys:
@@ -214,14 +213,6 @@ def is_valid_networking_config(config):
 
             elif key == 'gateway' and not is_valid_gateway(value):
                 return False, "The gateway format is invalid! '%s'" % value
-
-        for key in other_fields:
-            if key not in global_keys:
-                continue
-
-            value = global_config[key]
-            if key == 'ntp_server' and not is_valid_ip(value):
-                return False, "The ntp server format is invalid!"
 
         return True, 'Valid!'
 

@@ -4,7 +4,7 @@ networking = {
     },
     'interfaces': {
         'management': {
-            'dns_pattern': '%(hostname)s.%(clustername)s.%(search_path)s',
+            'dns_pattern': '%(hostname)s.%(clusterid)s.%(search_path)s',
             'netmask': '255.255.255.0',
             'nic': 'eth0',
             'promisc': 0,
@@ -12,19 +12,19 @@ networking = {
         'tenant': {
             'netmask': '255.255.255.0',
             'nic': 'eth0',
-            'dns_pattern': 'virtual-%(hostname)s.%(clustername)s.%(search_path)s',
+            'dns_pattern': 'virtual-%(hostname)s.%(clusterid)s.%(search_path)s',
             'promisc': 0,
         },
         'public': {
             'netmask': '255.255.255.0',
             'nic': 'eth1',
-            'dns_pattern': 'floating-%(hostname)s.%(clustername)s.%(search_path)s',
+            'dns_pattern': 'floating-%(hostname)s.%(clusterid)s.%(search_path)s',
             'promisc': 1,
         },
         'storage': {
             'netmask': '255.255.255.0',
             'nic': 'eth0',
-            'dns_pattern': 'storage-%(hostname)s.%(clustername)s.%(search_path)s',
+            'dns_pattern': 'storage-%(hostname)s.%(clusterid)s.%(search_path)s',
             'promisc': 0,
         },
     },

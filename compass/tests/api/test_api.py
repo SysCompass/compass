@@ -292,8 +292,8 @@ class TestClusterAPI(ApiTestCase):
             "gateway": "192.168.1.1",
             "proxy": "",
             "ntp_sever": "",
-            "nameserver": "8.8.8.8",
-            "seach_path": "ods.com,ods1.com"}}
+            "nameservers": "8.8.8.8",
+            "search_path": "ods.com,ods1.com"}}
 
     def setUp(self):
         super(TestClusterAPI, self).setUp()
@@ -391,6 +391,12 @@ class TestClusterAPI(ApiTestCase):
         security['security']['xxxx'] = {'xxx': 'xxx'}
         rv = self.app.put(url, data=json.dumps(security))
         self.assertEqual(rv.status_code, 400)
+
+    def test_put_cluster_networking_resource(self):
+        networking = {"networking" : self.NETWORKING_CONFIG}
+        url = "/clusters/1/networking"
+        rv = self.app.put(url, data=json.dumps(networking))
+        self.assertEqual(rv.status_code, 200)
 
     def test_get_cluster_resource(self):
         # Test only one resource - secuirty as an example

@@ -366,7 +366,7 @@ def assign_noproxy(_upper_ref, _from_key, lower_refs,
 
 def override_if_empty(lower_ref, _ref_key):
     """Override if the configuration value is empty."""
-    if lower_ref.config:
+    if not lower_ref.config:
         return True
 
     return False

@@ -52,12 +52,12 @@ CLUSTER_HOST_MERGER = ConfigMerger(
         ConfigMapping(
             path_list=['/networking/interfaces/*'],
             from_upper_keys={'pattern': 'dns_pattern',
-                             'clustername': '/clustername',
+                             'clusterid': '/clusterid',
                              'search_path': '/networking/global/search_path'},
             from_lower_keys={'hostname': '/hostname'},
             to_key='dns_alias',
             value=functools.partial(config_merger_callbacks.assign_from_pattern,
-                                    upper_keys=['search_path', 'clustername'],
+                                    upper_keys=['search_path', 'clusterid'],
                                     lower_keys=['hostname'])
         ),
         ConfigMapping(
@@ -181,6 +181,21 @@ class ConfigManager(object):
         util.merge_dict(config, package_config)
         return config
 
+    def clean_cluster_config(self, clusterid, os_version, target_system):
+        config = self.config_provider_.get_cluster_config(clusterid)
+        logging.debug('got cluster %s config from %s: %s',
+                      clusterid, self.config_provider_, config)
+        self.os_installer_.clean_cluster_config(
+            clusterid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('clean cluster %s config in %s',
+                      clusterid, self.os_installer_)
+        self.package_installer_.clean_cluster_config(
+            clusterid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('clean cluster %s config in %s',
+                      clusterid, self.package_installer_)
+
     def update_cluster_config(self, clusterid, config,
                               os_version, target_system):
         """update cluster config."""
@@ -216,12 +231,33 @@ class ConfigManager(object):
         return config
 
     def get_host_configs(self, hostids, os_version, target_system):
-        """get host configs."""
+        """get hosts' configs."""
         host_configs = {}
         for hostid in hostids:
             host_configs[hostid] = self.get_host_config(
                 hostid, os_version, target_system)
         return host_configs
+
+    def clean_host_config(self, hostid, os_version, target_system):
+        """clean host config."""
+        config = self.config_provider_.get_host_config(hostid)
+        logging.debug('got host %s config from %s: %s',
+                      hostid, self.config_provider_, config)
+        self.os_installer_.clean_host_config(
+            hostid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('clean host %s config in %s',
+                      hostid, self.os_installer_)
+        self.package_installer_.clean_host_config(
+            hostid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('clean host %s config in %s',
+                      hostid, self.package_installer_)
+
+    def clean_host_configs(self, hostids, os_version, target_system):
+        """clean hosts' configs."""
+        for hostid in hostids:
+            self.clean_host_config(hostid, os_version, target_system)
 
     def update_host_config(self, hostid, config, os_version, target_system):
         """update host config."""

@@ -100,8 +100,8 @@ if __name__ == '__main__':
     if flags.OPTIONS.daemonize:
         with daemon.DaemonContext(
             pidfile=lockfile.FileLock('/var/run/progress_update.pid'),
-            stderr=open('/tmp/poll_switch_err.log', 'w+'),
-            stdout=open('/tmp/poll_switch_out.log', 'w+')
+            stderr=open('/tmp/progress_update_err.log', 'w+'),
+            stdout=open('/tmp/progress_update_out.log', 'w+')
         ):
             logging.info('run progress update as daemon') 
             main(sys.argv)

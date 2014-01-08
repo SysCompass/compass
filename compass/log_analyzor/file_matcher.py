@@ -198,15 +198,18 @@ class FileReaderFactory(object):
         return '%s[logdir: %s filefilter: %s]' % (
             self.__class__.__name__, self.logdir_, self.filefilter_)
 
-    def get_file_reader(self, hostname, filename):
+    def get_file_reader(self, hostname, clusterid, filename):
         """Get FileReader instance.
 
         :param hostname: hostname of installing host.
+        :param clusterid: cluster id of the installing host.
         :param filename: the filename of the log file.
 
         :returns: :class:`FileReader` instance if it is not filtered.
         """
-        pathname = os.path.join(self.logdir_, hostname, filename)
+        pathname = os.path.join(
+            self.logdir_, '%s.%s' % (hostname, clusterid),
+            filename)
         logging.debug('get FileReader from %s', pathname)
         if not self.filefilter_.filter(pathname):
             logging.error('%s is filtered', pathname)
@@ -290,11 +293,13 @@ class FileMatcher(object):
                 'ignore update file %s progress %s to total progress %s',
                 self.filename_, file_progress, total_progress)
 
-    def update_progress(self, hostname, total_progress):
+    def update_progress(self, hostname, clusterid, total_progress):
         """update progress from file.
 
         :param hostname: the hostname of the installing host.
         :type hostname: str
+        :param clusterid: the cluster id of the installing host.
+        :type clusterid: int
         :param total_progress: Progress instance to update.
 
         the function update installing progress by reading the log file.
@@ -307,7 +312,7 @@ class FileMatcher(object):
         no line end indicator for the last line of the file.
         """
         file_reader = FILE_READER_FACTORY.get_file_reader(
-            hostname, self.filename_)
+            hostname, clusterid, self.filename_)
         if not file_reader:
             return
 

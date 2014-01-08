@@ -39,6 +39,8 @@ sudo sed -i "s/subnet 192.168.1.0 netmask 255.255.255.0/subnet $SUBNET netmask 2
 sudo sed -i "/option routers/c\     option routers             $OPTION_ROUTER;" /etc/cobbler/dhcp.template
 sudo sed -i "/range dynamic-bootp/c\     range dynamic-bootp        $IP_RANGE;" /etc/cobbler/dhcp.template
 sudo sed -i "/next-server/c\     next-server                $NEXTSERVER;" /etc/cobbler/dhcp.template
+sed -i 's/^\([ \t]*\).*fixed-address.*$/\1#pass/g' /etc/cobbler/dhcp.template
+sudo sed -i "/allow bootp/a deny unknown-clients;" /etc/cobbler/dhcp.template
 
 # Set up other setting options in cobbler/settings
 sudo sed -i "/next_server/c\next_server: $ipaddr" /etc/cobbler/settings

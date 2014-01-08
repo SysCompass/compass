@@ -149,12 +149,11 @@ class Installer(os_installer.Installer):
         logging.debug('sync %s', self)
         self.remote_.sync(self.token_)
 
-    def _get_modify_system(self, hostname,
-                           profile, config, **kwargs):
+    def _get_modify_system(self, profile, config, **kwargs):
         """get modified system config."""
         system_config = {
-            'name': hostname,
-            'hostname': hostname,
+            'name': self._get_system_name(config),
+            'hostname': config['hostname'],
             'profile': profile,
         }
 
@@ -177,22 +176,33 @@ class Installer(os_installer.Installer):
             {'name': os_version})
         return profile_found[0]
 
+    def _get_system_name(self, config):
+        return '%s.%s' % (
+            config['hostname'], config['clusterid'])
+
     def _get_system(self, config):
         """get system reference id."""
-        hostname = config['hostname']
-        sys_found = self.remote_.find_system(
-            {'hostname': hostname})
-
-        if sys_found:
+        sys_name = self._get_system_name(config)
+        try:
             sys_id = self.remote_.get_system_handle(
-                sys_found[0], self.token_)
-            logging.debug('using existing system %s from %s',
-                          sys_id, sys_found)
-        else:
+                sys_name, self.token_)
+            logging.debug('using existing system %s for %s',
+                          sys_id, sys_name)
+        except Exception as e:
             sys_id = self.remote_.new_system(self.token_)
-            logging.debug('create new system %s', sys_id)
-        return (hostname, sys_id)
+            logging.debug('create new system %s for %s',
+                          sys_id, sys_name)
+        return sys_id
 
+    def _clean_system(self, config):
+        """clean system."""
+        sys_name = self._get_system_name(config)
+        try:
+            self.remote_.remove_system(sys_name, self.token_)
+            logging.debug('system %s is removed', sys_name)
+        except Exception as error:
+            logging.debug('no system %s found to remove', sys_name)
+      
     def _save_system(self, sys_id):
         """save system config update."""
         self.remote_.save_system(sys_id, self.token_)
@@ -203,12 +213,17 @@ class Installer(os_installer.Installer):
             self.remote_.modify_system(
                 sys_id, key, value, self.token_)
 
+    def clean_host_config(self, hostid, config, **kwargs):
+        """clean host config."""
+        self._clean_system(config)
+
     def update_host_config(self, hostid, config, **kwargs):
         """update host config."""
+        self.clean_host_config(hostid, config, **kwargs)
         profile = self._get_profile(**kwargs)
-        hostname, sys_id = self._get_system(config)
+        sys_id = self._get_system(config)
         system_config = self._get_modify_system(
-            hostname, profile, config, **kwargs)
+            profile, config, **kwargs)
         logging.debug('%s system config to update: %s',
                       hostid, system_config)
 

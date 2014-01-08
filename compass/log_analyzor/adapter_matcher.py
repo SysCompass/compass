@@ -31,15 +31,17 @@ class AdapterItemMatcher(object):
             self.__class__.__name__, self.file_matchers_,
             self.min_progress_, self.max_progress_)
 
-    def update_progress(self, hostname, progress):
+    def update_progress(self, hostname, clusterid, progress):
         """Update progress.
 
         :param hostname: the hostname of the installing host.
         :type hostname: str
+        :param clusterid: the cluster id of the installing host.
+        :type clusterid: int
         :param progress: Progress instance to update.
         """
         for file_matcher in self.file_matchers_:
-            file_matcher.update_progress(hostname, progress)
+            file_matcher.update_progress(hostname, clusterid, progress)
 
 
 class OSMatcher(object):
@@ -70,9 +72,9 @@ class OSMatcher(object):
             self.name_ == os_installer_name,
             self.os_regex_.match(os_name)])
 
-    def update_progress(self, hostname, progress):
+    def update_progress(self, hostname, clusterid, progress):
         """Update progress."""
-        self.matcher_.update_progress(hostname, progress)
+        self.matcher_.update_progress(hostname, clusterid, progress)
 
 
 class PackageMatcher(object):
@@ -103,9 +105,9 @@ class PackageMatcher(object):
             self.name_ == package_installer_name,
             self.target_system_ == target_system])
 
-    def update_progress(self, hostname, progress):
+    def update_progress(self, hostname, clusterid, progress):
         """Update progress."""
-        self.matcher_.update_progress(hostname, progress)
+        self.matcher_.update_progress(hostname, clusterid, progress)
 
 
 class AdapterMatcher(object):
@@ -276,19 +278,6 @@ class AdapterMatcher(object):
                               clusterid)
                 return
 
-            if cluster.state.progress > progress.progress:
-                logging.error(
-                    'cluster %s progress is not increased from %s to %s',
-                    clusterid, cluster.state, progress)
-                return
-
-            if (cluster.state.progress == progress.progress and
-                cluster.state.message == progress.message):
-                logging.info(
-                    'ignore update cluster  %s progress %s to %s',
-                    clusterid, progress, cluster.state)
-                return
-
             if progress.progress >= 1.0:
                 cluster.state.state = 'READY'
 
@@ -342,9 +331,9 @@ class AdapterMatcher(object):
             hostname, host_state, host_progress = host_value
             if host_state == 'INSTALLING' and host_progress.progress < 1.0:
                 self.os_matcher_.update_progress(
-                    hostname, host_progress)
+                    hostname, clusterid, host_progress)
                 self.package_matcher_.update_progress(
-                    hostname, host_progress)
+                    hostname, clusterid, host_progress)
                 self._update_host_progress(hostid, host_progress)
             else:
                 logging.error(
