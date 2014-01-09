@@ -282,6 +282,11 @@ class Installer(package_installer.Installer):
         self._clean_client(hostid, config, target_system, **kwargs)
         self._clean_node(hostid, config, target_system, **kwargs)
 
+    def reinstall_host(self, hostid, config, target_system, **kwargs):
+        """reinstall host."""
+        self._clean_client(hostid, config, target_system, **kwargs)
+        self._clean_node(hostid, config, target_system, **kwargs)
+
     def update_host_config(self, hostid, config, target_system, **kwargs):
         """update host cnfig."""
         self.clean_host_config(hostid, config,

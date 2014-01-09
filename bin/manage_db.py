@@ -2,6 +2,7 @@
 import logging
 import os
 import os.path
+import shutil
 import sys
 
 from flask.ext.script import Manager
@@ -17,6 +18,11 @@ from compass.utils import setting_wrapper as setting
 
 flags.add('table_name',
           help='table name',
+          default='')
+flags.add('clusters',
+          help=(
+              'clusters to clean, the format is as '
+              'clusterid:hostname1,hostname2,...;...'),
           default='')
 
 
@@ -45,7 +51,7 @@ def list_config():
 
 @manager.command
 def createdb():
-    "Creates database tables from sqlalchemy models"
+    "Creates database from sqlalchemy models"
     if setting.DATABASE_TYPE == 'sqlite':
         if os.path.exists(setting.DATABASE_FILE):
             os.remove(setting.DATABASE_FILE)
@@ -55,23 +61,23 @@ def createdb():
 
 @manager.command
 def dropdb():
-    "Creates database tables from sqlalchemy models"
+    "Drops database from sqlalchemy models"
     database.drop_db()
 
 
 @manager.command
 def createtable():
+    """Create database table by --table_name"""
     table_name = flags.OPTIONS.table_name
     if table_name and table_name in TABLE_MAPPING:
         database.create_table(TABLE_MAPPING[table_name])
     else:
         print '--table_name should be in %s' % TABLE_MAPPING.keys()
 
-
-
               
 @manager.command
 def droptable():
+    """Drop database table by --talbe_name"""
     table_name = flags.OPTIONS.table_name
     if table_name and table_name in TABLE_MAPPING:
         database.drop_table(TABLE_MAPPING[table_name])
@@ -81,6 +87,7 @@ def droptable():
 
 @manager.command
 def sync_from_installers():
+    """set adapters in Adapter table from installers."""
     manager = config_manager.ConfigManager()
     adapters = manager.get_adapters()
     target_systems = set()
@@ -100,8 +107,275 @@ def sync_from_installers():
                 session.add(Role(**role))
  
 
+def _get_clusters():
+    clusters = {}
+    logging.debug('get clusters from flag: %s', flags.OPTIONS.clusters)
+    for clusterid_and_hostnames in flags.OPTIONS.clusters.split(';'):
+        if not clusterid_and_hostnames:
+            continue
+
+        if ':' in clusterid_and_hostnames:
+            clusterid_str, hostnames_str = clusterid_and_hostnames.split(
+                ':', 1)
+        else:
+            clusterid_str = clusterid_and_hostnames
+            hostnames_str = ''
+
+        clusterid = int(clusterid_str)
+        hostnames = [
+            hostname for hostname in hostnames_str.split(',')
+            if hostname
+        ]
+        clusters[clusterid] = hostnames
+
+    logging.debug('got clusters from flag: %s', clusters)
+    with database.session() as session:
+        clusterids = clusters.keys()
+        if not clusterids:
+            cluster_list = session.query(Cluster).all()
+            clusterids = [cluster.id for cluster in cluster_list]
+
+        for clusterid in clusterids:
+            hostnames = clusters.get(clusterid, [])
+            if not hostnames:
+                host_list = session.query(ClusterHost).filter_by(
+                    cluster_id=clusterid).all()
+                hostids = [host.id for host in host_list]
+                clusters[clusterid] = hostids
+            else:
+                hostids = []
+                for hostname in hostnames:
+                    host = session.query(ClusterHost).filter_by(
+                        cluster_id=clusterid, hostname=hostname).first()
+                    if host:
+                        hostids.append(host.id)
+                clusters[clusterid] = hostids
+
+    return clusters 
+
+
+def _clean_clusters(clusters):
+    manager = config_manager.ConfigManager()
+    logging.info('clean cluster hosts: %s', clusters)
+    with database.session() as session:
+        for clusterid, hostids in clusters.items():
+            cluster = session.query(Cluster).filter_by(id=clusterid).first()
+            if not cluster:
+                continue
+           
+            all_hostids = [host.id for host in cluster.hosts]
+            logging.debug('all hosts in cluster %s is: %s',
+                          clusterid, all_hostids)
+
+            logging.info('clean hosts %s in cluster %s',
+                         hostids, clusterid)
+
+            adapter = cluster.adapter
+            for hostid in hostids:
+                host = session.query(ClusterHost).filter_by(id=hostid).first()
+                if not host:
+                    continue
+
+                log_dir = os.path.join(
+                    setting.INSTALLATION_LOGDIR,
+                    '%s.%s' % (host.hostname, clusterid))
+                logging.info('clean log dir %s', log_dir)
+                shutil.rmtree(log_dir, True)
+                session.query(LogProgressingHistory).filter(
+                    LogProgressingHistory.pathname.startswith(
+                        '%s/' % log_dir)).delete(
+                    synchronize_session='fetch')
+
+                logging.info('clean host %s', hostid)
+                manager.clean_host_config(
+                    hostid,
+                    os_version=adapter.os,
+                    target_system=adapter.target_system)
+                session.query(ClusterHost).filter_by(
+                    id=hostid).delete(synchronize_session='fetch')
+                session.query(HostState).filter_by(
+                    id=hostid).delete(synchronize_session='fetch')
+
+            if set(all_hostids) == set(hostids):
+                logging.info('clean cluster %s', clusterid)
+                manager.clean_cluster_config(
+                    clusterid,
+                    os_version=adapter.os,
+                    target_system=adapter.target_system)
+                session.query(Cluster).filter_by(
+                    id=clusterid).delete(synchronize_session='fetch')
+                session.query(ClusterState).filter_by(
+                    id=clusterid).delete(synchronize_session='fetch')
+
+    manager.sync()
+
+
+@manager.command
+def clean_clusters():
+    """delete clusters and hosts.
+       The clusters and hosts are defined in --clusters.
+    """
+    clusters = _get_clusters()
+    _clean_clusters(clusters)
+    os.system('service rsyslog restart')
+
+
+def _clean_installation_progress(clusters):
+    logging.info('clean installation progress for cluster hosts: %s',
+                 clusters)
+    with database.session() as session:
+        for clusterid, hostids in clusters.items():
+            cluster = session.query(Cluster).filter_by(
+                id=clusterid).first()
+            if not cluster:
+                continue
+
+            logging.info(
+                'clean installation progress for hosts %s in cluster %s',
+                hostids, clusterid)
+            
+            all_hostids = [host.id for host in cluster.hosts]
+            logging.debug('all hosts in cluster %s is: %s',
+                          clusterid, all_hostids)
+
+            for hostid in hostids:
+                host = session.query(ClusterHost).filter_by(id=hostid).first()
+                if not host:
+                    continue
+
+                log_dir = os.path.join(
+                    setting.INSTALLATION_LOGDIR,
+                    '%s.%s' % (host.hostname, clusterid))
+
+                logging.info('clean log dir %s', log_dir)
+                shutil.rmtree(log_dir, True)
+
+                session.query(LogProgressingHistory).filter(
+                    LogProgressingHistory.pathname.startswith(
+                        '%s/' % log_dir)).delete(
+                    synchronize_session='fetch')
+
+                logging.info('clean host installation progress for %s',
+                             hostid)
+                if host.state and host.state.state != 'UNINITIALIZED':
+                    session.query(ClusterHost).filter_by(
+                        id=hostid).update({
+                            'mutable': False
+                        }, synchronize_session='fetch')
+                    session.query(HostState).filter_by(id=hostid).update({
+                        'state': 'INSTALLING',
+                        'progress': 0.0,
+                        'message': '',
+                        'severity': 'INFO'
+                    }, synchronize_session='fetch')
+
+            if set(all_hostids) == set(hostids):
+                logging.info('clean cluster installation progress %s',
+                             clusterid)
+                if cluster.state and cluster.state != 'UNINITIALIZED':
+                    session.query(Cluster).filter_by(
+                        id=clusterid).update({
+                        'mutable': False
+                    }, synchronize_session='fetch')
+                    session.query(ClusterState).filter_by(
+                        id=clusterid).update({
+                        'state': 'INSTALLING',
+                        'progress': 0.0,
+                        'message': '',
+                        'severity': 'INFO'
+                    }, synchronize_session='fetch')
+
+
+@manager.command
+def clean_installation_progress():
+    """Clean clusters and hosts installation progress.
+       The cluster and hosts is defined in --clusters.
+    """
+    clusters = _get_clusters()
+    _clean_installation_progress(clusters)
+    os.system('service rsyslog restart')
+
+
+def _reinstall_hosts(clusters):
+    logging.info('reinstall cluster hosts: %s', clusters)
+    manager = config_manager.ConfigManager()
+    with database.session() as session:
+        for clusterid, hostids in clusters.items():
+            cluster = session.query(Cluster).filter_by(id=clusterid).first()
+            if not cluster:
+                continue
+           
+            all_hostids = [host.id for host in cluster.hosts]
+            logging.debug('all hosts in cluster %s is: %s',
+                          clusterid, all_hostids)
+
+            logging.info('reinstall hosts %s in cluster %s',
+                         hostids, clusterid)
+            adapter = cluster.adapter
+            for hostid in hostids:
+                host = session.query(ClusterHost).filter_by(id=hostid).first()
+                if not host:
+                    continue
+
+                log_dir = os.path.join(
+                    setting.INSTALLATION_LOGDIR,
+                    '%s.%s' % (host.hostname, clusterid))
+                logging.info('clean log dir %s', log_dir)
+                shutil.rmtree(log_dir, True)
+                session.query(LogProgressingHistory).filter(
+                    LogProgressingHistory.pathname.startswith(
+                        '%s/' % log_dir)).delete(
+                    synchronize_session='fetch')
+
+                logging.info('reinstall host %s', hostid)
+                manager.reinstall_host(
+                    hostid,
+                    os_version=adapter.os,
+                    target_system=adapter.target_system)
+                if host.state and host.state.state != 'UNINITIALIZED':
+                    session.query(ClusterHost).filter_by(
+                        id=hostid).update({
+                            'mutable': False
+                        }, synchronize_session='fetch')
+                    session.query(HostState).filter_by(
+                        id=hostid).update({
+                            'state': 'INSTALLING',
+                            'progress': 0.0,
+                            'message': '',
+                            'severity': 'INFO'
+                        }, synchronize_session='fetch')
+
+            if set(all_hostids) == set(hostids):
+                logging.info('reinstall cluster %s',
+                             clusterid)
+                if cluster.state and cluster.state != 'UNINITIALIZED':
+                    session.query(Cluster).filter_by(
+                        id=clusterid).update({
+                        'mutable': False
+                    }, synchronize_session='fetch')
+                    session.query(ClusterState).filter_by(
+                        id=clusterid).update({
+                        'state': 'INSTALLING',
+                        'progress': 0.0,
+                        'message': '',
+                        'severity': 'INFO'
+                    }, synchronize_session='fetch')
+
+    manager.sync()
+  
+
+@manager.command
+def reinstall_hosts():
+    """Reinstall hosts in clusters.
+       the hosts are defined in --clusters.
+    """
+    clusters = _get_clusters()
+    _reinstall_hosts(clusters)
+
+
 @manager.command
 def set_fake_switch_machine():
+    """Set fake switches and machines for test."""
     with database.session() as session:
         credential = { 'version'    :  'v2c',
                        'community'  :  'public',

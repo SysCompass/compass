@@ -225,9 +225,12 @@ class AdapterMatcher(object):
 
             if progress.severity == 'ERROR':
                 host.state.state = 'ERROR'
-                logging.debug(
-                    'update host %s state %s',
-                    hostid, host.state)
+
+            if host.state.state != 'INSTALLING':
+                host.mutable = True
+            logging.debug(
+                'update host %s state %s',
+                hostid, host.state)
 
     @classmethod
     def _get_cluster_progress(cls, clusterid):
@@ -289,6 +292,9 @@ class AdapterMatcher(object):
 
             if progress.severity == 'ERROR':
                 cluster.state.state = 'ERROR'
+
+            if cluster.state.state != 'INSTALLING':
+                cluster.mutable = True
 
             logging.debug(
                 'update cluster %s state %s',

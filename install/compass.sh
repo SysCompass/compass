@@ -1,5 +1,8 @@
 #!/bin/bash
-COMPASSDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+echo "script dir: $SCRIPT_DIR"
+COMPASSDIR=${SCRIPT_DIR}/..
+echo "compass dir is $COMPASSDIR"
 copygit2dir()
 {
     destdir=$1
@@ -11,7 +14,6 @@ copygit2dir()
     fi
     git clone $repo $destdir
 }
-SCRIPT_DIR=$(cd $(dirname "$0") && pwd)
 cd $SCRIPT_DIR
 #export ipaddr=$(ifconfig $NIC | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 

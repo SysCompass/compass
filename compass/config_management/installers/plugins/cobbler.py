@@ -180,7 +180,7 @@ class Installer(os_installer.Installer):
         return '%s.%s' % (
             config['hostname'], config['clusterid'])
 
-    def _get_system(self, config):
+    def _get_system(self, config, create_if_not_exists=True):
         """get system reference id."""
         sys_name = self._get_system_name(config)
         try:
@@ -189,9 +189,13 @@ class Installer(os_installer.Installer):
             logging.debug('using existing system %s for %s',
                           sys_id, sys_name)
         except Exception as e:
-            sys_id = self.remote_.new_system(self.token_)
-            logging.debug('create new system %s for %s',
-                          sys_id, sys_name)
+            if create_if_not_exists:
+                sys_id = self.remote_.new_system(self.token_)
+                logging.debug('create new system %s for %s',
+                              sys_id, sys_name)
+            else:
+                sys_id = None
+
         return sys_id
 
     def _clean_system(self, config):
@@ -213,9 +217,20 @@ class Installer(os_installer.Installer):
             self.remote_.modify_system(
                 sys_id, key, value, self.token_)
 
+    def _netboot_enabled(self, sys_id):
+        """enable netboot"""
+        self.remote_.modify_system(
+            sys_id, 'netboot_enabled', True, self.token_)
+
     def clean_host_config(self, hostid, config, **kwargs):
         """clean host config."""
         self._clean_system(config)
+
+    def reinstall_host(self, hostid, config, **kwargs):
+        """reinstall host."""
+        sys_id = self._get_system(config, False)
+        if sys_id:
+            self._netboot_enabled(sys_id)
 
     def update_host_config(self, hostid, config, **kwargs):
         """update host config."""

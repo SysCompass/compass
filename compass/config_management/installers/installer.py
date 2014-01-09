@@ -19,6 +19,10 @@ class Installer(object):
         """virtual method to sync installer."""
         pass
 
+    def reinstall_host(self, hostid, config, **kwargs):
+        """virtual method to reinstall specific host."""
+        pass
+
     def get_global_config(self, **kwargs):
         """virtual method to get global config."""
         return {}

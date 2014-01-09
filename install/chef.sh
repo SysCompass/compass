@@ -37,19 +37,9 @@ sudo chef-server-ctl test
 sudo curl -L http://www.opscode.com/chef/install.sh | sudo bash
 
 sudo mkdir ~/.chef
-sudo ln -s /etc/chef-server/admin.pem ~/.chef
-sudo ln -s /etc/chef-server/chef-validator.pem ~/.chef
 
-sudo knife configure -i <<EOF
-
-
-
-
-
-
-
-~/chef-repo
-$CHEF_PASSWD
+sudo knife configure -y -i --defaults -r ~/chef-repo -s https://localhost:443 -u $USER --admin-client-name admin --admin-client-key /etc/chef-server/admin.pem --validation-client-name chef-validator --validation-key /etc/chef-server/chef-validator.pem <<EOF
+root1234
 EOF
-sudo sed -i "/node_name/c\node_name                \'admin\'" /root/.chef/knife.rb
-sudo sed -i "/client_key/c\client_key               \'\/root\/.chef\/admin.pem\'" /root/.chef/knife.rb
+sudo sed -i "/node_name/c\node_name                \'admin\'" /$USER/.chef/knife.rb
+sudo sed -i "/client_key/c\client_key               \'\/etc\/chef-server\/admin.pem\'" /$USER/.chef/knife.rb

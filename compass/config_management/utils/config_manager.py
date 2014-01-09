@@ -259,6 +259,26 @@ class ConfigManager(object):
         for hostid in hostids:
             self.clean_host_config(hostid, os_version, target_system)
 
+    def reinstall_host(self, hostid, os_version, target_system):
+        """reinstall host."""
+        config = self.config_provider_.get_host_config(hostid)
+        logging.debug('got host %s config from %s: %s',
+                      hostid, self.config_provider_, config)
+        self.os_installer_.reinstall_host(
+            hostid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('reinstall host %s in %s',
+                      hostid, self.os_installer_)
+        self.package_installer_.reinstall_host(
+            hostid, config, os_version=os_version,
+            target_system=target_system)
+        logging.debug('clean host %s in %s',
+                      hostid, self.package_installer_)
+
+    def reinstall_hosts(self, hostids, os_version, target_system):
+        for hostid in hostids:
+            self.reinstall_host(hostid, os_version, target_system)
+
     def update_host_config(self, hostid, config, os_version, target_system):
         """update host config."""
         logging.debug('update host %s config: %s', hostid, config)
