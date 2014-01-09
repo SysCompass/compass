@@ -58,7 +58,7 @@ The action \"deploy\" shall deploy and start to install each host(s) in the clus
 <td><a href="#deploy_action">deploy</a></td>
 <td>plain</td>
 <td>list</td>
-<td>The list of host IDs in the cluster expected to be deployed. Empty list means deploy all hosts in the cluster.</td>
+<td>Empty list to trigger cluster deploy action.</td>
 </tr>
 
 </tbody>
@@ -91,7 +91,7 @@ The action \"deploy\" shall deploy and start to install each host(s) in the clus
 <td>cluster_hosts</td>
 <td>list</td>
 <td>The list of all hosts which is added successfully to the specified cluster.
-Each host represents as a dict including the attributes "id" (host id) and "machine_id".</td>
+Each host represents as a dict including the attributes  \"id\" (host id) and \"machine_id\".</td>
 </tr>
 
 </tbody>
@@ -112,20 +112,10 @@ Each host represents as a dict including the attributes "id" (host id) and "mach
 {% highlight javascript %}
 {
     "status": "OK",
-    "cluster_hosts": [
-        {
-            "id": 1,
-            "machine_id": 11
-        },
-        {
-            "id": 2,
-            "machine_id": 12
-        },
-        {
-            "id": 3,
-            "machine_id": 13
-        }
-    ]
+    "cluster_hosts": {
+        "id": 1,
+        "machine_id": 11
+    }
 }
 {% endhighlight  %}
 
@@ -166,7 +156,7 @@ Each host represents as a dict including the attributes "id" (host id) and "mach
 <td>cluster_hosts</td>
 <td>list</td>
 <td>The list of all hosts which are removed successfully from the specified cluster.
-Each host represents as a dict including the attributes "id" (host id) and "machine_id".</td>
+Each host represents as a dict including the attributes  \"id\" (host id) and \"machine_id\".</td>
 </tr>
 
 </tbody>
@@ -230,7 +220,7 @@ Each host represents as a dict including the attributes "id" (host id) and "mach
 <td>cluster_hosts</td>
 <td>list</td>
 <td>The list of all hosts which successfully replaces all previous ones int the specified cluster.
-Each host represents as a dict including the attributes "id" (host id) and "machine_id".</td>
+Each host represents as a dict including the attributes  \"id\" (host id) and \"machine_id\".</td>
 </tr>
 
 </tbody>
@@ -279,7 +269,7 @@ Each host represents as a dict including the attributes "id" (host id) and "mach
 <tr>
 <td>status</td>
 <td>string </td>
-<td>"accepted" if no error occurs, or appropriate error string in case of failure.</td>
+<td>"OK" if no error occurs, or appropriate error string in case of failure.</td>
 </tr>
 <tr>
 <td>deployment</td>
@@ -298,31 +288,11 @@ Each host represents as a dict including the attributes "id" (host id) and "mach
 }
 {% endhighlight  %}
 
-**Sample JSON Request**
-
-{% highlight javascript %}
-{
-    "deploy": [15]
-}
-{% endhighlight  %}
-
 **Sample JSON Response**
 
 {% highlight javascript %}
 {
-    "status": "accepted",
-    "deployment": {
-        "cluster": {
-            "cluster_id": 1,
-            "url": "/clusters/1/progress"
-        },
-        "hosts": [
-            {
-                "host_id": 1,
-                "url": "/cluster_hosts/1/progress"
-            },
-            ...
-        ]
-    }
+    "status": "OK",
+    "deployment": "/progress/cluster/1"
 }
 {% endhighlight  %}

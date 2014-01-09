@@ -19,19 +19,6 @@ body {
   height: 100%;
 }
 
-.hiddenRow {
-    padding: 0 !important;
-}
-
-div.anchor_divider {
-   height: 50px;
-   width: 100%;
-}
-
-h4.docs_subheader {
-    color: #0b3b0b;
-}
-
 /* Code in headings */
 h3 code {
   font-size: 14px;

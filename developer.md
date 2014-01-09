@@ -7,8 +7,8 @@ title: developer
 
 
 {% capture subhead %}
-  <h1>Become a Developer</h1>
-  <p class="lead">More Details Coming Soon ...</p>
+  <h1>Become a developer</h1>
+  <p class="lead">More Details Comming Soon ...</p>
 {% endcapture %}
 
 {% capture maincontent %}

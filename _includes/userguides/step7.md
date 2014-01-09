@@ -2,7 +2,20 @@
 
 Networking enables OpenStack networking configuration. In this page, you may configure your OpenStack cluster's network by specifying global network configuration and per-interface network configuration.
 
+Compass golden image predefined the network configuration. If you wish to use your own configuration for this demo, please make sure you set a unique NIC for Public Network and enable the promisc mode.
+
+
 ![Networking](/img/7_networking.png)
+
+![Public network](/img/7_public_network.png)
+
+![Promisc](/img/7_promisc.png)
+
+After reviewing/editing each tab, you can proceed by clicking on “Continue”.
+
+![Global network](/img/7_global_network.png)
+
+Basic descriptions of what each tab of networking config does can be found below:
 
 **Global: **In the Global tab of Networking page, you will need to fill in these values:
 
@@ -26,8 +39,3 @@ Networking enables OpenStack networking configuration. In this page, you may con
   * Tenant: The OpenStack tenant network. This network enables OpenStack tenants(virtual machines) that are from different physical compute nodes to communicate with each other;
   * Public: The public network is a network which OpenStack points tenant public traffic to. This requires the respective physical interface to be set as promiscuous mode. That is to say, this network needs to be mapped to a unique physical interface which is different from all other networks to avoid networking chaos. (please refer to the screenshot below)
   * Storage: Currently the storage network is not utilized by Compass. Theoretically the storage network will be used by tenants to access storage devices or services such as Swift/Cinder;
-
-![Public network](/img/7_public_network.png)
-
-![Promisc](/img/7_promisc.png)
-

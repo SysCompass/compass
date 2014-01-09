@@ -208,14 +208,6 @@ Updates the configuration information of the specified cluster. The configuratio
 <td>The name of the network adapter.</td>
 </tr>
 
-
-<tr>
-<td>promisc</td>
-<td>plain</td>
-<td>int</td>
-<td>The value is 1 if NIC is in promisc mode, otherwise the value will be 0.</td>
-</tr>
-
 <tr>
 <td>nameservers</td>
 <td>plain</td>
@@ -245,7 +237,7 @@ Updates the configuration information of the specified cluster. The configuratio
 </tr>
 
 <tr>
-<td>ntp-server(optional)</td>
+<td>ntp-server</td>
 <td>plain</td>
 <td>string</td>
 <td>The ntp server for global networking config</td>
@@ -287,8 +279,7 @@ Updates the configuration information of the specified cluster. The configuratio
                 "netmask": "255.255.255.0",
                 "gateway": "",
                 "vlan": "",
-                "nic": "eth0",
-                "promisc": 1
+                "nic": "eth0"
             },
             "tenant": {
                 "ip_start": "192.168.10.100",
@@ -296,8 +287,7 @@ Updates the configuration information of the specified cluster. The configuratio
                 "netmask": "255.255.255.0",
                 "gateway": "",
                 "vlan": "",
-                "nic": "eth2",
-                "promisc": 0
+                "nic": "eth2"
             },
             "public":{
                 "ip_start": "12.145.68.100",
@@ -305,8 +295,7 @@ Updates the configuration information of the specified cluster. The configuratio
                 "netmask": "255.255.255.0",
                 "gateway": "",
                 "vlan": "",
-                "nic": "eth3",
-                "promisc": 0
+                "nic": "eth3"
             },
             "storage":{
                 "ip_start": "172.29.8.100",
@@ -314,8 +303,7 @@ Updates the configuration information of the specified cluster. The configuratio
                 "netmask": "255.255.255.0",
                 "gateway": "",
                 "vlan": "",
-                "nic": "eth4",
-                "promisc": 0
+                "nic": "eth4"
             }
         },
         "global":{

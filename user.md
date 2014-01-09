@@ -8,7 +8,7 @@ title: userguide
 
 {% capture subhead %}
   <h1>Try Compass</h1>
-  <p class="lead">Compass Golden Image - An Illustration of Compass Magic</p>
+  <p class="lead">Compass Golden Image: an illusion of Compass magic</p>
 {% endcapture %}
 
 
@@ -29,7 +29,7 @@ title: userguide
   <li><a href="#step-nine">Step 9 - Review and Deploy</a></li>
   <li><a href="#step-ten">Step 10 - Turn on hosts</a></li>
   <li><a href="#step-eleven">Step 11 - OpenStack</a></li>
-  <li><a href="#step-twelve">Step 12 - Reinstallation</a></li>
+  <li><a href="#appendix1">Appendix I - Cleaning Up</a></li>
 </ul>
 
 {% endcapture %}
@@ -51,7 +51,7 @@ title: userguide
   {% include /userguides/step9.md %}
   {% include /userguides/step10.md %}
   {% include /userguides/step11.md %}
-  {% include /userguides/step12.md %}
+  {% include /userguides/appendix1.md %}
 
 {% endcapture %}
 

@@ -10,8 +10,8 @@ And you will see…
 
 Now go back to the Compass Web-UI, you can see that Compass uses progress bars to visualize the installation. You can also switch between two types of visualizations: Graph and List.
 
-![Progress list](/img/10_progress_list.png)
+![Progress list view](/img/10_progress_list.png)
 
-![Progress graph](/img/10_progress_graph.png)
+![Progress graph view](/img/10_progress_graph.png)
 
-![Progress complete](/img/10_progress_complete.png)
+![Click here button to go to OpenStack dashboard](/img/10_dashboard_link.png)

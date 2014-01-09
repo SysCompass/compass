@@ -1,4 +1,5 @@
 <h4>GET /switches?switchIp={switch_ip_address}&amp;switchIpNetwork={switch_ip_network}&amp;limit={number}</h4>
+-----------------------------------------------
 Queries and lists the details for the device(s) filtered by switch ID or a switch IP network, and returns a specified number of results as designated by limit.
 
 ***Normal Response Code:*** 202

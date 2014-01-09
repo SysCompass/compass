@@ -18,3 +18,5 @@ The security page enables the customizing of server and service credentials. As 
 
 ![Security](/img/6_security.png)
 
+Compass golden image provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: root)
+

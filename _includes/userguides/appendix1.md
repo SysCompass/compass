@@ -1,16 +1,16 @@
-<h2 id="step-twelve">Step 12 - Reinstallation</h2>
+<h2 id="appendix1">Appendix I - Cleaning Up</h2>
 
 If you would like to try out Compass again, you need to remove all the VirtualBox hosts and network configurations.
 
-![Remove hosts](/img/12_remove_hosts.png)
+![Remove VMs](/img/12_remove_vms.png)
 
-![Confirm remove hosts](/img/12_confirm_remove.png)
+![Confirm remove VMs](/img/12_confirm_remove_vms.png)
 
 Once you have removed all hosts, remove the host-only interface: File-Preferences. Then click on the “Network” tab then the “Host-only Networks” tab to remove.
 
-![File preference](/img/12_file_preference.png)
+![Remove network step 1](/img/12_remove_network_step1.png)
 
-![Remove network](/img/12_remove_network.png)
+![Remove network step 2](/img/12_remove_network_step2.png)
 
 You will need local admin privilege to perform the removal of network adapters.
 
