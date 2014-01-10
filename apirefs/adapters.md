@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "Documentation"
+tag_li: "adapter"
 description: ""
 apis:
   - switch.md
@@ -13,7 +14,7 @@ apis:
 
 {% capture subhead %}
   <h1>API Reference</h1>
-  <p class="lead">Reference doc of Compass RESTful API</p>
+  <p class="lead">Reference Documentation of Compass RESTful API</p>
 {% endcapture %}
 
 
