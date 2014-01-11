@@ -2,6 +2,8 @@
 
 If you would like to try out Compass again, you need to remove all the VirtualBox hosts and network configurations.
 
+![Power off VMs](/img/12_power_off_hosts.png)
+
 ![Remove VMs](/img/12_remove_vms.png)
 
 ![Confirm remove VMs](/img/12_confirm_remove_vms.png)
