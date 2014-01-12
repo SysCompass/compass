@@ -4,16 +4,16 @@ The security page enables the customizing of server and service credentials. As 
 
 **OpenStack Server Credentials: **
 
-  * The combination of username and password for Linux operating system on each server
+--- The combination of username and password for Linux operating system on each server
 
 **OpenStack Service Credentials: **
 
-  * The combination of username and password for all the services running within the target distribution system
+--- The combination of username and password for all the services running within the target distribution system
 
 
 **OpenStack Management Console Credentials: **
 
-  * The combination of username and password for OpenStack Dashboard Web-UI authentication
+--- The combination of username and password for OpenStack Dashboard Web-UI authentication
 
 
 ![Security](/img/6_security.png)

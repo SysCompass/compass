@@ -4,7 +4,7 @@ After the execution of  “runme.bat” file has completed, open Oracle VirtualB
 
 ![Open VirtualBox and start Compass](/img/2_start_compass.png)
 
-You will see a pop-up window for “compass”, a CentOS6.4 is installed on host “compass”.
+You will see a pop-up window for “compass”, which CentOS6.4 is installed on host “compass”.
 
 ![Compass starting](/img/2_compass_starting.png)
 
