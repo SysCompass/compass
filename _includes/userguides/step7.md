@@ -2,7 +2,7 @@
 
 Networking enables OpenStack networking configuration. In this page, you may configure your OpenStack cluster's network by specifying global network configuration and per-interface network configuration.
 
-The Compass golden image provides preconfigured network configuration for demo purpose. If you wish to use your own configuration for this demo, please make sure you set a unique NIC for Public Network and enable the promisc mode.
+The Compass golden image provides preconfigured network configuration for demo purpose. *If you wish to use your own configuration for this demo, please make sure you set a unique NIC for Public Network and enable the promisc mode.*
 
 
 ![Networking](/img/7_networking.png)
@@ -10,6 +10,9 @@ The Compass golden image provides preconfigured network configuration for demo p
 ![Public network](/img/7_public_network.png)
 
 ![Promisc](/img/7_promisc.png)
+
+<br />
+<br />
 
 After reviewing/editing each tab, you can proceed by clicking on “Continue”.
 

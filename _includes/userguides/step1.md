@@ -13,8 +13,5 @@ Once you have downloaded the Compass golden image zip file, extract it and execu
 
 ![launch script completed](/img/1_script_completed.png)
 
-The execution may take up to 5 minutes as it import the Compass virtual appliance image to VirtualBox. In addtion, two virtual machines will be created by the batch script for OpenStack installation demo purposes. 
+The execution may take up to 5 minutes as it imports the Compass virtual appliance image to VirtualBox. In addtion, two virtual machines will be created by the batch script for OpenStack installation demo purposes. 
 
-If you go to the folder where VMs are stored, you will see we have successfully added three hosts: CompassDemo, host1 and host2.
-
-![VM folder after run launch script](/img/1_folder_after_script.png)

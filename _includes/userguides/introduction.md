@@ -8,5 +8,4 @@ of two hosts, one controller node and one compute node, as shown in
 ![Golden Image](/img/goldenimage.png)
 
 Compass has a web wizard which will lead you to a successful installation
-step by step. Detailed instructions of each step are shown in the later
-sections.
+step by step. Detailed instructions of each step are shown in the following steps.

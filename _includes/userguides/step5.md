@@ -4,6 +4,8 @@ This page enables the hardware discovery mechanism. Enter switch IP addresses an
 
 ![Find servers](/img/5_find_servers.png)
 
+<br />
+<br />
 By clicking “Find Servers”, you will see:
 
 ![Select servers](/img/5_found_servers.png)
