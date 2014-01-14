@@ -27,7 +27,7 @@ title: userguide
   <li><a href="#step-seven">Step 7 - Networking</a></li>
   <li><a href="#step-eight">Step 8 - Hosts</a></li>
   <li><a href="#step-nine">Step 9 - Review and Deploy</a></li>
-  <li><a href="#step-ten">Step 10 - Turn on hosts</a></li>
+  <li><a href="#step-ten">Step 10 - Start hosts</a></li>
   <li><a href="#step-eleven">Step 11 - OpenStack</a></li>
   <li><a href="#appendix1">Appendix I - Cleaning Up</a></li>
 </ul>

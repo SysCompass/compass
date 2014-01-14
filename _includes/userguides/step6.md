@@ -1,22 +1,16 @@
 <h2 id="step-six">Step 6 - Security</h2>
 
-The security page enables the customizing of server and service credentials. As you can see in the security page screenshot, there are three sets of credentials you need to setup. 
+The security page allows configuration of server and service credentials. As you can see in the following screenshot, there are three sets of credentials you need to configure. 
 
-**OpenStack Server Credentials: **
+ 1. *OpenStack Server Credentials: * The combination of username and password for Linux operating system on each server.
 
-  * The combination of username and password for Linux operating system on each server
-
-**OpenStack Service Credentials: **
-
-  * The combination of username and password for all the services running within the target distribution system
+ 2. *OpenStack Service Credentials: *  The combination of username and password for all the services running within the target distributed system.
 
 
-**OpenStack Management Console Credentials: **
-
-  * The combination of username and password for OpenStack Dashboard Web-UI authentication
+ 3. *OpenStack Management Console Credentials: * The combination of username and password for OpenStack Dashboard Web-UI authentication.
 
 
 ![Security](/img/6_security.png)
 
-Compass golden image provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: root)
+Compass golden image provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: huawei123)
 
