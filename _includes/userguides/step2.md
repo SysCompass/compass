@@ -8,5 +8,12 @@ After the execution of  “runme.bat” file has completed, open Oracle VirtualB
 
 You will see a pop-up window for “compass”, which CentOS6.4 is installed on host “compass”.
 
+
 ![Compass starting](/img/2_compass_starting.png)
 
+Normally you do not need to login to `CompassDemo` server for Compass to work. However, if you would like to login, mainly for debugging purposes, the server credentials are listed below:
+
+<pre>
+Username: root
+Password: huawei123
+ </pre>

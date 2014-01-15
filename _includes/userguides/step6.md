@@ -12,5 +12,5 @@ The security page allows configuration of server and service credentials. As you
 
 ![Security](/img/6_security.png)
 
-Compass golden image provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: huawei123)
+Compass appliance provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: huawei123)
 

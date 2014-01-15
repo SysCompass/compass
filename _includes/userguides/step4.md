@@ -5,4 +5,4 @@
 
 ![Compass features woring](/img/4_compass_features_wiring.png)
 
-So far only “OpenStack core virtualization” is supported in the golden image. By clicking “Continue”, the wizard will take you to the "Find Server“ page, from which you will start to interact with Compass and tell Compass what your cloud configurations are. 
+So far only “OpenStack core virtualization” is supported in the appliance. By clicking “Continue”, the wizard will take you to the "Find Server“ page, from which you will start to interact with Compass and tell Compass what your cloud configurations are. 

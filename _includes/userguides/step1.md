@@ -1,6 +1,6 @@
 <h2 id="step-one">Step 1 - Run Script</h2>
 
-Once you have downloaded the Compass golden image zip file, extract it and execute the "launch.bat" file. 
+Once you have downloaded the Compass appliance zip file, extract it and execute the "launch.bat" file. 
 
 ![Click launch script](/img/1_script_click.png)
 

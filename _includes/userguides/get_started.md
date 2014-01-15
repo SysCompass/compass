@@ -10,6 +10,8 @@ System requirements are:
 
    * VirtualBox Extension Pack, which is also available from [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)
 
+ 		* We have successfully tested this Compass Appliance on both `Oracle VirtualBox 4.3.4 and 4.3.6`
+
 To start your Oracle VirtualBox, please refer to the image below.
   ![Click runme script](/img/0_instruction.png)
 

@@ -15,3 +15,10 @@ Now go back to the Compass Web-UI, you can see that Compass uses progress bars t
 ![Progress graph view](/img/10_progress_graph.png)
 
 ![Click here button to go to OpenStack dashboard](/img/10_dashboard_link.png)
+
+Again, you do not need to login to these two hosts when they boot up. However, if you would like to login for debugging `OpenStack` purposes, their identical credentials are shown below:
+
+<pre>
+Username: root
+Password: huawei123
+</pre>
