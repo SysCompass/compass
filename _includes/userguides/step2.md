@@ -1,6 +1,6 @@
 <h2 id="step-two">Step 2 - Start Compass</h2>
 
-After the execution of  “runme.bat” file has completed, open Oracle VirtualBox. There should be three VMs and a host-only interface configured already. Select the VM “compass” and start it by clicking the start button on the top tool bar. 
+After the execution of  `launch.bat` file has completed, open Oracle VirtualBox. There should be three VMs and a host-only interface configured already. Select the VM “compass” and start it by clicking the start button on the top tool bar. 
 
 ![Open VirtualBox and start Compass](/img/2_start_compass.png)
 

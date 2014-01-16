@@ -18,5 +18,5 @@ You will need local admin privilege to perform the removal of network adapters.
 
 ![Confirm remove network](/img/12_confirm_remove_network.png)
 
-At this point, your Compass environment has been removed and you can start over by executing runme.bat again. 
+At this point, your Compass environment has been removed and you can start over by executing `launch.bat` again. 
 

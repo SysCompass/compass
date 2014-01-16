@@ -28,7 +28,7 @@ Basic descriptions of what each tab of networking config does can be found below
 
   * Gateway: The global gateway to route host traffic to the outside network. 
 
-  * HTTP proxy server: an HTTP proxy server for all HTTP traffic. This is very import as Compass uses HTTP proxy server to cache packages during host installation.
+  * HTTP proxy server: an HTTP proxy server for all HTTP traffic. This is very important as Compass uses HTTP proxy server to cache packages during host installation.
 
 
 **Per-Interface Network: **There are four network types: Management, Tenant, Public and Storage. Each network interface type has a tab on the Networking page. These tabs have identical fields for you to fill in, which are:
