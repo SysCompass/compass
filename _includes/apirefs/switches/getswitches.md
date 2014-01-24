@@ -1,5 +1,7 @@
 <h4>GET /switches?switchIp={switch_ip_address}&amp;switchIpNetwork={switch_ip_network}&amp;limit={number}</h4>
 Queries and lists the details for the device(s) filtered by switch ID or a switch IP network, and returns a specified number of results as designated by limit.
+Note: The API does not support to query switchIp and switchIpNetwork together now.
+
 
 ***Normal Response Code:*** 202
 
@@ -23,7 +25,7 @@ Queries and lists the details for the device(s) filtered by switch ID or a switc
 <td>switchIp (optional)</td>
 <td>query</td>
 <td>string</td>
-<td>Only the switch(es) with the IP(s) will be returned. Repeating with multiple switchIp for querying multiple specified switches</td>
+<td>The switch with the IP will be returned. Repeating with multiple switchIp for querying multiple specified switches</td>
 </tr>
 
 <tr>
@@ -33,7 +35,7 @@ switchIpNetwork
 </td>
 <td>query</td>
 <td>string </td>
-<td>Only the switch(es) in this network will be returned.</td>
+<td>Switch(es) in this network will be returned.</td>
 </tr>
 
 
@@ -70,7 +72,7 @@ switchIpNetwork
 <tr>
 <td>state</td>
 <td>string </td>
-<td>The state of the specified switch. ("not_reached | under_monitoring")</td>
+<td>The state of the specified switch. (unreachable, notsupported, under_monitoring)</td>
 </tr>
 
 
@@ -94,7 +96,7 @@ switchIpNetwork
 
 {% highlight javascript %}
 {
-    "status": "accepted",
+    "status": "OK",
     "switches": [
 	    {
             "ip": "192.168.10.2",

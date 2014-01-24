@@ -1,5 +1,5 @@
 <h4>GET /switches/{id}</h4>
-------------------------
+
 Lists details for a specified switch
 
 ***Normal Response Code:*** 200
@@ -47,7 +47,7 @@ Lists details for a specified switch
 <tr>
 <td>state</td>
 <td>string </td>
-<td>The state of the specified switch. ("not_reached | under_monitoring")</td>
+<td>The state of the specified switch. (unreachable, notsupported, under_monitoring)</td>
 </tr>
 
 
@@ -71,10 +71,42 @@ Lists details for a specified switch
 
 {% highlight javascript %}
 {
-    "status": "accepted",
+    "status": "OK",
     "switch": {
         "ip": "192.168.10.2",
         "state": "under_monitoring",
+        "link": {
+            "href": "/switches/1",
+            "rel": "self"
+        }
+    }
+}
+{% endhighlight  %}
+
+***Sample JSON Response***
+
+{% highlight javascript %}
+{
+    "status": "OK",
+    "switch": {
+        "ip": "192.168.10.2",
+        "state": "unreachable",
+        "link": {
+            "href": "/switches/1",
+            "rel": "self"
+        }
+    }
+}
+{% endhighlight  %}
+
+***Sample JSON Response***
+
+{% highlight javascript %}
+{
+    "status": "OK",
+    "switch": {
+        "ip": "192.168.10.2",
+        "state": "notsupported",
         "link": {
             "href": "/switches/1",
             "rel": "self"

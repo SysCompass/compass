@@ -80,7 +80,7 @@ Updates the credentials of a specified switch, triggering polling switch action 
 <td>status</td>
 <td>string </td>
 <td>
-accepted if the switch is created successfully, or appropriate error string in case of failure.
+"accepted" if the switch is created successfully, or appropriate error string in case of failure.
 </td>
 </tr>
 
@@ -88,9 +88,7 @@ accepted if the switch is created successfully, or appropriate error string in c
 <tr>
 <td>state</td>
 <td>string </td>
-<td>Valid only if the switch is created successfully.
-Once polling switch is completed and MAC addresses retrieved,
-the state of the switch shall be under_monitoring, otherwise it shall be not_reached. </td>
+<td>Valid only if the switch is created successfully. (repolling) </td>
 </tr>
 
 
@@ -119,7 +117,7 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
     "switch": {
         "ip": "192.168.10.2",
         "credential": {
-	        "version": "v2c"
+	        "version": "2c"
         }
     }
 }
@@ -131,12 +129,12 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
 {
     "switch": {
         "ip": "192.168.10.2",
-        "credential": { 
+        "credential": {
             "username": "admin",
-            "password": "admin" 
-        } 
-    } 
-} 
+            "password": "admin"
+        }
+    }
+}
 {% endhighlight  %}
 
 ***Sample JSON Response***
@@ -146,7 +144,7 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
     "status": "accepted",
     "id": 1,
     "switch": {
-        "state": "not_reached",
+        "state": "repolling",
         "link": {
             "href": "/switches/1",
             "rel": "self"

@@ -91,9 +91,7 @@ accepted if the switch is created successfully, or appropriate error string in c
 <tr>
 <td>state</td>
 <td>string </td>
-<td>Valid only if the switch is created successfully.
-Once polling switch is completed and MAC addresses retrieved,
-the state of the switch shall be under_monitoring, otherwise it shall be not_reached. </td>
+<td>Valid only if the switch is created successfully.(initialized) </td>
 </tr>
 
 
@@ -122,7 +120,7 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
     "switch": {
         "ip": "192.168.10.2",
         "credential": {
-	        "version": "v2c",
+	        "version": "2c",
 	        "community": "public"
         }
     }
@@ -150,7 +148,7 @@ the state of the switch shall be under_monitoring, otherwise it shall be not_rea
     "status": "accepted",
     "id": 1,
     "switch": {
-        "state": "not_reached",
+        "state": "initialized",
         "link": {
             "href": "/switches/1",
             "rel": "self"
