@@ -20,5 +20,5 @@ Again, you do not need to login to these two hosts when they boot up. However, i
 
 <pre>
 Username: root
-Password: huawei123
+Password: huawei
 </pre>

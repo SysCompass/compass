@@ -15,5 +15,5 @@ Normally you do not need to login to `CompassDemo` server for Compass to work. H
 
 <pre>
 Username: root
-Password: huawei123
+Password: huawei
  </pre>

@@ -4,6 +4,8 @@ We provide a pre-configured Compass VM image for you to get a detailed look at w
 
 System requirements are:
 
+   * CPU Architecture: x86_64
+
    * Windows 7 (64-bit OS)
 
    * VirtualBox on Windows: VirtualBox is a general-purpose full virtualizer for x86 hardware provided by Oracle. VirtualBox can be downloaded from its official web site at [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)

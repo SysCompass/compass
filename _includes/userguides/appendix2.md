@@ -25,7 +25,7 @@ III. Compass Apache2 server is not running
 
 * Open up an ssh session and connect to `ssh://33.33.33.10:22`,
 or login in the VM console of `CompassDemo` on VirtualBox
-* The default username and password for compass server are: `root/huawei123`
+* The default username and password for compass server are: `root/huawei`
 * Check the apache server by running `service httpd status` and see if it's running
 * If apache server is not running, start it by running `service httpd start`
 
