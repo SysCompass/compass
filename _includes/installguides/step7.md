@@ -1,8 +1,7 @@
-<h2 id="step-seven">Step 7 - Review and Deploy</h2>
+<h2 id="step-seven">Step 7 - Partition</h2>
 
 
+This page will allow you to allocate your disk partition.
 
-Please review the configuration before you deploy. If you need to fix an error, please click **Go back** to go to the certain page. 
 
-
-Once everything looks good to you, click **Delopy** and let Compass do it's work.
+![partition](/img/install/12.png)

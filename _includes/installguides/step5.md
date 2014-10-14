@@ -1,8 +1,8 @@
-<h2 id="step-five">Step 5 - Networking</h2>
+<h2 id="step-five">Step 5 - OS Global Config</h2>
 
 
 
-For more details on how to set up networking configuration, please check out appliance instruction on "Step 7 - Networking".
+Most configurations have been pre-filled except for NTP Serve and ONS Server. For this two blanks, please fill with your compass server ip address.
 
 
-Please make sure you set a unique NIC for Public Network and enable the promisc mode.
+![os global config](/img/install/07.png)

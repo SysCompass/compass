@@ -1,9 +1,27 @@
-<h2 id="step-four">Step 4 - Security</h2>
+<h2 id="step-four">Step 4 - Discover Servers</h2>
 
-The security page allows configuration of server and service credentials. There are three sets of credentials you need to configure.
 
-1. *OpenStack Server Credentials*: The combination of username and password for Linux operating system on each server.
+This enables the hardware discover mechianism.
 
-2. *OpenStack Service Credentials*: The combination of username and password for all the services running within the target distributed system.
 
-3. *OpenStack Management Console Credentials*: The combination of username and password for OpenStack Dashboard Web-UI authentication.
+![discover servers](/img/install/03.png)
+
+
+Compass will discover all the servers that are connected to the switch ip you entered. 
+
+
+![switch ip](/img/install/04.png)
+
+
+Select the switch to discover servers.
+
+
+![discover](/img/install/05.png)
+
+
+In the search bar, enter the target server's mac address and check the box. If you are unable to find server, please refer to <a href="#appendix">Appendix</a> for more information.
+
+
+![success](/img/install/06.png)
+
+

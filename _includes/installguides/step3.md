@@ -1,10 +1,11 @@
-<h2 id="step-three">Step 3 - Discover Machines</h2>
+<h2 id="step-three">Step 3 - Create Cluster</h2>
 
 
-Open VMware vSphere, firstly, start your CentOS virtual mechine. Then, right click on the CentOS vm, click **Edit Setting**, click the **network adapter** to get the MAC address.
-
- 
-Enter your switch IP then click **Find Server** to get the all the machines that are connected to those switches. The default "SNMP version" and "Community" are "v2c" and "public", respectively.
+![create cluster](/img/install/02.png)
 
 
-Find your MAC address in the left box, select *CentOS-6.5-x86_64/openstack* as the adapter. Click **Continue** to process.
+Target System: Choose if you want to install whole package or only operation system.
+
+OS: We support both CentOS and Ubuntu.
+
+Flavor: Enable you to configure nodes to satisfied different scenario.
