@@ -1,6 +1,6 @@
 
 <ul class="nav nav-pills">
-<li class="{% if page.tag_li == 'switch' %} active {% endif %}"><a href="overview.html">Switch</a> </li>
+<li class="{% if page.tag_li == 'switch' %} active {% endif %}"><a href="switches.html">Switch</a> </li>
 <li class="{% if page.tag_li == 'machine' %} active {% endif %}"> <a href="machines.html">Machine</a> </li>
 <li class="{% if page.tag_li == 'cluster' %} active {% endif %}"> <a href="clusters.html">Cluster</a> </li>
 <li class="{% if page.tag_li == 'cluster_host' %} active {% endif %}"> <a href="cluster_hosts.html">Cluster Host</a> </li>
