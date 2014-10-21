@@ -15,10 +15,11 @@
 
     <!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="/assets/css/docs.css?body=1" rel="stylesheet">
     <link href="/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   </head>
 
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -63,6 +64,16 @@
     ga('create', 'UA-55186188-1', 'auto');
     ga('send', 'pageview');
 
+  </script>
+
+  <script type="text/javascript">
+  $(document).ready(function () {
+      $('.carousel').carousel({
+          interval: 3000
+      });
+
+      $('.carousel').carousel('cycle');
+  });
   </script>
   </body>
 </html>
