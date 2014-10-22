@@ -1,19 +1,17 @@
 <h2 id="step-two">Step 2 - Start Compass</h2>
 
-After the execution of  `launch.bat` file has completed, open Oracle VirtualBox. There should be three VMs and a host-only interface configured already. Select the VM “compass” and start it by clicking the start button on the top tool bar. 
+After the execution of launch script file has completed, open Oracle VirtualBox. There should be two VMs and two host-only interfaces configured already. Select the VM “compass-server” and start it by clicking the start button on the top tool bar. 
 
-![Open VirtualBox and start Compass](/img/2_start_compass.png)
 
 <br />
 
-You will see a pop-up window for “compass”, which CentOS6.4 is installed on host “compass”.
+You will see a pop-up window for “compass-server”, which CentOS6.5 is installed on host “compass-server”.
 
 
-![Compass starting](/img/2_compass_starting.png)
 
-Normally you do not need to login to `CompassDemo` server for Compass to work. However, if you would like to login, mainly for debugging purposes, the server credentials are listed below:
+Normally you do not need to login to compass server for Compass to work. However, if you would like to login, mainly for debugging purposes, the server credentials are listed below:
 
 <pre>
 Username: root
-Password: huawei
- </pre>
+Password: P@ssw0rd
+</pre>

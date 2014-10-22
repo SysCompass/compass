@@ -1,13 +1,13 @@
 <h2 id="step-eleven">Step 11 - Review and Deployment</h2>
 
 
-On the review page, you will have a chance to review all the configuration you have set up previously. You may go back to fix errors. Once you think everything looks good, go ahead click "Deploy".
+This is the last step before the actual deployment. You should review this page carefully. Record the service and server credentials if needed. Once you have reviewed your cluster, click "Deploy" and you will be brought to a deployment status page.
 
 
-![deploy](/img/install/22.png)
+![deploy](/img/install/11_review.png)
 
 
-If you are unable to get any progress after a while after you deployed, you may refer to <a href="#appendix">Appendix</a> for guidance.
+You can see there is a progress bar for each server. If the progresses stay at 0 for a long time, please refer to <a href="#appendix">Appendix</a> for guidance.
 
 
 ![done](/img/install/23.png)

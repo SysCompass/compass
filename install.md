@@ -7,8 +7,8 @@ title: userguide
 
 
 {% capture subhead %}
-  <h1>Compass User Manual</h1>
-  <!--<p class="lead">test Compass Appliance - An Illustration of Compass Magic</p>-->
+  <h1>Try Compass</h1>
+  <p class="lead">Compass Production Environment - An Illustration of Compass Magic</p>
 {% endcapture %}
 
 
@@ -24,7 +24,7 @@ title: userguide
   <li><a href="#step-five">Step 5 - OS Global Config</a></li>
   <li><a href="#step-six">Step 6 - Network</a></li>
   <li><a href="#step-seven">Step 7 - Partition</a></li>
-  <li><a href="#step-eigth">Step 8 - Security</a></li>
+  <li><a href="#step-eight">Step 8 - Security</a></li>
   <li><a href="#step-nine">Step 9 - Role Assignment</a></li>
   <li><a href="#step-ten">Step 10 - Network Mapping</a></li>
   <li><a href="#step-eleven">Step 11 - Review and Deployment</a></li>

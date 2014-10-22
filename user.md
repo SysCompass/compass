@@ -21,14 +21,16 @@ title: userguide
   <li><a href="#step-one">Step 1 - Run Script</a></li>
   <li><a href="#step-two">Step 2 - Start Compass</a></li>
   <li><a href="#step-three">Step 3 - Compass-Web</a></li>
-  <li><a href="#step-four">Step 4 - Features</a></li>
+  <li><a href="#step-four">Step 4 - Cluster</a></li>
   <li><a href="#step-five">Step 5 - Discover Machines</a></li>
-  <li><a href="#step-six">Step 6 - Security</a></li>
+  <li><a href="#step-six">Step 6 - Global Configuration</a></li>
   <li><a href="#step-seven">Step 7 - Networking</a></li>
-  <li><a href="#step-eight">Step 8 - Hosts</a></li>
-  <li><a href="#step-nine">Step 9 - Review and Deploy</a></li>
-  <li><a href="#step-ten">Step 10 - Start hosts</a></li>
-  <li><a href="#step-eleven">Step 11 - OpenStack</a></li>
+  <li><a href="#step-eight">Step 8 - Partition</a></li>
+  <li><a href="#step-nine">Step 9 - Target System Configuration</a></li>
+  <li><a href="#step-ten">Step 10 - Role Assignment</a></li>
+  <li><a href="#step-eleven">Step 11 - Network Mapping</a></li>
+  <li><a href="#step-twelve">Step 12 - Deploy</a></li>
+  <li><a href="#step-thirteen">Step 13 - Deploying OpenStack</a></li>
   <li><a href="#appendix1">Appendix I - Cleaning Up</a></li>
   <li><a href="#appendix2">Appendix II - FAQ</a></li>
 </ul>
@@ -52,6 +54,8 @@ title: userguide
   {% include /userguides/step9.md %}
   {% include /userguides/step10.md %}
   {% include /userguides/step11.md %}
+  {% include /userguides/step12.md %}
+  {% include /userguides/step13.md %}
   {% include /userguides/appendix1.md %}
   {% include /userguides/appendix2.md %}
 
