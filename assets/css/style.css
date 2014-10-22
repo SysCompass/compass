@@ -17,14 +17,13 @@
 }
 
 .carousel-mind .carousel-img {
-    display: table-cell;
     vertical-align: middle;
     overflow: hidden;
     height: 500px;
 }
 
 .carousel-mind .carousel-img img {
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .aligncenter {
@@ -35,7 +34,7 @@
 }
 
 .carousel-mind .carousel-img img {
-    width: 100%;
+    /*width: 100%;*/
 
 }
 
@@ -56,12 +55,22 @@
 	background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.5);
 	text-align: center !important;
 }
-.compass-download
-{
+.compass-download {
 	margin-top: 100px;
 	margin-left: 80px;
 	color:white;
 	/*font-family: "Abel",sans-serif !important;*/
+}
+.compass-download h1 {
+    transform: scale(2);
+}
+.compass-download .slogan {
+    transform: scale(1.4);
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+.compass-download .downloads {
+    margin-top: 30px;
 }
 .carousel-list li {
     color: #FFF;
@@ -84,4 +93,46 @@
 	 margin-left: auto;
 	 margin-right: auto;
 	 width: 500px;
+}
+
+.carousel-text h1 {
+    font-size: 32px;
+}
+
+.laptop-img {
+    left: 20px;
+    position: absolute;
+    top: 50px;
+}
+
+@media (max-width: 979px) {
+    #carousel-example-generic {
+        margin-top: -20px;
+    }
+
+    .carousel-caption {
+        padding: 1px 10px;
+    }
+    .carousel-text h1 {
+        font-size: 27px;
+    }
+
+    .carousel-mind .carousel-img {
+        height: 450px;
+    }
+
+    .laptop-img {
+        display: none;
+    }
+
+}
+@media (max-width: 767px) {
+    #carousel-example-generic {
+        margin-right: -20px;
+        margin-left: -20px;
+    }
+
+    .carousel-text h1 {
+        font-size: 23px;
+    }
 }
