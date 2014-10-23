@@ -1,3 +1,58 @@
+body {
+    padding: 0px;
+}
+.navbar {
+    margin-bottom: 0px;
+    background-color: #1b1b1b;
+    background-image: linear-gradient(to bottom, #222222, #111111);
+    background-repeat: repeat-x;
+    border-color: #252525;
+}
+.navbar a {
+    color: white;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: #1b1b1b;
+    background-image: linear-gradient(to bottom, #111111, #222222);
+    text-decoration: none;
+}
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    background-color: #1b1b1b;
+}
+.bs-docs-sidenav > li.active {
+    background-color: #428bca;
+    background-image: none; 
+}
+.bs-docs-sidenav > li > a:hover, .bs-docs-sidenav > li > a:focus {
+    background-color: #f5f5f5;
+    color: #428bca;
+    background-image: none;
+}
+.bs-docs-sidenav > li.active a {
+    background-color: #428bca;
+    color: white;
+}
+#sidebar .nav > li.active {
+    background-color: #428bca;
+    color: white;
+    background-image: none;
+}
+#sidebar .nav > li > a:hover, #sidebar .nav > li > a:focus {
+    background-color: #eee;
+    background-image: none;
+}
+.dropdown-menu {
+    background-color: transparent;
+}
+.dropdown-menu > li > a {
+    color: #ddd;
+}
+#myContent img {
+    max-width: 100%;
+}
+.navbar-toggle .icon-bar {
+    background: none repeat scroll 0 0 white;
+}
 .carousel-mind {
     background-size: cover;
     background-image: url('/img/carousel-bkg.png');
@@ -51,6 +106,10 @@
 	font-family: "Abel",sans-serif;
 }
 .carousel-caption{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 	color: #E1E1E1; 
 	background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.5);
 	text-align: center !important;
@@ -104,7 +163,15 @@
     position: absolute;
     top: 50px;
 }
-
+.carousel-control {
+    width: 10%;
+}
+.carousel-indicators {
+    bottom: 10px;
+}
+.laptop-img {
+    display: none;
+}
 @media (max-width: 979px) {
     #carousel-example-generic {
         margin-top: -20px;
@@ -125,6 +192,12 @@
         display: none;
     }
 
+    .carousel-indicators {
+        display: none;
+    }
+    .navbar {
+        margin-bottom: 20px;
+    }
 }
 @media (max-width: 767px) {
     #carousel-example-generic {
