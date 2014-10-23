@@ -1,16 +1,7 @@
-<h2 id="step-six">Step 6 - Security</h2>
+<h2 id="step-six">Step 6 - Global Configuration</h2>
 
-The security page allows configuration of server and service credentials. As you can see in the following screenshot, there are three sets of credentials you need to configure. 
+In this step, you are setting up the global configuration of the server(s) you are going to install OpenStack on. All the required field(except confirm password) have been pre-filled. Most of these values should not be changed unless you change the Compass server's configuration. For the password field, the default password is 'huawei'. You may type 'huawei' in the password confirm field or override the default password with your own password.
 
- 1. *OpenStack Server Credentials: * The combination of username and password for Linux operating system on each server.
+![global config](/img/appliance/6_osglobal.png)
 
- 2. *OpenStack Service Credentials: *  The combination of username and password for all the services running within the target distributed system.
-
-
- 3. *OpenStack Management Console Credentials: * The combination of username and password for OpenStack Dashboard Web-UI authentication.
-
-
-![Security](/img/6_security.png)
-
-Compass appliance provides pre-configured credentials. As you can see from the screenshot above, usernames are configured already. Passwords and their respective usernames are identical. (e.g: OpenStack server credential: Username: root, password: huawei123)
-
+Please proceed with "Next" button once you have confirmed all the global config fields.

@@ -1,6 +1,6 @@
-<h2 id="step-nine">Step 9 - Review and Deploy</h2>
+<h2 id="step-nine">Step 9 - Target System Configuration</h2>
 
-On the review page, you will have a chance to review all the configurations you have previously set up. You may go back to fix config errors by clicking the “Go back” link. Once you are done reviewing all the configuration data, click “Deploy” and the Compass magic will happen. 
+You are configuring target system on this page. For OpenStack, the configuration is mainly about credentials, including component credentials and keystone user credentials. We have pre-filled these credential values for you. So you can proceed just by clicking on "Next". You can change some or all of the credentials and you will get a chance to review them on the review page before deployment.
 
-![Review](/img/9_review.png)
+![Security](/img/appliance/9_security.png)
 

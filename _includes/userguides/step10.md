@@ -1,24 +1,17 @@
-<h2 id="step-ten">Step 10 - Start hosts</h2>
+<h2 id="step-ten">Step 10 - Role Assignment</h2>
 
-Now you need to start the host VMs from VirtualBox. Go back to the Oracle VirtualBox and start the two host VMs.
+*Roles* are what Compass uses to identify what each server does. In OpenStack there are controller, compute, network, storage, etc. These are all roles. When you say some node is a compute node, it means that node is running OpenStack compute services and playing the role as a compute node. We are listing all available roles on the right under "Drag to Assign". The role list is depending on the flavor you chose when you created the cluster. Different flavors may result in different granularities of roles listed in this section. Compass Appliance uses all-in-one flavor. Therefore we have one available role here called "All in One Compute". 
 
-![Turn on hosts](/img/10_turn_on_hosts.png)
+![roles](/img/appliance/10_role.png)
 
-And you will see…
+To manually assign roles, you can just drag the role and drop it at the server under "Roles" column or first select a server by checking the box next to it and click on the "Manually Assign" drop-down menu to choose roles. You can also multi-select servers and assign the same role to them.
 
-![Installing](/img/10_installing.png)
+We also can help you automatically assign roles. This would be more useful when deploying a relatively large distributed system. Click on "Auto Assign" button and you will see all available roles listed and a blank after each of them for you to input the numbers of servers you'd like to assign each role to. 
 
-Now go back to the Compass Web-UI, you can see that Compass uses progress bars to visualize the installation process. You can also switch between two types of visualizations: Graph and List.
+![Auto Assign](/img/appliance/10_autoassign.png)
 
-![Progress list view](/img/10_progress_list.png)
+For all-in-one role, you can just click "Assign" button and the role will be assigned to it.
 
-![Progress graph view](/img/10_progress_graph.png)
+![Assigned](/img/appliance/10_allinone-assigned.png)
 
-![Click here button to go to OpenStack dashboard](/img/10_dashboard_link.png)
-
-Again, you do not need to login to these two hosts when they boot up. However, if you would like to login for debugging `OpenStack` purposes, their identical credentials are shown below:
-
-<pre>
-Username: root
-Password: huawei
-</pre>
+Click on "Next" to prceed.

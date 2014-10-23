@@ -1,8 +1,11 @@
-<h2 id="step-four">Step 4 - Features</h2>
+<h2 id="step-four">Step 4 - Create a Cluster</h2>
 
+A window will pop up when you click on "New Cluster" button. It is asking you for basic information about your cluster. Compass Appliance only supports OpenStack Icehouse on CentOS-6.5 Operating System. Therefore we have already pre-filled the values for you. You may always customize the cluster name.
 
-![Compass features page](/img/4_compass_features.png)
+![new_cluster](/img/appliance/4_createcluster.png)
 
-![Compass features woring](/img/4_compass_features_wiring.png)
+When you have verified the cluster info, proceed with the "Create" button and you will see this:
 
-So far only “OpenStack core virtualization” is supported in the appliance. By clicking “Continue”, the wizard will take you to the "Find Server“ page, from which you will start to interact with Compass and tell Compass what your cloud configurations are. 
+![wizard begin](/img/appliance/4_wizardbegin.png)
+
+You won't be able to see any servers as this is a brand new Compass environment. To discover servers, click on the "Discover Servers" button on the top-right.
