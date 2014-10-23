@@ -1,22 +1,22 @@
 body {
     padding: 0px;
 }
-.navbar {
+header.navbar {
     margin-bottom: 0px;
     background-color: #1b1b1b;
     background-image: linear-gradient(to bottom, #222222, #111111);
     background-repeat: repeat-x;
     border-color: #252525;
 }
-.navbar a {
+header.navbar a {
     color: white;
 }
-.nav > li > a:hover, .nav > li > a:focus {
+header .nav > li > a:hover, header .nav > li > a:focus {
     background-color: #1b1b1b;
     background-image: linear-gradient(to bottom, #111111, #222222);
     text-decoration: none;
 }
-.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+header .nav .open > a, header .nav .open > a:hover, header .nav .open > a:focus {
     background-color: #1b1b1b;
 }
 .bs-docs-sidenav > li.active {
@@ -41,6 +41,7 @@ body {
     background-color: #eee;
     background-image: none;
 }
+
 .dropdown-menu {
     background-color: transparent;
 }
@@ -104,6 +105,9 @@ body {
 {
 	text-transform: uppercase;
 	font-family: "Abel",sans-serif;
+}
+.carousel-inner {
+    overflow: initial;
 }
 .carousel-caption{
     position: absolute;
