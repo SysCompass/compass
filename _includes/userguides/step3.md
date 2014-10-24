@@ -1,6 +1,6 @@
 <h2 id="step-three">Step 3 - Compass-Web</h2>
 
-The booting process for “compass” may take a few minutes. Once it is ready, open a browser and type in [http://33.33.33.10](http://33.33.33.10) in the address bar. 
+The booting process for "Compass" may take a few minutes. Once it is ready, open a browser and type in [http://33.33.33.20](http://33.33.33.20) in the address bar.
 
 If you are unable to get to the page shown below, you may refer to <a href="#appendix2">Appendix II</a> for guidance.
 
