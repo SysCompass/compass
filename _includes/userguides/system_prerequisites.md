@@ -1,4 +1,4 @@
-<h2 id="started">Getting Started</h2>
+<h2 id="started">System Prerequisites</h2>
 
 We provide a pre-configured Compass VM image for you to get a detailed look at what Compass can do. It is packaged as a VirtualBox appliance in OVF. We support MacOS/Ubuntu/Windows at this time. We provide shell/bash scripts to import Compass server and step networks as well as a slave machine.
 
@@ -12,7 +12,10 @@ System requirements are:
 
    * VirtualBox Extension Pack, which is also available from [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)
 
- 		* We have successfully tested this Compass Appliance on both `Oracle VirtualBox 4.3.4 and 4.3.6`
+   * We have successfully tested this Compass Appliance on the following system:
+
+   ![virtualbox table](/img/appliance/virtualbox_table.png)
+
 
 When you start the VirtualBox, it should look like this:
 

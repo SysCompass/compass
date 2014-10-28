@@ -16,7 +16,7 @@ title: userguide
 
 <ul class="nav nav-list bs-docs-sidenav">
   <li class="active"><a href="#introduction">Introduction</a></li>
-  <li><a href="#started">Getting Started</a></li>
+  <li><a href="#started">System Prerequisites</a></li>
   <li><a href="#download">Download</a></li>
   <li><a href="#step-one">Step 1 - Run Script</a></li>
   <li><a href="#step-two">Step 2 - Start Compass</a></li>
@@ -30,7 +30,7 @@ title: userguide
   <li><a href="#step-ten">Step 10 - Role Assignment</a></li>
   <li><a href="#step-eleven">Step 11 - Network Mapping</a></li>
   <li><a href="#step-twelve">Step 12 - Deploy</a></li>
-  <li><a href="#step-thirteen">Step 13 - Deploying OpenStack</a></li>
+  <li><a href="#step-thirteen">Step 13 - Viewing OpenStack Deploying Progress</a></li>
   <li><a href="#appendix1">Appendix I - Cleaning Up</a></li>
   <li><a href="#appendix2">Appendix II - FAQ</a></li>
 </ul>
@@ -41,7 +41,7 @@ title: userguide
 {% capture maincontent %}
 
   {% include /userguides/introduction.md %}
-  {% include /userguides/get_started.md %}
+  {% include /userguides/system_prerequisites.md %}
   {% include /userguides/download.md %}
   {% include /userguides/step1.md %}
   {% include /userguides/step2.md %}

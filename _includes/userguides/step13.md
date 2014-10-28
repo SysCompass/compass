@@ -1,4 +1,4 @@
-<h2 id="step-thirteen">Step 13 - Deploying OpenStack</h2>
+<h2 id="step-thirteen">Step 13 - Viewing OpenStack Deploying Progress</h2>
 
 Once the deployment starts, Compass Web-UI updates the cluster progress periodically and shows them as progress bars.
 
