@@ -101,8 +101,7 @@ header .nav .open > a, header .nav .open > a:hover, header .nav .open > a:focus 
 .carousel-mind .carousel-caption {
     text-align: left;
 }
-.carousel-text
-{
+.carousel-text{
 	text-transform: uppercase;
 	font-family: "Abel",sans-serif;
 }
@@ -120,7 +119,6 @@ header .nav .open > a, header .nav .open > a:hover, header .nav .open > a:focus 
 }
 .compass-download {
 	margin-top: 100px;
-	margin-left: 80px;
 	color:white;
 	/*font-family: "Abel",sans-serif !important;*/
 }
