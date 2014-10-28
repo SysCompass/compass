@@ -4,13 +4,8 @@
 
 ![roles](/img/appliance/10_role.png)
 
-To manually assign roles, you can just drag the role and drop it at the server under "Roles" column or first select a server by checking the box next to it and click on the "Manually Assign" drop-down menu to choose roles. You can also multi-select servers and assign the same role to them.
+To manually assign roles, you can just drag the role and drop it at the server under "Roles" column.
 
-We also can help you automatically assign roles. This would be more useful when deploying a relatively large distributed system. Click on "Auto Assign" button and you will see all available roles listed and a blank after each of them for you to input the numbers of servers you'd like to assign each role to. 
-
-![Auto Assign](/img/appliance/10_autoassign.png)
-
-For all-in-one role, you can just click "Assign" button and the role will be assigned to it.
 
 ![Assigned](/img/appliance/10_allinone-assigned.png)
 

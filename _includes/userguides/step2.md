@@ -2,10 +2,10 @@
 
 After the execution of launch script file has completed, open Oracle VirtualBox. There should be two VMs and two host-only interfaces configured already. Select the VM “compass-server” and start it by clicking the start button on the top tool bar. 
 
+![start compass server](/img/appliance/2_start_server.png)
 
-<br />
 
-You will see a pop-up window for “compass-server”, which CentOS6.5 is installed on host “compass-server”.
+You will see a pop-up window for "compass-server", which CentOS6.5 is installed on host "compass-server".
 
 
 
