@@ -181,11 +181,11 @@ title: mailinglist
 </ul>
 </p>
 
-<h2 id='If_you_are_a_developer'>If you're an developer</h2>
+<h2 id='If_you_are_a_developer'>If you're a developer</h2>
 <ul>
     <li>Check out how we work</li>
         <ul>
-             <li>What is <a href='https://wiki.openstack.org/wiki/Compass'>compass</a>, and how it works.</li>
+             <li>What is <a href='https://wiki.openstack.org/wiki/Compass'>Compass</a>, and how it works.</li>
         </ul>
     <li>Read the <a href='#'>Developer's Guide of Compass Manual</a> to get started</li>
     <li>Learn how to work with Openstack Gerrit review system.</li>
