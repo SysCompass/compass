@@ -171,6 +171,10 @@ header .nav .open > a, header .nav .open > a:hover, header .nav .open > a:focus 
 .carousel-indicators {
     bottom: 10px;
 }
+.carousel-inner > .item {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .laptop-img {
     display: none;
 }
@@ -203,11 +207,28 @@ header .nav .open > a, header .nav .open > a:hover, header .nav .open > a:focus 
 }
 @media (max-width: 767px) {
     #carousel-example-generic {
-        margin-right: -20px;
-        margin-left: -20px;
+        margin-right: 0px;
+        margin-left: 0px;
     }
 
     .carousel-text h1 {
         font-size: 23px;
+    }
+    .compass-download h1 {
+        transform: scale(1.5);
+    }
+}
+@media (max-width: 600px) {
+    .compass-download .slogan {
+        transform: scale(1.2);
+    }
+    .carousel-control .icon-next, .carousel-control .glyphicon-chevron-right {
+        margin-right: -15px;
+    }
+    .carousel-control .icon-prev, .carousel-control .glyphicon-chevron-left {
+        margin-left: -15px;
+    }
+    .masthead-links {
+        padding-left: 0px;
     }
 }
