@@ -176,7 +176,7 @@ title: mailinglist
 <p>Please join our communication forums:
 
 <ul>
-    <li>Subscribe <a href="http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-dev">OpenStack-dev mailing list</a>.</li>
+    <li>Subscribe to <a href="http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-dev">OpenStack-dev mailing list</a>.</li>
     <li>When posting messages to the openstack-dev mailing list, prefix the subject with [compass].</li>
 </ul>
 </p>
